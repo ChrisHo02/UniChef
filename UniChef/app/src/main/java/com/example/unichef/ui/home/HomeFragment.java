@@ -28,17 +28,18 @@ public class HomeFragment extends Fragment {
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        //This was default code written when I loaded up the project.
         /*final TextView textView = root.findViewById(R.id.text_home);
-
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
         });*/
+
         listView = root.findViewById(R.id.listView);
 
-        MyAdapter adapter  = new MyAdapter(root.getContext(), recipeTitle, recipeDescription);
+        MyAdapter adapter  = new MyAdapter(getActivity(), recipeTitle, recipeDescription);
         listView.setAdapter(adapter);
 
         return root;
@@ -56,18 +57,19 @@ public class HomeFragment extends Fragment {
             this.m_recipeTitle = title;
             this.m_recipeDescription = description;
         }
+
+        @Nullable
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = layoutInflater.inflate(R.layout.med_recipe_item, parent, false);
+            TextView myTitle = row.findViewById(R.id.textView1);
+            TextView myDescription = row.findViewById(R.id.textView2);
+
+            myTitle.setText(recipeTitle[position]);
+            myDescription.setText(recipeDescription[position]);
+
+            return row;
+        }
     }
-    /*
-    @Nullable
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = layoutInflater.inflate(R.layout.med_recipe_item, parent, false);
-        TextView myTitle = row.findViewById(R.id.textView1);
-        TextView myDescription = row.findViewById(R.id.textView2);
-
-        myTitle.setText(recipeTitle[position]);
-        myDescription.setText(recipeDescription[position]);
-
-        return row;
-    }*/
 }
