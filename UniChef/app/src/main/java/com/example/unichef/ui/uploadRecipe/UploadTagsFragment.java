@@ -1,4 +1,4 @@
-package com.example.unichef;
+package com.example.unichef.ui.uploadRecipe;
 
 import android.os.Bundle;
 
@@ -12,12 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.unichef.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link uploadRecipe4#newInstance} factory method to
+ * Use the {@link UploadTagsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class uploadRecipe4 extends Fragment implements View.OnClickListener{
+public class UploadTagsFragment extends Fragment implements View.OnClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,7 +32,7 @@ public class uploadRecipe4 extends Fragment implements View.OnClickListener{
     Button next;
     NavController navController;
 
-    public uploadRecipe4() {
+    public UploadTagsFragment() {
         // Required empty public constructor
     }
 
@@ -43,8 +45,8 @@ public class uploadRecipe4 extends Fragment implements View.OnClickListener{
      * @return A new instance of fragment uploadRecipe4.
      */
     // TODO: Rename and change types and number of parameters
-    public static uploadRecipe4 newInstance(String param1, String param2) {
-        uploadRecipe4 fragment = new uploadRecipe4();
+    public static UploadTagsFragment newInstance(String param1, String param2) {
+        UploadTagsFragment fragment = new UploadTagsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,7 +67,7 @@ public class uploadRecipe4 extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_upload_recipe4,
+        View view = inflater.inflate(R.layout.fragment_upload_tags,
                 container, false);
 
 
