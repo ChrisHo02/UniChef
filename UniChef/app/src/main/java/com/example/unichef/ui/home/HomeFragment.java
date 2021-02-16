@@ -1,10 +1,12 @@
 package com.example.unichef.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.unichef.R;
+import com.example.unichef.ViewRecipeActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -37,7 +40,15 @@ public class HomeFragment extends Fragment {
             }
         });*/
 
+        //listView = root.findViewById(R.id.listView);
+
         listView = root.findViewById(R.id.listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(new Intent(getActivity(), ViewRecipeActivity.class));
+            }
+        });
 
         MyAdapter adapter  = new MyAdapter(getActivity(), recipeTitle, recipeDescription);
         listView.setAdapter(adapter);
