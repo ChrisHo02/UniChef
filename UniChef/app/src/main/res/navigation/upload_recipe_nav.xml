@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/upload_recipe_nav"
+    app:startDestination="@id/uploadRecipe0">
+    <fragment
+        android:id="@+id/uploadRecipe0"
+        android:name="com.example.unichef.uploadRecipe0"
+        android:label="fragment_upload_recipe0"
+        tools:layout="@layout/fragment_upload_recipe0" >
+        <action
+            android:id="@+id/action_uploadRecipe0_to_uploadRecipe1"
+            app:destination="@id/uploadRecipe1"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadRecipe1"
+        android:name="com.example.unichef.uploadRecipe1"
+        android:label="fragment_upload_recipe1"
+        tools:layout="@layout/fragment_upload_recipe1" >
+        <action
+            android:id="@+id/action_uploadRecipe1_to_uploadRecipe2"
+            app:destination="@id/uploadRecipe2"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadRecipe2"
+        android:name="com.example.unichef.uploadRecipe2"
+        android:label="fragment_upload_recipe2"
+        tools:layout="@layout/fragment_upload_recipe2" >
+        <action
+            android:id="@+id/action_uploadRecipe2_to_uploadRecipe3"
+            app:destination="@id/uploadRecipe3"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadRecipe3"
+        android:name="com.example.unichef.uploadRecipe3"
+        android:label="fragment_upload_recipe3"
+        tools:layout="@layout/fragment_upload_recipe3" >
+        <action
+            android:id="@+id/action_uploadRecipe3_to_uploadRecipe4"
+            app:destination="@id/uploadRecipe4"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadRecipe4"
+        android:name="com.example.unichef.uploadRecipe4"
+        android:label="fragment_upload_recipe4"
+        tools:layout="@layout/fragment_upload_recipe4" >
+        <action
+            android:id="@+id/action_uploadRecipe4_to_uploadRecipe5"
+            app:destination="@id/uploadRecipe5"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadRecipe5"
+        android:name="com.example.unichef.uploadRecipe5"
+        android:label="fragment_upload_recipe5"
+        tools:layout="@layout/fragment_upload_recipe5" />
+</navigation>
