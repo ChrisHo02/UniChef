@@ -3,4 +3,20 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_recipe">New Recipe</string>
+    <string name="next">Next</string>
+    <string name="name_your_recipe">Name Your Recipe</string>
+    <string name="name_of_recipe">Name of Recipe</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="portion_size">Portion Size</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="prep_time">Prep Time</string>
+    <string name="minutes">Minutes</string>
+    <string name="cooking_time">Cooking Time</string>
+    <string name="method">Method</string>
+    <string name="tags">Tags</string>
+    <string name="preview">Preview</string>
+    <string name="finish">Finish</string>
 </resources>
