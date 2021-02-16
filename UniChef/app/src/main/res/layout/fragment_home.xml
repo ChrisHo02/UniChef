@@ -7,11 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <ListView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listView"
+        android:layout_height="match_parent">
 
-        ></ListView>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView"
+
+            ></ListView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@mipmap/ic_launcher"
+            android:layout_margin="40dp" />
+
+        </FrameLayout>
+
+
 
 </LinearLayout>

@@ -21,8 +21,8 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     ListView listView;
-    String recipeTitle[] = {"Spaghetti", "Lasagne", "Turds with Cream"};
-    String recipeDescription[] = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either."};
+    String recipeTitle[] = {"Spaghetti", "Lasagne", "Turds with Cream", "Curry", "Avocado", "Fish", "Toilet Finder", "Pizza"};
+    String recipeDescription[] = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
