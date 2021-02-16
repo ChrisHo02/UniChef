@@ -1,10 +1,9 @@
-package com.example.unichef;
+package com.example.unichef.ui.uploadRecipe;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -13,12 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.unichef.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link uploadRecipe5#newInstance} factory method to
+ * Use the {@link SubmitRecipeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class uploadRecipe5 extends Fragment implements  View.OnClickListener{
+public class SubmitRecipeFragment extends Fragment implements  View.OnClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,7 +32,7 @@ public class uploadRecipe5 extends Fragment implements  View.OnClickListener{
     Button finish;
     NavController navController;
 
-    public uploadRecipe5() {
+    public SubmitRecipeFragment() {
         // Required empty public constructor
     }
 
@@ -44,8 +45,8 @@ public class uploadRecipe5 extends Fragment implements  View.OnClickListener{
      * @return A new instance of fragment uploadRecipe5.
      */
     // TODO: Rename and change types and number of parameters
-    public static uploadRecipe5 newInstance(String param1, String param2) {
-        uploadRecipe5 fragment = new uploadRecipe5();
+    public static SubmitRecipeFragment newInstance(String param1, String param2) {
+        SubmitRecipeFragment fragment = new SubmitRecipeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,7 +67,7 @@ public class uploadRecipe5 extends Fragment implements  View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_upload_recipe5,
+        View view = inflater.inflate(R.layout.fragment_submit_recipe,
                 container, false);
 
 

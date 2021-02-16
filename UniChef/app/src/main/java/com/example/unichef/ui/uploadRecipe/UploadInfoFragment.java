@@ -1,25 +1,27 @@
-package com.example.unichef;
+package com.example.unichef.ui.uploadRecipe;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+
+import com.example.unichef.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link uploadRecipe0#newInstance} factory method to
+ * Use the {@link UploadInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class uploadRecipe0 extends Fragment implements View.OnClickListener {
+public class UploadInfoFragment extends Fragment implements View.OnClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,10 +31,10 @@ public class uploadRecipe0 extends Fragment implements View.OnClickListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    Button next;
-    NavController navController;
+    private Button next;
+    private NavController navController;
 
-    public uploadRecipe0() {
+    public UploadInfoFragment() {
         // Required empty public constructor
     }
 
@@ -42,11 +44,11 @@ public class uploadRecipe0 extends Fragment implements View.OnClickListener {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment uploadRecipe0.
+     * @return A new instance of fragment uploadRecipe1.
      */
     // TODO: Rename and change types and number of parameters
-    public static uploadRecipe0 newInstance(String param1, String param2) {
-        uploadRecipe0 fragment = new uploadRecipe0();
+    public static UploadInfoFragment newInstance(String param1, String param2) {
+        UploadInfoFragment fragment = new UploadInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,25 +64,31 @@ public class uploadRecipe0 extends Fragment implements View.OnClickListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_upload_info,
+                container, false);
 
+        Spinner mspin=(Spinner) view.findViewById(R.id.spinner);
+        Integer[] items = new Integer[]{1,2,3,4,5,6,7,8,9,10};
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this.getContext(), android.R.layout.simple_spinner_item, items);
+        mspin.setAdapter(adapter);
 
         navController = NavHostFragment.findNavController(this);
-        View view = inflater.inflate(R.layout.fragment_upload_recipe0,
-                container, false);
         next = (Button) view.findViewById(R.id.button);
         next.setOnClickListener(this);
         return view;
-    }
 
+        //return inflater.inflate(R.layout.fragment_upload_recipe2, container, false);
+    }
 
     @Override
     public void onClick(View view) {
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadRecipe0_to_uploadRecipe1));
+        navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadRecipe1_to_uploadRecipe2));
     }
 }
