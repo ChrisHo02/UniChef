@@ -40,8 +40,6 @@ public class HomeFragment extends Fragment {
             }
         });*/
 
-        //listView = root.findViewById(R.id.listView);
-
         listView = root.findViewById(R.id.listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -50,12 +48,11 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        MyAdapter adapter  = new MyAdapter(getActivity(), recipeTitle, recipeDescription);
+        MyAdapter adapter = new MyAdapter(getActivity(), recipeTitle, recipeDescription);
         listView.setAdapter(adapter);
 
         return root;
     }
-
 
     class MyAdapter extends ArrayAdapter<String>{
         Context context;
