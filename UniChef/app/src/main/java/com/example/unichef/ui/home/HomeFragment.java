@@ -24,9 +24,9 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     ListView listView;
-    String recipeTitle[] = {"Spaghetti", "Lasagne", "Turds with Cream", "Curry", "Avocado", "Fish", "Toilet Finder", "Pizza"};
-    String recipeDescription[] = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
-
+    String[] recipeTitle = {"Spaghetti", "Lasagne", "Turds with Cream", "Curry", "Avocado", "Fish", "Toilet Finder", "Pizza"};
+    String[] recipeDescription = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
+    int[] size = {1, 0, 2, 0, 2, 2, 1, 2};
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -70,7 +70,15 @@ public class HomeFragment extends Fragment {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.med_recipe_item, parent, false);
+            View row = null;
+            if (size[position] == 1){
+                row = layoutInflater.inflate(R.layout.med_recipe_item, parent, false);
+            } else if (size[position] == 2){
+                row = layoutInflater.inflate(R.layout.large_recipe_item, parent, false);
+            } else {
+                row = layoutInflater.inflate(R.layout.smol_recipe_item, parent, false);
+            }
+
             TextView myTitle = row.findViewById(R.id.textView1);
             TextView myDescription = row.findViewById(R.id.textView2);
 
