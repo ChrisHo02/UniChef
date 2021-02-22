@@ -17,19 +17,24 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.unichef.MainActivity;
 import com.example.unichef.R;
+import com.example.unichef.UploadRecipe;
 import com.example.unichef.ViewRecipeActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    //private HomeViewModel homeViewModel;
     ListView listView;
+    //FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+
     String[] recipeTitle = {"Spaghetti", "Lasagne", "Turds with Cream", "Curry", "Avocado", "Fish", "Toilet Finder", "Pizza"};
     String[] recipeDescription = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
     int[] size = {1, 0, 2, 0, 2, 2, 1, 2};
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        //homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         //This was default code written when I loaded up the project.
         /*final TextView textView = root.findViewById(R.id.text_home);
@@ -37,6 +42,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
+            }
+        });*/
+
+        /*fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),
+                        UploadRecipe.class);
+                startActivity(intent);
             }
         });*/
 
