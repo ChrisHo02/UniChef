@@ -19,6 +19,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.unichef.R;
 import com.example.unichef.ViewRecipeActivity;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 public class HomeFragment extends Fragment {
 
@@ -26,6 +28,7 @@ public class HomeFragment extends Fragment {
     ListView listView;
     String recipeTitle[] = {"Spaghetti", "Lasagne", "Turds with Cream", "Curry", "Avocado", "Fish", "Toilet Finder", "Pizza"};
     String recipeDescription[] = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
+    String categories [] = {"Vegan", "Meat", "Food", "Drink", "Pasta", "Vegetarian", "Quick", "Easy"};
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -39,6 +42,13 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });*/
+
+        ChipGroup chipGroup = root.findViewById(R.id.chipGroup);
+        for (String category : categories){
+            Chip categoryChip = new Chip(container.getContext());
+            categoryChip.setText(category);
+            chipGroup.addView(categoryChip);
+        }
 
         listView = root.findViewById(R.id.listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

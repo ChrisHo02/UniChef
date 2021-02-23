@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        uploadRecipe = findViewById(R.id.button);
-        uploadRecipe.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this,
-                    UploadRecipe.class);
-            startActivity(intent);
-        });
+//        uploadRecipe = findViewById(R.id.button);
+//        uploadRecipe.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this,
+//                    UploadRecipe.class);
+//            startActivity(intent);
+//        });
 
     }
 }
