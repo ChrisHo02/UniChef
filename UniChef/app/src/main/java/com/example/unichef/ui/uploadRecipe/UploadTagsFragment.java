@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.unichef.R;
+import com.example.unichef.adapters.UploadTagsAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +34,8 @@ public class UploadTagsFragment extends Fragment implements View.OnClickListener
     private String mParam2;
     Button next;
     NavController navController;
+    String tags[];
+    RecyclerView recyclerView;
 
     public UploadTagsFragment() {
         // Required empty public constructor
@@ -70,6 +75,12 @@ public class UploadTagsFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_upload_tags,
                 container, false);
 
+        recyclerView = view.findViewById(R.id.tags_recycler_view);
+        tags = getResources().getStringArray(R.array.tags);
+
+        UploadTagsAdapter uploadTagsAdapter = new UploadTagsAdapter(this.getContext(), tags);
+        recyclerView.setAdapter(uploadTagsAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         navController = NavHostFragment.findNavController(this);
         next = (Button) view.findViewById(R.id.button);
