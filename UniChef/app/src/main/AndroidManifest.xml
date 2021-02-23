@@ -10,7 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UniChef">
+<<<<<<< Updated upstream
         <activity android:name=".UploadRecipe"></activity>
+=======
+        <activity android:name=".UploadRecipeActivity" />
+        <activity android:name=".ViewRecipeActivity" />
+>>>>>>> Stashed changes
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

@@ -42,6 +42,9 @@
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
             app:popExitAnim="@anim/fragment_open_exit" />
+        <action
+            android:id="@+id/action_uploadRecipe2_to_chooseIngredientFragment"
+            app:destination="@id/chooseIngredientFragment" />
     </fragment>
     <fragment
         android:id="@+id/uploadRecipe3"
@@ -74,4 +77,13 @@
         android:name="com.example.unichef.ui.uploadRecipe.SubmitRecipeFragment"
         android:label="fragment_upload_recipe5"
         tools:layout="@layout/fragment_submit_recipe" />
+    <fragment
+        android:id="@+id/chooseIngredientFragment"
+        android:name="com.example.unichef.ui.uploadRecipe.ChooseIngredientFragment"
+        android:label="fragment_choose_ingredient"
+        tools:layout="@layout/fragment_choose_ingredient" >
+        <action
+            android:id="@+id/action_chooseIngredientFragment_to_uploadRecipe2"
+            app:destination="@id/uploadRecipe2" />
+    </fragment>
 </navigation>

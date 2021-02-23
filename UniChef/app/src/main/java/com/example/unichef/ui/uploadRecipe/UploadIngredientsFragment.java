@@ -30,7 +30,10 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     private String mParam1;
     private String mParam2;
     NavController navController;
+    Button addIngredient;
     Button next;
+
+
 
     public UploadIngredientsFragment() {
         // Required empty public constructor
@@ -61,6 +64,7 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -71,30 +75,36 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
         View view = inflater.inflate(R.layout.fragment_upload_ingredients,
                 container, false);
 
-//        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ingredientsRecyclerView);
-//        ArrayList<String> ingredients = new ArrayList<>();
-//        ingredients.add("Asparagus");
-//        ingredients.add("Bacon");
-//        ingredients.add("Cucumber");
-//        ingredients.add("Dijon Mustard");
-//        ingredients.add("Egg");
-//        ingredients.add("Flour");
-//        ingredients.add("Grapes");
 
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, ingredients);
-//        recyclerView.setAdapter(adapter);
+
+
+
+
+
 
         navController = NavHostFragment.findNavController(this);
+
+        addIngredient = (Button) view.findViewById(R.id.addIngredient_button);
+        addIngredient.setOnClickListener(this);
+
         next = (Button) view.findViewById(R.id.button);
         next.setOnClickListener(this);
 
         return view;
-
         //return inflater.inflate(R.layout.fragment_upload_recipe2, container, false);
     }
 
     @Override
     public void onClick(View view) {
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadRecipe2_to_uploadRecipe3));
+        switch (view.getId()) {
+            case R.id.addIngredient_button:
+                navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadRecipe2_to_chooseIngredientFragment));
+                break;
+            case R.id.button:
+                navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadRecipe2_to_uploadRecipe3));
+                break;
+            default:
+                break;
+        }
     }
 }

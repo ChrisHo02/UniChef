@@ -13,6 +13,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.unichef.R;
+<<<<<<< Updated upstream
+=======
+import com.example.unichef.UploadRecipeActivity;
+>>>>>>> Stashed changes
 
 public class DashboardFragment extends Fragment {
 
@@ -30,6 +34,20 @@ public class DashboardFragment extends Fragment {
                 textView.setText(s);
             }
         });
+<<<<<<< Updated upstream
         return root;
     }
+=======
+
+        Button uploadRecipe = root.findViewById(R.id.button);
+        uploadRecipe.setOnClickListener(v -> {
+            Intent intent = new Intent( DashboardFragment.super.getActivity(),
+                    UploadRecipeActivity.class);
+            startActivity(intent);
+        });
+
+        return root;
+    }
+
+>>>>>>> Stashed changes
 }
