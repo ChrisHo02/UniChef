@@ -9,15 +9,6 @@
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
 
-    <SearchView
-        android:id="@+id/search_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:iconifiedByDefault="false">
-    </SearchView>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
