@@ -27,7 +27,7 @@
             android:layout_width="198dp"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:inputType="textEmailAddress"
+            android:inputType="textPassword"
             android:maxLines="1"
             android:layout_marginBottom="15dp"/>
 
@@ -45,6 +45,7 @@
             android:gravity="center"
             android:text="Create an Account"
             android:layout_marginTop="50dp"/>
+        
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
