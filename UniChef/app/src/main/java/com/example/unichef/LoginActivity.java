@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.unichef.database.DBHelper;
+import com.example.unichef.database.User;
 
 public class LoginActivity extends AppCompatActivity {
     public Button button1;
@@ -15,6 +19,12 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //testing
+        DBHelper db = new DBHelper(this, null, null, 1);
+        User user = new User(1, "chris", "email.com","chris","pass");
+        db.addUser(db.getWritableDatabase(),user);
+        //end of testing
+
         super.onCreate(savedInstanceState);
         //for changing status bar icon colors
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
@@ -32,11 +42,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         button2 = (Button) findViewById(R.id.login_button);
+        EditText editTextEmail = findViewById(R.id.editTextEmail);
+        EditText editPassword = findViewById(R.id.editPassword);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                if(db.findUser(db.getReadableDatabase(),editTextEmail.getText().toString(), editPassword.getText().toString())){
+                    db.close();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
