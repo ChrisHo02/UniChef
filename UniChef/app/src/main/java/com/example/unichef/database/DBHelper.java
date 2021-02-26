@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Debug;
 
 import java.util.ArrayList;
 
@@ -17,29 +18,29 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //comment table
-        db.execSQL("CREATE TABLE Comment (commentId INTEGER PRIMARY KEY, userId INTEGER, recipeId INTEGER, comment TEXT, date TEXT, FOREIGN KEY(userId) REFERENCES User(userId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
+        db.execSQL("CREATE TABLE Comment (commentId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, recipeId INTEGER, comment TEXT, date TEXT, FOREIGN KEY(userId) REFERENCES User(userId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //equipment table
-        db.execSQL("CREATE TABLE Equipment (equipmentId INTEGER PRIMARY KEY, name, TEXT)");
+        db.execSQL("CREATE TABLE Equipment (equipmentId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
         //favourite recipe table
         db.execSQL("CREATE TABLE FavouriteRecipe (userId INTEGER, recipeId Integer, PRIMARY KEY(userId, recipeId), FOREIGN KEY(userId) REFERENCES User(userId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //ingredient table
-        db.execSQL("CREATE TABLE Ingredient(ingredientId INTEGER PRIMARY KEY, name TEXT)");
+        db.execSQL("CREATE TABLE Ingredient(ingredientId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
         //Instruction table
-        db.execSQL("CREATE TABLE Instruction(instructionId INTEGER PRIMARY KEY, recipeId INTEGER, step INTEGER, instruction TEXT, time INT, imageUrl TEXT, FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
+        db.execSQL("CREATE TABLE Instruction(instructionId INTEGER PRIMARY KEY AUTOINCREMENT, recipeId INTEGER, step INTEGER, instruction TEXT, time INT, imageUrl TEXT, FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //Liked recipe table
         db.execSQL("CREATE TABLE LikedRecipe(userId INTEGER, recipeId INTEGER, PRIMARY KEY(userId, recipeId), FOREIGN KEY(userId) REFERENCES User(userId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //Recipe table
-        db.execSQL("CREATE TABLE Recipe(recipeId INTEGER PRIMARY KEY, userId INTEGER, title TEXT, description TEXT, imageUrl TEXT, dateAdded TEXT, likes INTEGER, difficulty INTEGER, time INTEGER, portions INTEGER, FOREIGN KEY(userId) REFERENCES User(userId))");
+        db.execSQL("CREATE TABLE Recipe(recipeId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, title TEXT, description TEXT, imageUrl TEXT, dateAdded TEXT, likes INTEGER, difficulty INTEGER, time INTEGER, portions INTEGER, FOREIGN KEY(userId) REFERENCES User(userId))");
         //Recipe equipment table
         db.execSQL("CREATE TABLE RecipeEquipment(equipmentId INTEGER, recipeId INTEGER, PRIMARY KEY(equipmentId, recipeId), FOREIGN KEY(equipmentId) REFERENCES Equipment(equipmentId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //Recipe ingredients table
-        db.execSQL("CREATE TABLE RecipeIngredients(ingredientsId INTEGER, recipeId INTEGER, quantity INTEGER, PRIMARY KEY(ingredientsId, recipeId), FOREIGN KEY(ingredientsId) REFERENCES Ingredient(ingredientsId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
+        db.execSQL("CREATE TABLE RecipeIngredients(ingredientId INTEGER, recipeId INTEGER, quantity INTEGER, PRIMARY KEY(ingredientId, recipeId), FOREIGN KEY(ingredientId) REFERENCES Ingredient(ingredientId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //Recipe tags table
         db.execSQL("CREATE TABLE RecipeTags(tagId INTEGER, recipeId INTEGER, PRIMARY KEY(tagId, recipeId), FOREIGN KEY(tagId) REFERENCES Tag(tagId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //Tags table
-        db.execSQL("CREATE TABLE Tag(tagId INTEGER PRIMARY KEY, name TEXT)");
+        db.execSQL("CREATE TABLE Tag(tagId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
         //User table
-        db.execSQL("CREATE TABLE User(userId INTEGER PRIMARY KEY, name TEXT, email TEXT, username TEXT,  password TEXT)");
+        db.execSQL("CREATE TABLE User(userId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, username TEXT,  password TEXT)");
 
     }
 
@@ -49,28 +50,71 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void addUser(SQLiteDatabase db, User user){
         ContentValues values = new ContentValues();
-        values.put("userId", user.getUserId());
         values.put("name", user.getName());
         values.put("email", user.getEmail());
         values.put("username", user.getUsername());
         values.put("password", user.getPassword());
-        db.insert("User",null, values);
+        long userId = db.insert("User",null, values);
+        user.setId(userId);
     }
 
-    public void addComment(SQLiteDatabase db, Comment comment){
-        ContentValues values = new ContentValues();
-        values.put("commentId", comment.getCommentId());
-        values.put("userId", comment.getUserId());
-        values.put("recipeId", comment.getRecipeId());
-        values.put("comment", comment.getComment());
-        values.put("date", comment.getDate());
-        db.insert("Comment",null, values);
+//    public void addComment(SQLiteDatabase db, Comment comment){
+//        ContentValues values = new ContentValues();
+//        values.put("commentId", comment.getCommentId());
+//        values.put("userId", comment.getUserId());
+//        values.put("recipeId", comment.getRecipeId());
+//        values.put("comment", comment.getComment());
+//        values.put("date", comment.getDate());
+//        db.insert("Comment",null, values);
+//    }
+
+    public void addEquipment(SQLiteDatabase db, Equipment equipment, long recipeId){
+        String equipmentName = equipment.getName();
+        String query = "SELECT equipmentId FROM Equipment WHERE name = '" + equipmentName + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() == 0) {
+            ContentValues values = new ContentValues();
+            values.put("name", equipment.getName());
+            long equipmentId = db.insert("Equipment", null, values);
+
+            ContentValues linkValues = new ContentValues();
+            linkValues.put("equipmentId", equipmentId);
+            linkValues.put("recipeId", recipeId);
+            db.insert("RecipeEquipment", null, linkValues);
+        }else{
+            cursor.moveToFirst();
+            ContentValues linkValues = new ContentValues();
+            linkValues.put("equipmentId", cursor.getInt(cursor.getColumnIndex("equipmentId")));
+            linkValues.put("recipeId", recipeId);
+            db.insert("RecipeEquipment", null, linkValues);
+        }
     }
 
-    public void addInstruction(SQLiteDatabase db, Instruction instruction){
+    public void addIngredient(SQLiteDatabase db, Ingredient ingredient, long recipeId){
+        String ingredientName = ingredient.getName();
+        String query = "SELECT ingredientId FROM Ingredient WHERE name = '" + ingredientName + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() == 0) {
+            ContentValues values = new ContentValues();
+            values.put("name", ingredientName);
+            long ingredientId = db.insert("Ingredient", null, values);
+
+            ContentValues linkValues = new ContentValues();
+            linkValues.put("ingredientId", ingredientId);
+            linkValues.put("recipeId", recipeId);
+            db.insert("RecipeIngredients", null, linkValues);
+        }else{
+            cursor.moveToFirst();
+            ContentValues linkValues = new ContentValues();
+            linkValues.put("ingredientId", cursor.getInt(0));
+            linkValues.put("recipeId", recipeId);
+            db.insert("RecipeIngredients", null, linkValues);
+        }
+    }
+
+    public void addInstruction(SQLiteDatabase db, Instruction instruction, long recipeId){
         ContentValues values = new ContentValues();
-        values.put("instructionId", instruction.getInstructionId());
-        values.put("recipeId", instruction.getRecipeId());
+        values.put("recipeId", recipeId);
         values.put("step", instruction.getStep());
         values.put("instruction", instruction.getInstruction());
         values.put("time", instruction.getTime());
@@ -78,53 +122,33 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert("Instruction",null, values);
     }
 
-    public void addRecipeEquipment(SQLiteDatabase db, RecipeEquipment recipeEquipment){
-        ContentValues values = new ContentValues();
-        values.put("equipmentId", recipeEquipment.getEquipmentId());
-        values.put("recipeId", recipeEquipment.getRecipeId());
-        db.insert("RecipeEquipment",null, values);
-    }
+    public void addTag(SQLiteDatabase db, Tag tag, long recipeId){
+        String tagName = tag.getName();
+        String query = "SELECT tagId FROM Tag WHERE name = '" + tagName + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() == 0) {
+            ContentValues values = new ContentValues();
+            values.put("name", tagName);
+            long tagId = db.insert("Tag", null, values);
 
-    public void addEquipment(SQLiteDatabase db, Equipment equipment){
-        ContentValues values = new ContentValues();
-        values.put("equipmentId", equipment.getEquipmentId());
-        values.put("name", equipment.getName());
-        db.insert("Equipment",null, values);
-    }
-
-    public void addIngredient(SQLiteDatabase db, Ingredient ingredient){
-        ContentValues values = new ContentValues();
-        values.put("ingredientId", ingredient.getIngredientId());
-        values.put("name", ingredient.getName());
-        db.insert("Instruction",null, values);
-    }
-
-    public void addTag(SQLiteDatabase db, Tag tag){
-        ContentValues values = new ContentValues();
-        values.put("tagId", tag.getTagId());
-        values.put("name", tag.getName());
-        db.insert("Tag",null, values);
-    }
-
-    public void addRecipeEquipment(SQLiteDatabase db, RecipeIngredients recipeIngredients){
-        ContentValues values = new ContentValues();
-        values.put("ingredientId", recipeIngredients.getIngredientsId());
-        values.put("recipeId", recipeIngredients.getRecipeId());
-        values.put("quantity", recipeIngredients.getQuantity());
-        db.insert("RecipeEquipment",null, values);
-    }
-
-    public void addRecipeTags(SQLiteDatabase db, RecipeTags recipeTags){
-        ContentValues values = new ContentValues();
-        values.put("tagId", recipeTags.getTagId());
-        values.put("recipeId", recipeTags.getRecipeId());
-        db.insert("RecipeTags",null, values);
+            ContentValues linkValues = new ContentValues();
+            linkValues.put("tagId", tagId);
+            linkValues.put("recipeId", recipeId);
+            db.insert("RecipeTags", null, linkValues);
+        }else{
+            cursor.moveToFirst();
+            ContentValues linkValues = new ContentValues();
+            linkValues.put("tagId", cursor.getInt(0));
+            linkValues.put("recipeId", recipeId);
+            db.insert("RecipeTags", null, linkValues);
+        }
     }
 
     public void addRecipe(SQLiteDatabase db, Recipe recipe){
+        User recipeMaker = recipe.getUser();
+
         ContentValues values = new ContentValues();
-        values.put("recipeId", recipe.getRecipeId());
-        values.put("userId", recipe.getUserId());
+        values.put("userId", recipe.getUser().getId());
         values.put("title", recipe.getTitle());
         values.put("description", recipe.getDescription());
         values.put("imageUrl", recipe.getImageUrl());
@@ -133,22 +157,39 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("difficulty", recipe.getDifficulty());
         values.put("time", recipe.getTime());
         values.put("portions", recipe.getPortions());
-        db.insert("Recipe",null, values);
+        long entryId = db.insert("Recipe",null, values);
+        finaliseRecipe(db, entryId, recipe);
     }
 
-    public void addLikedRecipe(SQLiteDatabase db, LikedRecipe likedRecipe){
-        ContentValues values = new ContentValues();
-        values.put("userId", likedRecipe.getUserId());
-        values.put("recipeId", likedRecipe.getRecipeId());
-        db.insert("LikedRecipe",null, values);
+    //Update the Equipment/Ingredient/Tag/Instruction tables so that they correspond to the recipe.
+    public void finaliseRecipe(SQLiteDatabase db, long recipeId, Recipe recipe){
+        for (Equipment equipment : recipe.getEquipment()){
+            addEquipment(db, equipment, recipeId);
+        }
+        for (Ingredient ingredient : recipe.getIngredients()){
+            addIngredient(db, ingredient, recipeId);
+        }
+        for (Instruction instruction : recipe.getInstructions()){
+            addInstruction(db, instruction, recipeId);
+        }
+        for (Tag tag : recipe.getTags()){
+            addTag(db, tag, recipeId);
+        }
     }
 
-    public void addFavouriteRecipe(SQLiteDatabase db, FavouriteRecipe favouriteRecipe){
-        ContentValues values = new ContentValues();
-        values.put("userId", favouriteRecipe.getUserId());
-        values.put("recipeId", favouriteRecipe.getRecipeId());
-        db.insert("FavouriteRecipe",null, values);
-    }
+//    public void addLikedRecipe(SQLiteDatabase db, LikedRecipe likedRecipe){
+//        ContentValues values = new ContentValues();
+//        values.put("userId", likedRecipe.getUserId());
+//        values.put("recipeId", likedRecipe.getRecipeId());
+//        db.insert("LikedRecipe",null, values);
+//    }
+//
+//    public void addFavouriteRecipe(SQLiteDatabase db, FavouriteRecipe favouriteRecipe){
+//        ContentValues values = new ContentValues();
+//        values.put("userId", favouriteRecipe.getUserId());
+//        values.put("recipeId", favouriteRecipe.getRecipeId());
+//        db.insert("FavouriteRecipe",null, values);
+//    }
 
     //checks user login details
     public boolean findUser(SQLiteDatabase db, String emailInput, String passwordInput){
@@ -287,58 +328,4 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return title;
     }
-
-    public int generateUserId(SQLiteDatabase db){
-        String Query = "SELECT MAX(userId) FROM User";
-        Cursor cursor = db.rawQuery(Query, null);
-        if(cursor.getCount() <= 0){
-            cursor.close();
-            return 1;
-        }
-        int max = cursor.getInt(0);
-        return max+1;
-    }
-
-    public int generateRecipeId(SQLiteDatabase db){
-        String Query = "SELECT MAX(recipeId) FROM Recipe";
-        Cursor cursor = db.rawQuery(Query, null);
-        if(cursor.getCount() < 1){
-            cursor.close();
-            return 1;
-        }
-        int max = cursor.getInt(0);
-        cursor.close();
-        return max+1;
-    }
-
-    public int generateEquipmentId(SQLiteDatabase db){
-        String Query = "SELECT MAX(equipmentId) FROM Equipment";
-        Cursor cursor = db.rawQuery(Query, null);
-        if(cursor.getCount() < 1){
-            return 1;
-        }
-        int max = cursor.getInt(0);
-        return max+1;
-    }
-
-    public int generateTagId(SQLiteDatabase db){
-        String Query = "SELECT MAX(tagId) FROM Tag";
-        Cursor cursor = db.rawQuery(Query, null);
-        if(cursor.getCount() < 1){
-            return 1;
-        }
-        int max = cursor.getInt(0);
-        return max+1;
-    }
-
-    public int generateCommentId(SQLiteDatabase db){
-        String Query = "SELECT MAX(commentId) FROM Comment";
-        Cursor cursor = db.rawQuery(Query, null);
-        if(cursor.getCount() < 1){
-            return 1;
-        }
-        int max = cursor.getInt(0);
-        return max+1;
-    }
-    
 }

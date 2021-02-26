@@ -1,16 +1,12 @@
 package com.example.unichef.database;
 
 public class Instruction {
-    private int instructionId;
-    private int recipeId;
     private int step;
     private String instruction;
     private int time;
     private String imageUrl;
 
-    public Instruction(int instructionId, int recipeId, int step, String instruction, int time, String imageUrl) {
-        this.instructionId = instructionId;
-        this.recipeId = recipeId;
+    public Instruction(int step, String instruction, int time, String imageUrl) {
         this.step = step;
         this.instruction = instruction;
         this.time = time;
@@ -50,15 +46,4 @@ public class Instruction {
         this.step = step;
     }
 
-    public int getRecipeId() {
-        return recipeId;
-    }
-
-    public void setRecipeId(int recipeId) {
-        this.recipeId = recipeId;
-    }
-
-    public int getInstructionId() {
-        return instructionId;
-    }
 }
