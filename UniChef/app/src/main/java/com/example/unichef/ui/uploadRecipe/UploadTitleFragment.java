@@ -86,8 +86,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        EditText editText = view.findViewById(R.id.nameOfRecipe);
-        String nameOfRecipe = editText.getText().toString();
+        
         navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadTitle_to_navigation_uploadInfo));
     }
 }
