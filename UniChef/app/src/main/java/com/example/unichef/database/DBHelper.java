@@ -58,15 +58,14 @@ public class DBHelper extends SQLiteOpenHelper {
         user.setId(userId);
     }
 
-//    public void addComment(SQLiteDatabase db, Comment comment){
-//        ContentValues values = new ContentValues();
-//        values.put("commentId", comment.getCommentId());
-//        values.put("userId", comment.getUserId());
-//        values.put("recipeId", comment.getRecipeId());
-//        values.put("comment", comment.getComment());
-//        values.put("date", comment.getDate());
-//        db.insert("Comment",null, values);
-//    }
+    public void addComment(SQLiteDatabase db, Comment comment){
+        ContentValues values = new ContentValues();
+        values.put("userId", comment.getUser().getId());
+        values.put("recipeId", comment.getRecipe().getId());
+        values.put("comment", comment.getComment());
+        values.put("date", comment.getDate());
+        db.insert("Comment",null, values);
+    }
 
     public void addEquipment(SQLiteDatabase db, Equipment equipment, long recipeId){
         String equipmentName = equipment.getName();
@@ -88,6 +87,7 @@ public class DBHelper extends SQLiteOpenHelper {
             linkValues.put("recipeId", recipeId);
             db.insert("RecipeEquipment", null, linkValues);
         }
+        cursor.close();
     }
 
     public void addIngredient(SQLiteDatabase db, Ingredient ingredient, long recipeId){
@@ -110,6 +110,7 @@ public class DBHelper extends SQLiteOpenHelper {
             linkValues.put("recipeId", recipeId);
             db.insert("RecipeIngredients", null, linkValues);
         }
+        cursor.close();
     }
 
     public void addInstruction(SQLiteDatabase db, Instruction instruction, long recipeId){
@@ -142,11 +143,10 @@ public class DBHelper extends SQLiteOpenHelper {
             linkValues.put("recipeId", recipeId);
             db.insert("RecipeTags", null, linkValues);
         }
+        cursor.close();
     }
 
     public void addRecipe(SQLiteDatabase db, Recipe recipe){
-        User recipeMaker = recipe.getUser();
-
         ContentValues values = new ContentValues();
         values.put("userId", recipe.getUser().getId());
         values.put("title", recipe.getTitle());
@@ -158,6 +158,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("time", recipe.getTime());
         values.put("portions", recipe.getPortions());
         long entryId = db.insert("Recipe",null, values);
+        recipe.setId(entryId);
         finaliseRecipe(db, entryId, recipe);
     }
 
@@ -177,19 +178,23 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-//    public void addLikedRecipe(SQLiteDatabase db, LikedRecipe likedRecipe){
-//        ContentValues values = new ContentValues();
-//        values.put("userId", likedRecipe.getUserId());
-//        values.put("recipeId", likedRecipe.getRecipeId());
-//        db.insert("LikedRecipe",null, values);
-//    }
-//
-//    public void addFavouriteRecipe(SQLiteDatabase db, FavouriteRecipe favouriteRecipe){
-//        ContentValues values = new ContentValues();
-//        values.put("userId", favouriteRecipe.getUserId());
-//        values.put("recipeId", favouriteRecipe.getRecipeId());
-//        db.insert("FavouriteRecipe",null, values);
-//    }
+    public void addLikedRecipe(SQLiteDatabase db, User user, Recipe recipe){
+        ContentValues values = new ContentValues();
+        values.put("userId", user.getId());
+        values.put("recipeId", recipe.getId());
+        db.insert("LikedRecipe",null, values);
+
+        //Possibly want another method for this, or a method to get the number of liked recipes from the DB
+        String query = "UPDATE Recipe SET likes = likes + 1 WHERE recipeId = " + recipe.getId();
+        db.execSQL(query);
+    }
+
+    public void addFavouriteRecipe(SQLiteDatabase db, User user, Recipe recipe){
+        ContentValues values = new ContentValues();
+        values.put("userId", user.getId());
+        values.put("recipeId", recipe.getId());
+        db.insert("FavouriteRecipe",null, values);
+    }
 
     //checks user login details
     public boolean findUser(SQLiteDatabase db, String emailInput, String passwordInput){
