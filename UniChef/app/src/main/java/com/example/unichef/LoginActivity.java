@@ -11,7 +11,15 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.unichef.database.DBHelper;
+import com.example.unichef.database.Equipment;
+import com.example.unichef.database.Ingredient;
+import com.example.unichef.database.Instruction;
+import com.example.unichef.database.Recipe;
+import com.example.unichef.database.RecipeGenerator;
+import com.example.unichef.database.Tag;
 import com.example.unichef.database.User;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     public Button button1;
@@ -21,8 +29,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //testing
         DBHelper db = new DBHelper(this, null, null, 1);
-        User user = new User(1, "chris", "email.com","chris","pass");
-        db.addUser(db.getWritableDatabase(),user);
+        User user = new User("chris", "email.com","chris","pass");
+        db.addUser(db.getWritableDatabase(), user);
+
+        new RecipeGenerator().generateRecipes(db, user);
         //end of testing
 
         super.onCreate(savedInstanceState);
@@ -47,10 +57,12 @@ public class LoginActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
                 if(db.findUser(db.getReadableDatabase(),editTextEmail.getText().toString(), editPassword.getText().toString())){
                     db.close();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    //startActivity(intent);
                 }
             }
         });

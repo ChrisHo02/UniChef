@@ -1,18 +1,14 @@
 package com.example.unichef.database;
 
 public class Comment {
-    private int commentId;
-    private int userId;
-    private int recipeId;
+    private User user;
+    private Recipe recipe;
     private String comment;
     private String date;
 
-    public Comment(){}
-
-    public Comment(int commentId, int userId, int recipeId, String comment, String date){
-        this.commentId = commentId;
-        this.userId = userId;
-        this.recipeId = recipeId;
+    public Comment(User user, Recipe recipe, String comment, String date){
+        this.user = user;
+        this.recipe = recipe;
         this.comment = comment;
         this.date = date;
     }
@@ -21,6 +17,9 @@ public class Comment {
         return this.comment;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public String getDate() {
         return date;
@@ -30,27 +29,19 @@ public class Comment {
         this.date = date;
     }
 
-    public int getRecipeId() {
-        return recipeId;
+    public User getUser() {
+        return user;
     }
 
-    public void setRecipeId(int recipeId) {
-        this.recipeId = recipeId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getUserId() {
-        return userId;
+    public Recipe getRecipe() {
+        return recipe;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(int commentId) {
-        this.commentId = commentId;
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

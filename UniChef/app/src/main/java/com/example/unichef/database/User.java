@@ -1,27 +1,25 @@
 package com.example.unichef.database;
 
 public class User {
-    private int userId;
+    private long id;
     private String name;
     private String email;
     private String username;
     private String password;
 
-    public User(int userId, String name, String email, String username, String password) {
-        this.userId = userId;
+    public User(String name, String email, String username, String password) {
         this.name = name;
         this.email = email;
         this.username = username;
         this.password = password;
     }
 
-
-    public int getUserId() {
-        return userId;
+    public long getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
