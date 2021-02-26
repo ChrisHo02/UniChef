@@ -92,6 +92,6 @@ public class UploadTagsFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadRecipe4_to_uploadRecipe5));
+        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadTags_to_navigation_submitRecipe));
     }
 }

@@ -89,6 +89,6 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadRecipe1_to_uploadRecipe2));
+        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigationUploadInfo_to_navigation_uploadIngredient));
     }
 }
