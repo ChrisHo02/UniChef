@@ -1,11 +1,15 @@
 package com.example.unichef.database;
 
+import java.util.ArrayList;
+
 public class User {
     private long id;
     private String name;
     private String email;
     private String username;
     private String password;
+    private ArrayList<Recipe> likedRecipes;
+    private ArrayList<Recipe> favouriteRecipes;
 
     public User(String name, String email, String username, String password) {
         this.name = name;
@@ -52,5 +56,29 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public ArrayList<Recipe> getFavouriteRecipes() {
+        return favouriteRecipes;
+    }
+
+    public void setFavouriteRecipes(ArrayList<Recipe> favouriteRecipes) {
+        this.favouriteRecipes = favouriteRecipes;
+    }
+
+    public void addFavouriteRecipe(Recipe recipe){
+        favouriteRecipes.add(recipe);
+    }
+
+    public ArrayList<Recipe> getLikedRecipes() {
+        return likedRecipes;
+    }
+
+    public void setLikedRecipes(ArrayList<Recipe> likedRecipes) {
+        this.likedRecipes = likedRecipes;
+    }
+
+    public void addLikedRecipe(Recipe recipe){
+        likedRecipes.add(recipe);
     }
 }

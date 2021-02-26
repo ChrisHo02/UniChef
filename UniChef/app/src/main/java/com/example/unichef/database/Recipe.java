@@ -3,6 +3,7 @@ package com.example.unichef.database;
 import java.util.ArrayList;
 
 public class Recipe {
+    private long id;
     private User user;
     private String title;
     private String description;
@@ -32,6 +33,14 @@ public class Recipe {
         this.difficulty = difficulty;
         this.time = time;
         this.portions = portions;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public User getUser() {
