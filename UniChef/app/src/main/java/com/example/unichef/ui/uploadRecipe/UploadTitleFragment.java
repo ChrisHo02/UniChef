@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.unichef.R;
 
@@ -73,14 +74,20 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         navController = NavHostFragment.findNavController(this);
         View view = inflater.inflate(R.layout.fragment_upload_title,
                 container, false);
+
+
         next = (Button) view.findViewById(R.id.button);
         next.setOnClickListener(this);
+
+
         return view;
     }
 
 
     @Override
     public void onClick(View view) {
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadRecipe0_to_uploadRecipe1));
+        EditText editText = view.findViewById(R.id.nameOfRecipe);
+        String nameOfRecipe = editText.getText().toString();
+        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadTitle_to_navigation_uploadInfo));
     }
 }
