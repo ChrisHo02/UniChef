@@ -1,10 +1,13 @@
 package com.example.unichef.ui.uploadRecipe;
 
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -14,6 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.unichef.R;
+import com.example.unichef.database.Ingredient;
+import com.example.unichef.database.Recipe;
+import com.example.unichef.database.DBHelper;
+import com.example.unichef.database.User;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,7 +96,20 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadTitle_to_navigation_uploadInfo));
+        EditText recipeTextView = (EditText) getView().findViewById(R.id.nameOfRecipe);
+        EditText recipeDescTextView = (EditText) getView().findViewById(R.id.description);
+        String title = recipeTextView.getText().toString();
+        String description = recipeDescTextView.getText().toString();
+
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+
+
+
+        Recipe recipe = new Recipe(null, title, description, null, null, null, ingredients, null, null, -1, -1, -1, -1);
+
+        UploadTitleFragmentDirections.ActionNavigationUploadTitleToNavigationUploadInfo action = UploadTitleFragmentDirections.actionNavigationUploadTitleToNavigationUploadInfo();
+        action.setRecipeArg(recipe);
+        Navigation.findNavController(view).navigate(action);
+        //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadTitle_to_navigation_uploadInfo));
     }
 }

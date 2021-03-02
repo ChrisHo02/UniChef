@@ -32,7 +32,7 @@ public class UploadTagsAdapter extends RecyclerView.Adapter<UploadTagsAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.ingredient_txt.setText(data[position]);
+        holder.tag_txt.setText(data[position]);
     }
 
     @Override
@@ -41,11 +41,11 @@ public class UploadTagsAdapter extends RecyclerView.Adapter<UploadTagsAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView ingredient_txt;
+        TextView tag_txt;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ingredient_txt = itemView.findViewById(R.id.tag_txt);
+            tag_txt = itemView.findViewById(R.id.tag_txt);
         }
     }
 }

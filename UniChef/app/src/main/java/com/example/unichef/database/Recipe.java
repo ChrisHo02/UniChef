@@ -1,8 +1,9 @@
 package com.example.unichef.database;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Recipe {
+public class Recipe implements Serializable {
     private long id;
     private User user;
     private String title;

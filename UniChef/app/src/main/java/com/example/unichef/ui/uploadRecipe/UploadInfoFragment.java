@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -12,9 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 
 import com.example.unichef.R;
+
+import com.example.unichef.database.Ingredient;
+import com.example.unichef.database.Recipe;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +41,7 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
     private String mParam2;
     private Button next;
     private NavController navController;
+    Recipe recipe;
 
     public UploadInfoFragment() {
         // Required empty public constructor
@@ -74,6 +83,8 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_upload_info,
                 container, false);
 
+        this.recipe = UploadInfoFragmentArgs.fromBundle(getArguments()).getRecipeArg();
+
         Spinner mspin=(Spinner) view.findViewById(R.id.spinner);
         Integer[] items = new Integer[]{1,2,3,4,5,6,7,8,9,10};
         ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this.getContext(), android.R.layout.simple_spinner_item, items);
@@ -82,13 +93,39 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
         navController = NavHostFragment.findNavController(this);
         next = (Button) view.findViewById(R.id.button);
         next.setOnClickListener(this);
-        return view;
 
+
+        return view;
         //return inflater.inflate(R.layout.fragment_upload_recipe2, container, false);
     }
 
     @Override
     public void onClick(View view) {
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigationUploadInfo_to_navigation_uploadIngredient));
+
+        Spinner recipePortionSpinner = (Spinner) getView().findViewById(R.id.spinner);
+        Integer portion = Integer.parseInt(recipePortionSpinner.getSelectedItem().toString());
+
+        RatingBar recipeDifficultyRateBar = (RatingBar) getView().findViewById(R.id.ratingBar);
+        Integer difficulty = recipeDifficultyRateBar.getNumStars();
+
+
+        EditText recipeTimeTextView = (EditText) getView().findViewById(R.id.cookingTime);
+        Integer cookingTime = 0;
+        if (!recipeTimeTextView.getText().toString().equals("")) {
+            cookingTime = Integer.parseInt(recipeTimeTextView.getText().toString());
+        }
+
+        recipe.setPortions(5);
+        recipe.setDifficulty(difficulty);
+        recipe.setTime(cookingTime);
+
+//        ArrayList<Ingredient> ingredients = new ArrayList<>();
+//        ingredients.add(new Ingredient("apple"));
+//        ingredients.add(new Ingredient("banana"));
+
+        UploadInfoFragmentDirections.ActionNavigationUploadInfoToNavigationUploadIngredient action = UploadInfoFragmentDirections.actionNavigationUploadInfoToNavigationUploadIngredient();
+        action.setRecipeArg(recipe);
+        Navigation.findNavController(view).navigate(action);
+//        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_UploadInfo_to_navigation_uploadIngredient));
     }
 }
