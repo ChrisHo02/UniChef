@@ -92,7 +92,7 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
 
 
         recyclerView = view.findViewById(R.id.recyclerView);
-        String[] testData = new String[recipe.getIngredients().size()];
+//        String[] testData = new String[recipe.getIngredients().size()];
 //        testData = (recipe.getIngredients()).toArray(testData);
 //        IngredientAdapter adapter = new IngredientAdapter(testData);
 //        recyclerView.setHasFixedSize(true);
