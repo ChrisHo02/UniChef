@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@color/light_grey"
     tools:context=".ui.settings.SettingsFragment">
 
     <TextView
@@ -21,133 +21,165 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="219dp"
-        tools:layout_editor_absoluteY="265dp">
+        tools:layout_editor_absoluteX="170dp"
+        tools:layout_editor_absoluteY="134dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
-
-        <Button
-            android:id="@+id/button_delete"
+        <TextView
+            android:id="@+id/settings_title_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="74dp"
-            android:onClick="deleteAccount"
-            android:background="#CCF44336"
-            android:text="@string/title_button_delete_account" />
+            android:padding="10dp"
+            android:textSize="18dp"
+            android:text="@string/settings_account" />
 
-        <ImageView
-            android:id="@+id/profilepic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            app:srcCompat="@drawable/profile1"
-            android:layout_alignParentStart="true"
-            android:contentDescription="@string/profile_pic"/>
-
-        <TextView
-            android:id="@+id/usernameHolder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ratingBar"
-            android:layout_toRightOf="@id/profilepic"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:text="@string/usernameHolder"
-            android:background="#CCffffff "
-            android:layout_toEndOf="@id/profilepic" />
-
-        <TextView
-            android:id="@+id/username"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ratingBar"
-            android:layout_toRightOf="@id/usernameHolder"
-            android:background="#CCffffff "
-            android:text="@string/username" />
-
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/profilepic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:isIndicator="true"
-            android:background="#CCffffff "
-            android:rating = "2.5"/>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:progress="100"
-            android:fadingEdge="horizontal"
-            android:layout_below="@id/profilepic"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="wrap_content"
-            android:background="#CCffffff "
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/emailHolder"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:layout_below="@id/usernameHolder"
-            android:layout_toRightOf="@id/profilepic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#CCffffff "
-            android:text="@string/emailHolder" />
-
-        <TextView
-            android:id="@+id/email"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:layout_below="@id/usernameHolder"
-            android:layout_toRightOf="@id/emailHolder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#CCffffff "
-            android:text="@string/email" />
-
-        <Button
-            android:id="@+id/button_clearRecipes"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:layout_above="@id/button_delete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#CCF44336"
-            android:text="@string/clearRecipes" />
-
-        <Button
-            android:id="@+id/button_changeDetails"
-            android:layout_above="@id/button_clearRecipes"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#CCF44336"
-            android:text="@string/changeDetails" />
-
-        <ImageButton
-            android:id="@+id/button_savedRecipes"
+        <Switch
+            android:id="@+id/settings_switch_private_account"
             android:layout_centerInParent="true"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/recipebook" />
+            android:layout_below="@+id/settings_title_account"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@color/white"
+            android:text="@string/settings_private_account" />
 
+        <Button
+            android:id="@+id/settings_change_password"
+            android:layout_below="@+id/settings_switch_private_account"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:theme="@style/settings_button_white"
+            android:padding="2dp"
+            android:text="@string/settings_change_password" />
+
+        <Button
+            android:id="@+id/settings_change_email"
+            android:layout_below="@+id/settings_change_password"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:theme="@style/settings_button_white"
+            android:padding="2dp"
+            android:text="@string/settings_change_email" />
 
     </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="2dp">
+            <TextView
+                android:id="@+id/settings_title_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="18dp"
+                android:text="@string/settings_title_notifications" />
+
+            <Switch
+                android:id="@+id/settings_app_notifications"
+                android:layout_centerInParent="true"
+                android:layout_below="@+id/settings_title_notifications"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@color/white"
+                android:text="@string/settings_app_notifications" />
+
+            <Switch
+                android:id="@+id/settings_email_notifications"
+                android:layout_centerInParent="true"
+                android:layout_below="@+id/settings_app_notifications"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@color/white"
+                android:text="@string/settings_email_notifications" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/settings_title_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="18dp"
+                android:text="@string/settings_title_about" />
+
+            <Button
+                android:id="@+id/settings_privacy_policy"
+                android:layout_below="@+id/settings_title_about"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                android:theme="@style/settings_button_white"
+                android:padding="2dp"
+                android:text="@string/settings_privacy_policy" />
+
+            <Button
+                android:id="@+id/settings_code_of_conduct"
+                android:layout_below="@+id/settings_privacy_policy"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                android:theme="@style/settings_button_white"
+                android:padding="2dp"
+                android:text="@string/settings_code_of_conduct" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp">
+            <TextView
+                android:id="@+id/settings_title_help"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="18dp"
+                android:text="@string/settings_title_help" />
+
+            <Button
+                android:id="@+id/settings_help_button"
+                android:layout_below="@+id/settings_title_help"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                android:theme="@style/settings_button_white"
+                android:padding="2dp"
+                android:text="@string/settings_get_help" />
+
+            <Button
+                android:id="@+id/settings_delete_account"
+                android:layout_below="@+id/settings_help_button"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                android:theme="@style/settings_button_white"
+                android:padding="2dp"
+                android:text="@string/settings_delete_account" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
