@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //comment table
-        db.execSQL("CREATE TABLE Comment (commentId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, recipeId INTEGER, comment TEXT, date TEXT, FOREIGN KEY(userId) REFERENCES User(userId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
+        db.execSQL("CREATE TABLE Comment (commentId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, recipeId INTEGER, comment TEXT, date INTEGER, FOREIGN KEY(userId) REFERENCES User(userId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //equipment table
         db.execSQL("CREATE TABLE Equipment (equipmentId INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
         //favourite recipe table
@@ -30,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
         //Liked recipe table
         db.execSQL("CREATE TABLE LikedRecipe(userId INTEGER, recipeId INTEGER, PRIMARY KEY(userId, recipeId), FOREIGN KEY(userId) REFERENCES User(userId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //Recipe table
-        db.execSQL("CREATE TABLE Recipe(recipeId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, title TEXT, description TEXT, imageUrl TEXT, dateAdded TEXT, likes INTEGER, difficulty INTEGER, time INTEGER, portions INTEGER, FOREIGN KEY(userId) REFERENCES User(userId))");
+        db.execSQL("CREATE TABLE Recipe(recipeId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, title TEXT, description TEXT, imageUrl TEXT, dateAdded INTEGER, likes INTEGER, difficulty INTEGER, time INTEGER, portions INTEGER, FOREIGN KEY(userId) REFERENCES User(userId))");
         //Recipe equipment table
         db.execSQL("CREATE TABLE RecipeEquipment(equipmentId INTEGER, recipeId INTEGER, PRIMARY KEY(equipmentId, recipeId), FOREIGN KEY(equipmentId) REFERENCES Equipment(equipmentId), FOREIGN KEY(recipeId) REFERENCES Recipe(recipeId))");
         //Recipe ingredients table
@@ -61,7 +61,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void addComment(SQLiteDatabase db, Comment comment){
         ContentValues values = new ContentValues();
         values.put("userId", comment.getUser().getId());
-        values.put("recipeId", comment.getRecipe().getId());
+        values.put("recipeId", comment.getRecipeId());
         values.put("comment", comment.getComment());
         values.put("date", comment.getDate());
         db.insert("Comment",null, values);
@@ -196,6 +196,180 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert("FavouriteRecipe",null, values);
     }
 
+    public ArrayList<Recipe> getRecipes(SQLiteDatabase db, int amount){
+        String query = "SELECT * FROM Recipe ORDER BY dateAdded ASC LIMIT " + amount;
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<Recipe> recipes = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Recipe newRecipe = getRecipe(db, cursor);
+                recipes.add(newRecipe);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return recipes;
+    }
+
+    public Recipe getRecipe(SQLiteDatabase db, Cursor cursor){
+        Recipe newRecipe = new Recipe();
+        int recipeId = cursor.getInt(0);
+        newRecipe.setId(recipeId);
+        newRecipe.setTitle(cursor.getString(2));
+        newRecipe.setDescription(cursor.getString(3));
+        newRecipe.setImageUrl(cursor.getString(4));
+        newRecipe.setDateAdded(cursor.getInt(5));
+        newRecipe.setLikes(cursor.getInt(6));
+        newRecipe.setDifficulty(cursor.getInt(7));
+        newRecipe.setTime(cursor.getInt(8));
+        newRecipe.setPortions(cursor.getInt(9));
+
+        User recipeUser = getUser(db, cursor.getInt(1));
+        newRecipe.setUser(recipeUser);
+
+        ArrayList<Instruction> recipeInstructions = getInstructions(db, recipeId);
+        newRecipe.setInstructions(recipeInstructions);
+
+        ArrayList<Ingredient> recipeIngredients = getIngredients(db, recipeId);
+        newRecipe.setIngredients(recipeIngredients);
+
+        ArrayList<Equipment> recipeEquipment = getEquipment(db, recipeId);
+        newRecipe.setEquipment(recipeEquipment);
+
+        ArrayList<Tag> recipeTags = getTags(db, recipeId);
+        newRecipe.setTags(recipeTags);
+
+        ArrayList<Comment> recipeComments = getComments(db, recipeId);
+        newRecipe.setComments(recipeComments);
+
+        return newRecipe;
+    }
+
+    public User getUser(SQLiteDatabase db, int userId){
+        String query = "SELECT * FROM User WHERE userId = " + userId;
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        User newUser = new User();
+        newUser.setId(userId);
+        newUser.setName(cursor.getString(1));
+        newUser.setEmail(cursor.getString(2));
+        newUser.setUsername(cursor.getString(3));
+        newUser.setPassword(cursor.getString(4));
+        cursor.close();
+        return newUser;
+    }
+
+    public ArrayList<Instruction> getInstructions(SQLiteDatabase db, int recipeId){
+        String query = "SELECT * FROM Instruction WHERE recipeId = " + recipeId;
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<Instruction> instructions = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Instruction newInstruction = getInstruction(cursor);
+                instructions.add(newInstruction);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return instructions;
+    }
+
+    public Instruction getInstruction(Cursor cursor){
+        Instruction instruction = new Instruction();
+        instruction.setStep(cursor.getInt(2));
+        instruction.setInstruction(cursor.getString(3));
+        instruction.setTime(cursor.getInt(4));
+        instruction.setImageUrl(cursor.getString(5));
+        return instruction;
+    }
+
+    public ArrayList<Ingredient> getIngredients(SQLiteDatabase db, int recipeId){
+        String query = "SELECT Name FROM Ingredient INNER JOIN RecipeIngredients ON Ingredient.ingredientId  = recipeingredients.ingredientId WHERE recipeingredients.recipeId = " + recipeId;
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                Ingredient newIngredient = getIngredient(cursor);
+                ingredients.add(newIngredient);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return ingredients;
+    }
+
+    public Ingredient getIngredient(Cursor cursor){
+        return new Ingredient(cursor.getString(0));
+    }
+
+    public ArrayList<Equipment> getEquipment(SQLiteDatabase db, int recipeId){
+        String query = "SELECT Name FROM Equipment INNER JOIN RecipeEquipment ON Equipment.equipmentId = RecipeEquipment.equipmentId WHERE RecipeEquipment.recipeId = " + recipeId;
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<Equipment> equipment = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Equipment newEquipment = getSingleEquipment(cursor);
+                equipment.add(newEquipment);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return equipment;
+    }
+
+    public Equipment getSingleEquipment(Cursor cursor){
+        return new Equipment(cursor.getString(0));
+    }
+
+    public ArrayList<Tag> getTags(SQLiteDatabase db, int recipeId){
+        String query = "SELECT Name FROM Tag INNER JOIN RecipeTags ON Tag.tagId  = recipetags.tagId WHERE recipetags.recipeId = " + recipeId;
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<Tag> tags = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Tag newTag = getTag(cursor);
+                tags.add(newTag);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return tags;
+    }
+
+    public Tag getTag(Cursor cursor){
+        return new Tag(cursor.getString(0));
+    }
+
+    public ArrayList<Comment> getComments(SQLiteDatabase db, int recipeId){
+        String query = "SELECT * FROM Comment WHERE recipeId = " + recipeId;
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<Comment> comments = new ArrayList<>();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Comment newComment = getComment(db, cursor, recipeId);
+                comments.add(newComment);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return comments;
+    }
+
+    public Comment getComment(SQLiteDatabase db, Cursor cursor, int recipeId){
+        Comment comment = new Comment();
+        comment.setRecipeId(recipeId);
+        comment.setUser(getUser(db, cursor.getInt(1)));
+        comment.setComment(cursor.getString(3));
+        comment.setDate(cursor.getInt(4));
+        return comment;
+    }
+
     //checks user login details
     public boolean findUser(SQLiteDatabase db, String emailInput, String passwordInput){
         String Query = "SELECT * FROM User WHERE email = '" + emailInput + "'" + "AND password = '" + passwordInput +"'";
@@ -302,17 +476,6 @@ public class DBHelper extends SQLiteOpenHelper {
         String title = cursor.getString(0);
         cursor.close();
         return title;
-    }
-
-    public ArrayList<String> getRecipeTags(SQLiteDatabase db, int recipeId){
-        ArrayList<String> recipeTags = new ArrayList<>();
-        String Query = "SELECT tagId FROM RecipeTags WHERE recipeId ='" + recipeId + "'";
-        Cursor cursor = db.rawQuery(Query, null);
-        for(int i=0;i<cursor.getCount();i++){
-            recipeTags.add(cursor.getString(i));
-        }
-        cursor.close();
-        return recipeTags;
     }
 
     public ArrayList<String> getListOfTagNames(SQLiteDatabase db, ArrayList<String> tagIds){

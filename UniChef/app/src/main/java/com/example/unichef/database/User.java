@@ -11,6 +11,8 @@ public class User {
     private ArrayList<Recipe> likedRecipes;
     private ArrayList<Recipe> favouriteRecipes;
 
+    public User(){}
+
     public User(String name, String email, String username, String password) {
         this.name = name;
         this.email = email;

@@ -6,6 +6,8 @@ public class Instruction {
     private int time;
     private String imageUrl;
 
+    public Instruction(){}
+
     public Instruction(int step, String instruction, int time, String imageUrl) {
         this.step = step;
         this.instruction = instruction;
