@@ -1,7 +1,6 @@
 package com.example.unichef.database;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class RecipeGenerator {
     public void generateRecipes(DBHelper db, User user) {
@@ -18,7 +17,7 @@ public class RecipeGenerator {
         ArrayList<Instruction> instructions = new ArrayList<>();
         instructions.add(new Instruction(1, "Fry", 20, "img"));
         instructions.add(new Instruction(2, "Eat", 10, "help me"));
-        Recipe recipe = new Recipe(user, "Title", "Description", "imageurl", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 5, 20, 4);
+        Recipe recipe = new Recipe(user, "Title", "Description", "imageurl", "date", instructions, ingredients, equipment, tags, 10, 5, 20, 4);
         db.addRecipe(db.getWritableDatabase(), recipe);
 
     }
@@ -59,7 +58,7 @@ public class RecipeGenerator {
         instructions.add(new Instruction(8, "Take the frying pan off the heat, leave to stand for 30 seconds, and add the egg-cheese mixture. Mix everything together, and the heat of the pasta will cook the egg (don't scramble it!). Add a couple of spoons of the pasta water to the frying pan.", 10, "help me"));
         instructions.add(new Instruction(9, "Serve and enjoy!", 10, "help me"));
 
-        Recipe recipe = new Recipe(user, "Spaghetti Carbonara", "This cheesy pasta dish is an Italian favourite and with the right technique, you can make it perfect every time", "carbonara.png", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 5, 20, 4);
+        Recipe recipe = new Recipe(user, "Spaghetti Carbonara", "This cheesy pasta dish is an Italian favourite and with the right technique, you can make it perfect every time", "carbonara.png", "28/02/21", instructions, ingredients, equipment, tags, 10, 5, 20, 4);
         db.addRecipe(db.getWritableDatabase(), recipe);
     }
 
@@ -90,7 +89,7 @@ public class RecipeGenerator {
         instructions.add(new Instruction(4, "Grill for 4-5 minutes on each side, depending on how well cooked you like them.", 10, "help me"));
         instructions.add(new Instruction(5, "Serve in burger buns", 20, "img"));
 
-        Recipe recipe = new Recipe(user, "Beef Burger Recipe", "Easy and Quick to make", "burgers.png", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 1, 30, 4);
+        Recipe recipe = new Recipe(user, "Beef Burger Recipe", "Easy and Quick to make", "burgers.png", "28/02/2021", instructions, ingredients, equipment, tags, 10, 1, 30, 4);
         db.addRecipe(db.getWritableDatabase(), recipe);
     }
 
@@ -129,7 +128,7 @@ public class RecipeGenerator {
         instructions.add(new Instruction(5, "To check the chicken is cooked, find the thickest part and tear in half – if any part is still raw cook until done.", 10, "help me"));
         instructions.add(new Instruction(6, "Serve in tortilla wraps", 10, "help me"));
 
-        Recipe recipe = new Recipe(user, "Chicken Fajitas", "Need a simple, vibrant midweek meal that you'll love? Put together these easy chicken fajitas and people can create their own masterpieces at the table", "fajitas.png", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 5, 15, 3);
+        Recipe recipe = new Recipe(user, "Chicken Fajitas", "Need a simple, vibrant midweek meal that you'll love? Put together these easy chicken fajitas and people can create their own masterpieces at the table", "fajitas.png", "28/02/21", instructions, ingredients, equipment, tags, 10, 5, 15, 3);
         db.addRecipe(db.getWritableDatabase(), recipe);
     }
 
@@ -168,7 +167,7 @@ public class RecipeGenerator {
         instructions.add(new Instruction(6, "When the bolognese is nearly finished, cook 400g spaghetti following the pack instructions.", 10, "help me"));
         instructions.add(new Instruction(7, "Drain the spaghetti and serve with bolognese on top", 10, "help me"));
 
-        Recipe recipe = new Recipe(user, "Spaghetti Bolognese", "super easy and a true Italian classic with a meaty, chilli sauce", "spagbol.png", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 5, 110, 3);
+        Recipe recipe = new Recipe(user, "Spaghetti Bolognese", "super easy and a true Italian classic with a meaty, chilli sauce", "spagbol.png", "28/02/21", instructions, ingredients, equipment, tags, 10, 5, 110, 3);
         db.addRecipe(db.getWritableDatabase(), recipe);
     }
 
@@ -199,7 +198,7 @@ public class RecipeGenerator {
         instructions.add(new Instruction(4, "Stir occasionally to prevent the Sauce from sticking to the bottom of the pan", 10, "help me"));
         instructions.add(new Instruction(5, "Taste and adjust the seasoning with salt, sugar and lemon juice", 20, "img"));
 
-        Recipe recipe = new Recipe(user, "Chicken Curry", "Flavourful and colourful quick chicken curry recipe", "chickencurry.png", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 1, 30, 4);
+        Recipe recipe = new Recipe(user, "Chicken Curry", "Flavourful and colourful quick chicken curry recipe", "chickencurry.png", "28/02/2021", instructions, ingredients, equipment, tags, 10, 1, 30, 4);
         db.addRecipe(db.getWritableDatabase(), recipe);
     }
 
@@ -227,7 +226,7 @@ public class RecipeGenerator {
         instructions.add(new Instruction(4, "When hot, cook your pancakes for 1 min on each side until golden, keeping them warm in a low oven as you go.", 10, "help me"));
         instructions.add(new Instruction(5, "Serve with your favourite toppings!", 20, "img"));
 
-        Recipe recipe = new Recipe(user, "Pancake", "Learn a skill for life with this foolproof crêpe recipe that ensures perfect pancakes every time – elaborate flip optional", "pancakes.png", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 1, 10-40, 4);
+        Recipe recipe = new Recipe(user, "Pancake", "Learn a skill for life with this foolproof crêpe recipe that ensures perfect pancakes every time – elaborate flip optional", "pancakes.png", "28/02/2021", instructions, ingredients, equipment, tags, 10, 1, 10-40, 4);
         db.addRecipe(db.getWritableDatabase(), recipe);
     }
 
@@ -265,7 +264,7 @@ public class RecipeGenerator {
         instructions.add(new Instruction(2, "Meanwhile, heat the remaining oil in a large saucepan over a medium heat. Add the onion, carrot and celery. Cook for 8-10 mins, stirring occasionally until soft, then crush in the garlic and cook for 1 min more. Add the remaining dried spices and tomato purée. Give everything a good mix and cook for 1 min more", 10, "help me"));
         instructions.add(new Instruction(3, "Add the red pepper, chopped tomatoes and 200ml water. Bring the chilli to a boil, then simmer for 20 mins. Tip in the beans and cook for another 10 mins before adding the sweet potato.", 10, "help me"));
 
-        Recipe recipe = new Recipe(user, "Vegan Chilli", "Flavour packed VEGAN chilli that can be enjoyed with rice.", "veganchilli.png", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 1, 45, 4);
+        Recipe recipe = new Recipe(user, "Vegan Chilli", "Flavour packed VEGAN chilli that can be enjoyed with rice.", "veganchilli.png", "28/02/2021", instructions, ingredients, equipment, tags, 10, 1, 45, 4);
         db.addRecipe(db.getWritableDatabase(), recipe);
     }
 
@@ -291,7 +290,7 @@ public class RecipeGenerator {
         instructions.add(new Instruction(2, "Tip half the Bolognese mixture into a large rectangular baking dish measuring about 26cm x 20cm. Arrange 3 lasagne sheets on top, then spread half the Creamy Sauce over them. Repeat the layers, then sprinkle the grated cheese evenly over the surface", 10, "help me"));
         instructions.add(new Instruction(3, "Bake for around 30 minutes, until cooked and golden brown. Allow to stand for a few minutes, then serve.", 10, "help me"));
 
-        Recipe recipe = new Recipe(user, "Easy Lasagne", "Saucy Lasagne with Sauces so takes less than half the time than normal!", "lasagna.png", new Date().getTime(), instructions, ingredients, equipment, tags, 10, 1, 50, 4);
+        Recipe recipe = new Recipe(user, "Easy Lasagne", "Saucy Lasagne with Sauces so takes less than half the time than normal!", "lasagna.png", "28/02/2021", instructions, ingredients, equipment, tags, 10, 1, 50, 4);
         db.addRecipe(db.getWritableDatabase(), recipe);
     }
 
