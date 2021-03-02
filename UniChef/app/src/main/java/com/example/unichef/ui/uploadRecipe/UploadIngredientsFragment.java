@@ -84,22 +84,25 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
         View view = inflater.inflate(R.layout.fragment_upload_ingredients,
                 container, false);
-
 
         this.recipe = UploadIngredientsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
 
 
-        recyclerView = view.findViewById(R.id.recyclerView);
+//        recyclerView = view.findViewById(R.id.recyclerView);
 //        String[] testData = new String[recipe.getIngredients().size()];
 //        testData = (recipe.getIngredients()).toArray(testData);
 //        IngredientAdapter adapter = new IngredientAdapter(testData);
 //        recyclerView.setHasFixedSize(true);
 //        recyclerView.setAdapter(adapter);
 
-        navController = NavHostFragment.findNavController(this);
 
+
+
+
+        navController = NavHostFragment.findNavController(this);
 
         addIngredient = (Button) view.findViewById(R.id.addIngredient_button);
         addIngredient.setOnClickListener(this);
