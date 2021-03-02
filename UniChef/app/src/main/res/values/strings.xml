@@ -4,15 +4,22 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_account">Account</string>
     <string name="title_settings">Settings</string>
-    <string name="title_button_delete_account">Delete Account</string>
-    <string name="profile_pic">Profile picture</string>
-    <string name="usernameHolder">Username: </string>
-    <string name="username">xFaZe Bentopher</string>
-    <string name="emailHolder">Email: </string>
-    <string name="email">bennyboy2000@hotmail.co.uk</string>
-    <string name="changeDetails">Edit Account Details</string>
-    <string name="clearRecipes">Clear Saved Recipes</string>
-    <string name="viewRecipes">View Saved Recipes</string>
+    <string name="settings_delete_account">Delete Account</string>
+
+    <string name="settings_account"><b>Account</b></string>
+    <string name="settings_title_notifications"><b>Notifications</b></string>
+    <string name="settings_title_help"><b>Support</b></string>
+    <string name="settings_title_about"><b>About</b></string>
+    <string name="settings_private_account">Private Account</string>
+    <string name="settings_change_password">Change Password</string>
+    <string name="settings_change_email">Change Email</string>
+    <string name="settings_get_help">Help FAQ</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_code_of_conduct">Code of Conduct</string>
+
+
+    <string name="settings_app_notifications">Receive notifications</string>
+    <string name="settings_email_notifications">Receive Email Updates</string>
 
     <string-array name="tags">
         <item>"test"</item>
