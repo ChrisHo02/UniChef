@@ -5,14 +5,23 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.unichef.MainActivity;
 import com.example.unichef.R;
+import com.example.unichef.adapters.IngredientAdapter;
+import com.example.unichef.database.Ingredient;
+import com.example.unichef.database.Recipe;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +41,9 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     NavController navController;
     Button addIngredient;
     Button next;
+    Recipe recipe;
+    ArrayList<Ingredient> ingredients;
+    RecyclerView recyclerView;
 
 
 
@@ -76,13 +88,18 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
                 container, false);
 
 
+        this.recipe = UploadIngredientsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
 
 
-
-
-
+        recyclerView = view.findViewById(R.id.recyclerView);
+        String[] testData = new String[recipe.getIngredients().size()];
+//        testData = (recipe.getIngredients()).toArray(testData);
+//        IngredientAdapter adapter = new IngredientAdapter(testData);
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setAdapter(adapter);
 
         navController = NavHostFragment.findNavController(this);
+
 
         addIngredient = (Button) view.findViewById(R.id.addIngredient_button);
         addIngredient.setOnClickListener(this);
@@ -98,7 +115,10 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addIngredient_button:
-                navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredient_to_navigation_chooseIngredient));
+                UploadIngredientsFragmentDirections.ActionNavigationUploadIngredientToNavigationChooseIngredient action = UploadIngredientsFragmentDirections.actionNavigationUploadIngredientToNavigationChooseIngredient();
+                action.setRecipeArg(recipe);
+                Navigation.findNavController(view).navigate(action);
+                //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredient_to_navigation_chooseIngredient));
                 break;
             case R.id.button:
                 navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));

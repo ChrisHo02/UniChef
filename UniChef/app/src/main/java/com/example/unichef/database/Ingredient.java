@@ -1,6 +1,7 @@
 package com.example.unichef.database;
 
-public class Ingredient {
+
+public class Ingredient  {
     private String name;
 
     public Ingredient(String name) {

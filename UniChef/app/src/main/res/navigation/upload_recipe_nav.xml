@@ -9,68 +9,68 @@
         android:name="com.example.unichef.ui.uploadRecipe.UploadTitleFragment"
         android:label="fragment_upload_title"
         tools:layout="@layout/fragment_upload_title">
-        <action
-            android:id="@+id/action_uploadRecipe0_to_uploadRecipe1"
-            app:destination="@id/uploadInfoFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+<!--        <action-->
+<!--            android:id="@+id/action_uploadRecipe0_to_uploadRecipe1"-->
+<!--            app:destination="@id/uploadInfoFragment"-->
+<!--            app:enterAnim="@anim/fragment_open_enter"-->
+<!--            app:exitAnim="@anim/fragment_open_exit"-->
+<!--            app:popEnterAnim="@anim/fragment_open_enter"-->
+<!--            app:popExitAnim="@anim/nav_default_pop_exit_anim" />-->
     </fragment>
     <fragment
         android:id="@+id/uploadInfoFragment"
         android:name="com.example.unichef.ui.uploadRecipe.UploadInfoFragment"
         android:label="fragment_upload_info"
         tools:layout="@layout/fragment_upload_info">
-        <action
-            android:id="@+id/action_uploadRecipe1_to_uploadRecipe2"
-            app:destination="@id/uploadRecipe2"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+<!--        <action-->
+<!--            android:id="@+id/action_uploadRecipe1_to_uploadRecipe2"-->
+<!--            app:destination="@id/uploadRecipe2"-->
+<!--            app:enterAnim="@anim/fragment_open_enter"-->
+<!--            app:exitAnim="@anim/fragment_open_exit"-->
+<!--            app:popEnterAnim="@anim/fragment_open_enter"-->
+<!--            app:popExitAnim="@anim/fragment_open_exit" />-->
     </fragment>
     <fragment
         android:id="@+id/uploadRecipe2"
         android:name="com.example.unichef.ui.uploadRecipe.UploadIngredientsFragment"
         android:label="fragment_upload_recipe2"
         tools:layout="@layout/fragment_upload_ingredients" >
-        <action
-            android:id="@+id/action_uploadRecipe2_to_uploadRecipe3"
-            app:destination="@id/uploadRecipe3"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
-        <action
-            android:id="@+id/action_uploadRecipe2_to_chooseIngredientFragment"
-            app:destination="@id/chooseIngredientFragment" />
+<!--        <action-->
+<!--            android:id="@+id/action_uploadRecipe2_to_uploadRecipe3"-->
+<!--            app:destination="@id/uploadRecipe3"-->
+<!--            app:enterAnim="@anim/fragment_open_enter"-->
+<!--            app:exitAnim="@anim/fragment_open_exit"-->
+<!--            app:popEnterAnim="@anim/fragment_open_enter"-->
+<!--            app:popExitAnim="@anim/fragment_open_exit" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_uploadRecipe2_to_chooseIngredientFragment"-->
+<!--            app:destination="@id/chooseIngredientFragment" />-->
     </fragment>
     <fragment
         android:id="@+id/uploadRecipe3"
         android:name="com.example.unichef.ui.uploadRecipe.UploadInstructionsFragment"
         android:label="fragment_upload_recipe3"
         tools:layout="@layout/fragment_upload_instructions" >
-        <action
-            android:id="@+id/action_uploadRecipe3_to_uploadRecipe4"
-            app:destination="@id/uploadRecipe4"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+<!--        <action-->
+<!--            android:id="@+id/action_uploadRecipe3_to_uploadRecipe4"-->
+<!--            app:destination="@id/uploadRecipe4"-->
+<!--            app:enterAnim="@anim/fragment_open_enter"-->
+<!--            app:exitAnim="@anim/fragment_open_exit"-->
+<!--            app:popEnterAnim="@anim/fragment_open_enter"-->
+<!--            app:popExitAnim="@anim/fragment_open_exit" />-->
     </fragment>
     <fragment
         android:id="@+id/uploadRecipe4"
         android:name="com.example.unichef.ui.uploadRecipe.UploadTagsFragment"
         android:label="fragment_upload_recipe4"
         tools:layout="@layout/fragment_upload_tags" >
-        <action
-            android:id="@+id/action_uploadRecipe4_to_uploadRecipe5"
-            app:destination="@id/uploadRecipe5"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+<!--        <action-->
+<!--            android:id="@+id/action_uploadRecipe4_to_uploadRecipe5"-->
+<!--            app:destination="@id/uploadRecipe5"-->
+<!--            app:enterAnim="@anim/fragment_open_enter"-->
+<!--            app:exitAnim="@anim/fragment_open_exit"-->
+<!--            app:popEnterAnim="@anim/fragment_open_enter"-->
+<!--            app:popExitAnim="@anim/fragment_open_exit" />-->
     </fragment>
     <fragment
         android:id="@+id/uploadRecipe5"
@@ -82,8 +82,8 @@
         android:name="com.example.unichef.ui.uploadRecipe.ChooseIngredientFragment"
         android:label="fragment_choose_ingredient"
         tools:layout="@layout/fragment_choose_ingredient" >
-        <action
-            android:id="@+id/action_chooseIngredientFragment_to_uploadRecipe2"
-            app:destination="@id/uploadRecipe2" />
+<!--        <action-->
+<!--            android:id="@+id/action_chooseIngredientFragment_to_uploadRecipe2"-->
+<!--            app:destination="@id/uploadRecipe2" />-->
     </fragment>
 </navigation>
