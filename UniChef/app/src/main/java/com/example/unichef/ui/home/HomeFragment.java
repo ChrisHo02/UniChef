@@ -23,12 +23,17 @@ import com.example.unichef.MainActivity;
 import com.example.unichef.R;
 import com.example.unichef.SignupActivity;
 import com.example.unichef.ViewRecipeActivity;
+import com.example.unichef.database.DBHelper;
+import com.example.unichef.database.Recipe;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    private ArrayList<Recipe> someRecipes;
     ListView listView;
     String recipeTitle[] = {"Spaghetti", "Lasagne", "Turds with Cream", "Curry", "Avocado", "Fish", "Toilet Finder", "Pizza"};
     String recipeDescription[] = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
@@ -47,6 +52,9 @@ public class HomeFragment extends Fragment {
             }
         });*/
 
+        DBHelper db = new DBHelper(this.getContext(), null, null, 1);
+        someRecipes = db.getRecipes(db.getReadableDatabase(), 10);
+
         ChipGroup chipGroup = root.findViewById(R.id.chipGroup);
         for (String category : categories){
             Chip categoryChip = new Chip(container.getContext());
@@ -55,12 +63,7 @@ public class HomeFragment extends Fragment {
         }
 
         listView = root.findViewById(R.id.listView);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getActivity(), ViewRecipeActivity.class));
-            }
-        });
+        listView.setOnItemClickListener((parent, view, position, id) -> startActivity(new Intent(getActivity(), ViewRecipeActivity.class)));
 
         MyAdapter adapter = new MyAdapter(getActivity(), recipeTitle, recipeDescription);
         listView.setAdapter(adapter);
