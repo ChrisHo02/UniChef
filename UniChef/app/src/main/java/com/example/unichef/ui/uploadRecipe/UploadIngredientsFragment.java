@@ -18,6 +18,8 @@ import android.widget.Button;
 import com.example.unichef.MainActivity;
 import com.example.unichef.R;
 import com.example.unichef.adapters.IngredientAdapter;
+import com.example.unichef.adapters.UploadIngredientsAdapter;
+import com.example.unichef.adapters.UploadTagsAdapter;
 import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Recipe;
 
@@ -92,11 +94,10 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
 
 
         recyclerView = view.findViewById(R.id.recyclerView);
-//        String[] testData = new String[recipe.getIngredients().size()];
-//        testData = (recipe.getIngredients()).toArray(testData);
-//        IngredientAdapter adapter = new IngredientAdapter(testData);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setAdapter(adapter);
+        ingredients = recipe.getIngredients();
+        UploadIngredientsAdapter adapter = new UploadIngredientsAdapter(this.getContext(), ingredients);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         navController = NavHostFragment.findNavController(this);
 

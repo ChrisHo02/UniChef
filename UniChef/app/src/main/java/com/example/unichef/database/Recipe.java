@@ -20,6 +20,9 @@ public class Recipe implements Serializable {
     private int portions;
     private ArrayList<Comment> comments;
 
+    public Recipe() {
+    }
+
     public Recipe(User user, String title, String description, String imageUrl, String dateAdded, ArrayList<Instruction> instructions, ArrayList<Ingredient> ingredients, ArrayList<Equipment> equipment, ArrayList<Tag> tags, int likes, int difficulty, int time, int portions) {
         this.user = user;
         this.title = title;

@@ -100,12 +100,15 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         EditText recipeDescTextView = (EditText) getView().findViewById(R.id.description);
         String title = recipeTextView.getText().toString();
         String description = recipeDescTextView.getText().toString();
-
         ArrayList<Ingredient> ingredients = new ArrayList<>();
 
 
 
-        Recipe recipe = new Recipe(null, title, description, null, null, null, ingredients, null, null, -1, -1, -1, -1);
+        Recipe recipe = new Recipe();
+        recipe.setTitle(title);
+        recipe.setDescription(description);
+        recipe.setImageUrl("IDK");
+        recipe.setIngredients(ingredients);
 
         UploadTitleFragmentDirections.ActionNavigationUploadTitleToNavigationUploadInfo action = UploadTitleFragmentDirections.actionNavigationUploadTitleToNavigationUploadInfo();
         action.setRecipeArg(recipe);
