@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.example.unichef.R;
 import com.example.unichef.database.Ingredient;
+import com.example.unichef.database.Instruction;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.DBHelper;
 import com.example.unichef.database.User;
@@ -100,13 +101,16 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         EditText recipeDescTextView = (EditText) getView().findViewById(R.id.description);
         String title = recipeTextView.getText().toString();
         String description = recipeDescTextView.getText().toString();
+
         ArrayList<Ingredient> ingredients = new ArrayList<>();
+        ArrayList<Instruction> instructions = new ArrayList<>();
 
         Recipe recipe = new Recipe();
         recipe.setTitle(title);
         recipe.setDescription(description);
         recipe.setImageUrl("IDK");
         recipe.setIngredients(ingredients);
+        recipe.setInstructions(instructions);
 
         UploadTitleFragmentDirections.ActionNavigationUploadTitleToNavigationUploadInfo action = UploadTitleFragmentDirections.actionNavigationUploadTitleToNavigationUploadInfo();
         action.setRecipeArg(recipe);

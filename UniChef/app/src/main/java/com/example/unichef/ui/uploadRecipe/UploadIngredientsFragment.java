@@ -116,13 +116,16 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addIngredient_button:
-                UploadIngredientsFragmentDirections.ActionNavigationUploadIngredientToNavigationChooseIngredient action = UploadIngredientsFragmentDirections.actionNavigationUploadIngredientToNavigationChooseIngredient();
+                UploadIngredientsFragmentDirections.ActionNavigationUploadIngredientsToNavigationChooseIngredient action = UploadIngredientsFragmentDirections.actionNavigationUploadIngredientsToNavigationChooseIngredient();
                 action.setRecipeArg(recipe);
                 Navigation.findNavController(view).navigate(action);
                 //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredient_to_navigation_chooseIngredient));
                 break;
             case R.id.button:
-                navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
+                UploadIngredientsFragmentDirections.ActionNavigationUploadIngredientsToNavigationUploadInstructions action2 = UploadIngredientsFragmentDirections.actionNavigationUploadIngredientsToNavigationUploadInstructions();
+                action2.setRecipeArg(recipe);
+                Navigation.findNavController(view).navigate(action2);
+                //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
                 break;
             default:
                 break;

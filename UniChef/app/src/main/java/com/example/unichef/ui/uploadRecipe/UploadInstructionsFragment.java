@@ -5,14 +5,26 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.unichef.R;
+import com.example.unichef.adapters.InstructionAdapter;
+import com.example.unichef.adapters.UploadIngredientsAdapter;
+import com.example.unichef.adapters.UploadInstructionsAdapter;
+import com.example.unichef.database.Instruction;
+import com.example.unichef.database.Recipe;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,7 +42,14 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
     private String mParam1;
     private String mParam2;
     Button next;
+    Button addInstruction;
     NavController navController;
+    Recipe recipe;
+    RecyclerView recyclerView;
+    ArrayList<Instruction> instructions;
+    UploadInstructionsAdapter adapter;
+    int step = 0;
+
 
     public UploadInstructionsFragment() {
         // Required empty public constructor
@@ -70,8 +89,23 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
         View view = inflater.inflate(R.layout.fragment_upload_instructions,
                 container, false);
 
+        this.recipe = UploadInstructionsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
+        this.instructions = recipe.getInstructions();
+
+
+
+        recyclerView = view.findViewById(R.id.instructions_recycler_view);
+        this.adapter= new UploadInstructionsAdapter(this.getContext(),instructions);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL));
+
 
         navController = NavHostFragment.findNavController(this);
+
+        addInstruction = (Button) view.findViewById(R.id.addInstruction_button);
+        addInstruction.setOnClickListener(this);
         next = (Button) view.findViewById(R.id.button);
         next.setOnClickListener(this);
 
@@ -81,6 +115,24 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
 
     @Override
     public void onClick(View view) {
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadInstructions_to_navigation_uploadTags));
+        switch (view.getId()) {
+            case R.id.addInstruction_button:
+                EditText instructionTextView = (EditText) getView().findViewById(R.id.instruction_editText);
+                String instructionStr = instructionTextView.getText().toString();
+                this.instructions.add(new Instruction(++step, instructionStr, 0,null));
+                System.out.println(instructions);
+                instructionTextView.getText().clear();
+                this.adapter.notifyDataSetChanged();
+                break;
+            case R.id.button:
+                recipe.setInstructions(instructions);
+                UploadInstructionsFragmentDirections.ActionNavigationUploadInstructionsToNavigationUploadTags action = UploadInstructionsFragmentDirections.actionNavigationUploadInstructionsToNavigationUploadTags();
+                action.setReipceArg(recipe);
+                Navigation.findNavController(view).navigate(action);
+                //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
+                break;
+            default:
+                break;
+        }
     }
 }

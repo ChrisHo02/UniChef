@@ -55,7 +55,7 @@
         android:label="@string/new_recipe"
         tools:layout="@layout/fragment_upload_ingredients">
         <action
-            android:id="@+id/action_navigation_uploadIngredient_to_navigation_chooseIngredient"
+            android:id="@+id/action_navigation_uploadIngredients_to_navigation_chooseIngredient"
             app:destination="@id/navigation_chooseIngredient" />
         <action
             android:id="@+id/action_navigation_uploadIngredients_to_navigation_uploadInstructions"
@@ -88,6 +88,11 @@
         <action
             android:id="@+id/action_navigation_uploadInstructions_to_navigation_uploadTags"
             app:destination="@id/navigation_uploadTags" />
+        <argument
+            android:name="recipeArg"
+            app:argType="com.example.unichef.database.Recipe"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/navigation_uploadTags"
@@ -97,11 +102,22 @@
         <action
             android:id="@+id/action_navigation_uploadTags_to_navigation_submitRecipe"
             app:destination="@id/navigation_submitRecipe" />
+        <argument
+            android:name="reipceArg"
+            app:argType="com.example.unichef.database.Recipe"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/navigation_submitRecipe"
         android:name="com.example.unichef.ui.uploadRecipe.SubmitRecipeFragment"
         android:label="@string/new_recipe"
-        tools:layout="@layout/fragment_submit_recipe" />
+        tools:layout="@layout/fragment_submit_recipe" >
+        <argument
+            android:name="recipeArg"
+            app:argType="com.example.unichef.database.Recipe"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 
 </navigation>
