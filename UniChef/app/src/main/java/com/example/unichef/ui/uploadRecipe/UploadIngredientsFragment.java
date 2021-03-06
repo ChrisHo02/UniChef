@@ -44,7 +44,11 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     private String mParam1;
     private String mParam2;
     private static final String[] INGREDIENTS = new String[]{
-            "Apple", "Avocado", "Acorn", "Banana", "Carrot", "Duck", "Egg", "Fire", "Garlic", "Ginger", "Hot sauce", "Igloo"
+            "Apple", "Avocado", "Acorn", "Banana", "Carrot", "Duck", "Egg", "Garlic", "Ginger", "Hot sauce", "Red onion", "Onion", "Red pepper", "Yellow pepper", "Green pepper",
+            "Pancetta", "Parmesan", "Egg", "Salted butter", "Unsalted butter", "Butter", "Salt", "Pepper", "Beef mince", "Pork mince", "Lamb mince", "Chicken breast",
+            "Chicken thigh", "Chicken wing", "Chicken drumstick", "Red chilli", "Smoked paprika", "Ground coriander", "Ground cumin", "Olive oil", "Lime", "Lemon", "Tabasco",
+            "Tortilla", "Carrot", "Oregano", "Tomato", "Spaghetti", "Tinned tomatoes", "Curry sauce", "Sugar", "Caster sugar", "Granulated sugar", "Vegetable oil", "Sweet potato",
+            "Potato", "Black beans", "Kidney beans", "Tomato purée", "Chilli powder", "Celery", "Lasagne sheets", "Cheddar cheese"
     };
     NavController navController;
     Button addIngredient;
