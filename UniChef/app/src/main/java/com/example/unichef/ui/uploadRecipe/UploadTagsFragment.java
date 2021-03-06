@@ -75,6 +75,7 @@ public class UploadTagsFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_upload_tags,
                 container, false);
 
+
         recyclerView = view.findViewById(R.id.tags_recycler_view);
         tags = getResources().getStringArray(R.array.tags);
 
@@ -92,6 +93,6 @@ public class UploadTagsFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadTags_to_navigation_submitRecipe));
+        //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadTags_to_navigation_submitRecipe));
     }
 }

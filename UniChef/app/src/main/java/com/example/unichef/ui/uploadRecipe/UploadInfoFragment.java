@@ -83,6 +83,7 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_upload_info,
                 container, false);
 
+        assert getArguments() != null;
         this.recipe = UploadInfoFragmentArgs.fromBundle(getArguments()).getRecipeArg();
 
         Spinner mspin=(Spinner) view.findViewById(R.id.spinner);
@@ -115,7 +116,7 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
             cookingTime = Integer.parseInt(recipeTimeTextView.getText().toString());
         }
 
-        recipe.setPortions(5);
+        recipe.setPortions(portion);
         recipe.setDifficulty(difficulty);
         recipe.setTime(cookingTime);
 
@@ -123,7 +124,8 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
 //        ingredients.add(new Ingredient("apple"));
 //        ingredients.add(new Ingredient("banana"));
 
-        UploadInfoFragmentDirections.ActionNavigationUploadInfoToNavigationUploadIngredient action = UploadInfoFragmentDirections.actionNavigationUploadInfoToNavigationUploadIngredient();
+
+        UploadInfoFragmentDirections.ActionUploadInfoFragmentToUploadIngredientsFragment action = UploadInfoFragmentDirections.actionUploadInfoFragmentToUploadIngredientsFragment();
         action.setRecipeArg(recipe);
         Navigation.findNavController(view).navigate(action);
 //        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_UploadInfo_to_navigation_uploadIngredient));

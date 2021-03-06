@@ -120,14 +120,13 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
                 EditText instructionTextView = (EditText) getView().findViewById(R.id.instruction_editText);
                 String instructionStr = instructionTextView.getText().toString();
                 this.instructions.add(new Instruction(++step, instructionStr, 0,null));
-                System.out.println(instructions);
                 instructionTextView.getText().clear();
                 this.adapter.notifyDataSetChanged();
                 break;
             case R.id.button:
                 recipe.setInstructions(instructions);
-                UploadInstructionsFragmentDirections.ActionNavigationUploadInstructionsToNavigationUploadTags action = UploadInstructionsFragmentDirections.actionNavigationUploadInstructionsToNavigationUploadTags();
-                action.setReipceArg(recipe);
+                UploadInstructionsFragmentDirections.ActionUploadInstructionsFragmentToUploadTagsFragment action = UploadInstructionsFragmentDirections.actionUploadInstructionsFragmentToUploadTagsFragment();
+                action.setRecipeArg(recipe);
                 Navigation.findNavController(view).navigate(action);
                 //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
                 break;

@@ -112,9 +112,9 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         recipe.setIngredients(ingredients);
         recipe.setInstructions(instructions);
 
-        UploadTitleFragmentDirections.ActionNavigationUploadTitleToNavigationUploadInfo action = UploadTitleFragmentDirections.actionNavigationUploadTitleToNavigationUploadInfo();
+        UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
         action.setRecipeArg(recipe);
         Navigation.findNavController(view).navigate(action);
-        //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadTitle_to_navigation_uploadInfo));
+        //navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadTitleFragment_to_uploadInfoFragment));
     }
 }

@@ -103,7 +103,8 @@ public class ChooseIngredientFragment extends Fragment implements  View.OnClickL
         EditText ingredientTextView = (EditText) getView().findViewById(R.id.ingredient_autoCompleteTextView);
         String ingredientString = ingredientTextView.getText().toString();
         recipe.addIngredient(new Ingredient(ingredientString));
-        ChooseIngredientFragmentDirections.ActionNavigationChooseIngredientToNavigationUploadIngredients action = ChooseIngredientFragmentDirections.actionNavigationChooseIngredientToNavigationUploadIngredients();
+
+        ChooseIngredientFragmentDirections.ActionChooseIngredientFragmentToUploadIngredientsFragment action = ChooseIngredientFragmentDirections.actionChooseIngredientFragmentToUploadIngredientsFragment();
         action.setRecipeArg(recipe);
         Navigation.findNavController(view).navigate(action);
         //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_chooseIngredient_to_navigation_uploadIngredients));

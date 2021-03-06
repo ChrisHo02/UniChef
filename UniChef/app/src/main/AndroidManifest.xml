@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UniChef">
-        <activity android:name=".UploadRecipe" />
+        <activity android:name=".UploadRecipeActivity"
+            android:parentActivityName="com.example.unichef.MainActivity"/>
         <activity android:name=".ViewRecipeActivity" />
         <activity
             android:name=".LoginActivity"

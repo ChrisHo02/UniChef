@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.unichef.MainActivity;
 import com.example.unichef.R;
@@ -40,12 +43,17 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private static final String[] INGREDIENTS = new String[]{
+            "Apple", "Avocado", "Acorn", "Banana", "Carrot", "Duck", "Egg", "Fire", "Garlic", "Ginger", "Hot sauce", "Igloo"
+    };
     NavController navController;
     Button addIngredient;
     Button next;
     Recipe recipe;
     ArrayList<Ingredient> ingredients;
     RecyclerView recyclerView;
+    ArrayAdapter<String> chooseAdapter;
+    UploadIngredientsAdapter uploadIngredientsAdapter;
 
 
 
@@ -90,13 +98,18 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
                 container, false);
 
 
+        assert getArguments() != null;
         this.recipe = UploadIngredientsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
 
 
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.ingredient_autoCompleteTextView);
+        this.chooseAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, INGREDIENTS);
+        autoCompleteTextView.setAdapter(chooseAdapter);
+
         recyclerView = view.findViewById(R.id.recyclerView);
         ingredients = recipe.getIngredients();
-        UploadIngredientsAdapter adapter = new UploadIngredientsAdapter(this.getContext(), ingredients);
-        recyclerView.setAdapter(adapter);
+        this.uploadIngredientsAdapter = new UploadIngredientsAdapter(this.getContext(), ingredients);
+        recyclerView.setAdapter(uploadIngredientsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         navController = NavHostFragment.findNavController(this);
@@ -116,13 +129,18 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addIngredient_button:
-                UploadIngredientsFragmentDirections.ActionNavigationUploadIngredientsToNavigationChooseIngredient action = UploadIngredientsFragmentDirections.actionNavigationUploadIngredientsToNavigationChooseIngredient();
-                action.setRecipeArg(recipe);
-                Navigation.findNavController(view).navigate(action);
+                EditText ingredientTextView = (EditText) getView().findViewById(R.id.ingredient_autoCompleteTextView);
+                String ingredientString = ingredientTextView.getText().toString();
+                recipe.addIngredient(new Ingredient(ingredientString));
+                ingredientTextView.getText().clear();
+                this.uploadIngredientsAdapter.notifyDataSetChanged();
+//                UploadIngredientsFragmentDirections.ActionUploadIngredientsFragmentToChooseIngredientFragment action = UploadIngredientsFragmentDirections.actionUploadIngredientsFragmentToChooseIngredientFragment();
+//                action.setRecipeArg(recipe);
+//                Navigation.findNavController(view).navigate(action);
                 //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredient_to_navigation_chooseIngredient));
                 break;
             case R.id.button:
-                UploadIngredientsFragmentDirections.ActionNavigationUploadIngredientsToNavigationUploadInstructions action2 = UploadIngredientsFragmentDirections.actionNavigationUploadIngredientsToNavigationUploadInstructions();
+                UploadIngredientsFragmentDirections.ActionUploadIngredientsFragmentToUploadInstructionsFragment action2 = UploadIngredientsFragmentDirections.actionUploadIngredientsFragmentToUploadInstructionsFragment();
                 action2.setRecipeArg(recipe);
                 Navigation.findNavController(view).navigate(action2);
                 //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));

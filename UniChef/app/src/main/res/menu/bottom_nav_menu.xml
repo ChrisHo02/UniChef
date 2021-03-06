@@ -7,12 +7,12 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_uploadTitle"
+        android:id="@+id/navigation_uploadRecipeActivty"
         android:icon="@drawable/new_recipe"
         android:title="@string/new_recipe" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_account"
         android:icon="@drawable/account_icon"
         android:title="@string/title_account" />
 

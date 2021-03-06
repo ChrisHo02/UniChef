@@ -14,9 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.unichef.MainActivity;
 import com.example.unichef.R;
-import com.example.unichef.UploadRecipe;
+import com.example.unichef.UploadRecipeActivity;
 
 public class DashboardFragment extends Fragment {
 
@@ -39,7 +38,7 @@ public class DashboardFragment extends Fragment {
         Button uploadRecipe = root.findViewById(R.id.button);
         uploadRecipe.setOnClickListener(v -> {
             Intent intent = new Intent( DashboardFragment.super.getActivity(),
-                    UploadRecipe.class);
+                    UploadRecipeActivity.class);
             startActivity(intent);
         });
 
