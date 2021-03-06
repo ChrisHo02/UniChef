@@ -8,7 +8,7 @@ public class Recipe implements Serializable {
     private User user;
     private String title;
     private String description;
-    private String imageUrl;
+    private byte[] image;
     private long dateAdded;
     private ArrayList<Instruction> instructions;
     private ArrayList<Ingredient> ingredients;
@@ -22,11 +22,11 @@ public class Recipe implements Serializable {
 
     public Recipe(){}
 
-    public Recipe(User user, String title, String description, String imageUrl, long dateAdded, ArrayList<Instruction> instructions, ArrayList<Ingredient> ingredients, ArrayList<Equipment> equipment, ArrayList<Tag> tags, int likes, int difficulty, int time, int portions) {
+    public Recipe(User user, String title, String description, byte[] image, long dateAdded, ArrayList<Instruction> instructions, ArrayList<Ingredient> ingredients, ArrayList<Equipment> equipment, ArrayList<Tag> tags, int likes, int difficulty, int time, int portions) {
         this.user = user;
         this.title = title;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.dateAdded = dateAdded;
         this.instructions = instructions;
         this.ingredients = ingredients;
@@ -70,12 +70,12 @@ public class Recipe implements Serializable {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(byte[] imageUrl) {
+        this.image = imageUrl;
     }
 
     public long getDateAdded() {

@@ -4,24 +4,24 @@ public class Instruction {
     private int step;
     private String instruction;
     private int time;
-    private String imageUrl;
+    private byte[] image;
 
     public Instruction(){}
 
-    public Instruction(int step, String instruction, int time, String imageUrl) {
+    public Instruction(int step, String instruction, int time, byte[] image) {
         this.step = step;
         this.instruction = instruction;
         this.time = time;
-        this.imageUrl = imageUrl;
+        this.image = image;
     }
 
 
-    public String getImageUrl() {
-        return imageUrl;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(byte[] imageUrl) {
+        this.image = imageUrl;
     }
 
     public int getTime() {

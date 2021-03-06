@@ -6,39 +6,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.unichef.MainActivity;
 import com.example.unichef.R;
-import com.example.unichef.SignupActivity;
 import com.example.unichef.ViewRecipeActivity;
-import com.example.unichef.database.DBHelper;
-import com.example.unichef.database.Recipe;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private ArrayList<Recipe> someRecipes;
     ListView listView;
-    String recipeTitle[] = {"Spaghetti", "Lasagne", "Turds with Cream", "Curry", "Avocado", "Fish", "Toilet Finder", "Pizza"};
-    String recipeDescription[] = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
-    String categories [] = {"Vegan", "Meat", "Food", "Drink", "Pasta", "Vegetarian", "Quick", "Easy"};
+    ArrayList<String> recipeTitles = new ArrayList<>();
+    ArrayList<String> recipeDescriptions = new ArrayList<>();
+    ArrayList<byte[]> recipeImages = new ArrayList<>();
     int size[] = {1, 0, 2, 0, 1, 1, 2, 0};
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -52,20 +43,25 @@ public class HomeFragment extends Fragment {
             }
         });*/
 
-        DBHelper db = new DBHelper(this.getContext(), null, null, 1);
-        someRecipes = db.getRecipes(db.getReadableDatabase(), 10);
+//        DBHelper db = new DBHelper(this.getContext(), null, null, 1);
+//        ArrayList<Recipe> someRecipes = db.getRecipes(db.getReadableDatabase(), 10);
+//        for (Recipe recipe : someRecipes){
+//            recipeTitles.add(recipe.getTitle());
+//            recipeDescriptions.add(recipe.getDescription());
+//            recipeImages.add(recipe.getImage());
+//        }
 
-        ChipGroup chipGroup = root.findViewById(R.id.chipGroup);
-        for (String category : categories){
-            Chip categoryChip = new Chip(container.getContext());
-            categoryChip.setText(category);
-            chipGroup.addView(categoryChip);
-        }
+//        ChipGroup chipGroup = root.findViewById(R.id.chipGroup);
+//        for (Tag tag : db.getAllTags(db.getReadableDatabase())){
+//            Chip categoryChip = new Chip(container.getContext());
+//            categoryChip.setText(tag.getName());
+//            chipGroup.addView(categoryChip);
+//        }
 
         listView = root.findViewById(R.id.listView);
         listView.setOnItemClickListener((parent, view, position, id) -> startActivity(new Intent(getActivity(), ViewRecipeActivity.class)));
 
-        MyAdapter adapter = new MyAdapter(getActivity(), recipeTitle, recipeDescription);
+        MyAdapter adapter = new MyAdapter(getActivity(), recipeTitles, recipeDescriptions);
         listView.setAdapter(adapter);
 
         return root;
@@ -73,10 +69,10 @@ public class HomeFragment extends Fragment {
 
     class MyAdapter extends ArrayAdapter<String>{
         Context context;
-        String m_recipeTitle[];
-        String m_recipeDescription[];
+        ArrayList<String> m_recipeTitle;
+        ArrayList<String> m_recipeDescription;
 
-        MyAdapter (Context c, String title[], String description[]){
+        MyAdapter (Context c, ArrayList<String> title, ArrayList<String> description){
             super(c, R.layout.med_recipe_item, R.id.textView1, title);
             this.context = c;
             this.m_recipeTitle = title;
@@ -100,9 +96,12 @@ public class HomeFragment extends Fragment {
 
             TextView myTitle = row.findViewById(R.id.textView1);
             TextView myDescription = row.findViewById(R.id.textView2);
+            ImageView myImage = row.findViewById(R.id.image);
 
-            myTitle.setText(recipeTitle[position]);
-            myDescription.setText(recipeDescription[position]);
+//            myTitle.setText(recipeTitles.get(position));
+//            myDescription.setText(recipeDescriptions.get(position));
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(recipeImages.get(position), 0, recipeImages.get(position).length);
+//            myImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap, myImage.getWidth(), myImage.getHeight(), false));
 
             return row;
         }

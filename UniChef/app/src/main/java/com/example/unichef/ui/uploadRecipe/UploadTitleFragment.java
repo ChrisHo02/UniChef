@@ -4,8 +4,6 @@ package com.example.unichef.ui.uploadRecipe;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -17,13 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.unichef.R;
-import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Recipe;
-import com.example.unichef.database.DBHelper;
-import com.example.unichef.database.User;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,7 +96,6 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         Recipe recipe = new Recipe();
         recipe.setTitle(title);
         recipe.setDescription(description);
-        recipe.setImageUrl("IDK");
 
         UploadTitleFragmentDirections.ActionNavigationUploadTitleToNavigationUploadInfo action = UploadTitleFragmentDirections.actionNavigationUploadTitleToNavigationUploadInfo();
         action.setRecipeArg(recipe);

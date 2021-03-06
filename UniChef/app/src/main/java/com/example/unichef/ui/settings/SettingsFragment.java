@@ -1,9 +1,11 @@
 package com.example.unichef.ui.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,10 +15,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.unichef.LoginActivity;
 import com.example.unichef.R;
 import com.example.unichef.ui.home.HomeFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     private SettingsViewModel settingsViewModel;
 
@@ -32,6 +36,9 @@ public class SettingsFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        root.findViewById(R.id.settings_delete_account).setOnClickListener(this);
+
         return root;
     }
 
@@ -40,4 +47,13 @@ public class SettingsFragment extends Fragment {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.settings_delete_account:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+                break;
+        }
+    }
 }
