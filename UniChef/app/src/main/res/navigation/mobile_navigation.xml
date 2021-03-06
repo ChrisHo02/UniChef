@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -11,15 +11,120 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.unichef.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+    <activity
+        android:id="@+id/navigation_uploadRecipeActivty"
+        android:name="com.example.unichef.UploadRecipeActivity"
+        android:label="activity_upload_recipe"
+        tools:layout="@layout/activity_upload_recipe" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.unichef.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_account"
+        android:name="com.example.unichef.ui.account.AccountFragment"
+        android:label="@string/title_account"
+        tools:layout="@layout/fragment_account" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.example.unichef.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_uploadTitle"-->
+<!--        android:name="com.example.unichef.ui.uploadRecipe.UploadTitleFragment"-->
+<!--        android:label="@string/new_recipe"-->
+<!--        tools:layout="@layout/fragment_upload_title" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_uploadTitle_to_navigation_uploadInfo"-->
+<!--            app:destination="@id/navigation_uploadInfo" />-->
+<!--    </fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_uploadInfo"-->
+<!--        android:name="com.example.unichef.ui.uploadRecipe.UploadInfoFragment"-->
+<!--        android:label="@string/new_recipe"-->
+<!--        tools:layout="@layout/fragment_upload_info" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_UploadInfo_to_navigation_uploadIngredient"-->
+<!--            app:destination="@id/navigation_uploadIngredients" />-->
+<!--        <argument-->
+<!--            android:name="titleArg"-->
+<!--            app:argType="string"-->
+<!--            android:defaultValue='""' />-->
+<!--        <argument-->
+<!--            android:name="recipeArg"-->
+<!--            app:argType="com.example.unichef.database.Recipe"-->
+<!--            app:nullable="true"-->
+<!--            android:defaultValue="@null" />-->
+<!--    </fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_uploadIngredients"-->
+<!--        android:name="com.example.unichef.ui.uploadRecipe.UploadIngredientsFragment"-->
+<!--        android:label="@string/new_recipe"-->
+<!--        tools:layout="@layout/fragment_upload_ingredients">-->
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_uploadIngredients_to_navigation_chooseIngredient"-->
+<!--            app:destination="@id/navigation_chooseIngredient" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_uploadIngredients_to_navigation_uploadInstructions"-->
+<!--            app:destination="@id/navigation_uploadInstructions" />-->
+<!--        <argument-->
+<!--            android:name="recipeArg"-->
+<!--            app:argType="com.example.unichef.database.Recipe"-->
+<!--            app:nullable="true"-->
+<!--            android:defaultValue="@null" />-->
+<!--    </fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_chooseIngredient"-->
+<!--        android:name="com.example.unichef.ui.uploadRecipe.ChooseIngredientFragment"-->
+<!--        android:label="@string/new_recipe"-->
+<!--        tools:layout="@layout/fragment_choose_ingredient">-->
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_chooseIngredient_to_navigation_uploadIngredients"-->
+<!--            app:destination="@id/navigation_uploadIngredients" />-->
+<!--        <argument-->
+<!--            android:name="recipeArg"-->
+<!--            app:argType="com.example.unichef.database.Recipe"-->
+<!--            app:nullable="true"-->
+<!--            android:defaultValue="@null" />-->
+<!--    </fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_uploadInstructions"-->
+<!--        android:name="com.example.unichef.ui.uploadRecipe.UploadInstructionsFragment"-->
+<!--        android:label="@string/new_recipe"-->
+<!--        tools:layout="@layout/fragment_upload_instructions">-->
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_uploadInstructions_to_navigation_uploadTags"-->
+<!--            app:destination="@id/navigation_uploadTags" />-->
+<!--        <argument-->
+<!--            android:name="recipeArg"-->
+<!--            app:argType="com.example.unichef.database.Recipe"-->
+<!--            app:nullable="true"-->
+<!--            android:defaultValue="@null" />-->
+<!--    </fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_uploadTags"-->
+<!--        android:name="com.example.unichef.ui.uploadRecipe.UploadTagsFragment"-->
+<!--        android:label="@string/new_recipe"-->
+<!--        tools:layout="@layout/fragment_upload_tags">-->
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_uploadTags_to_navigation_submitRecipe"-->
+<!--            app:destination="@id/navigation_submitRecipe" />-->
+<!--        <argument-->
+<!--            android:name="recipeArg"-->
+<!--            app:argType="com.example.unichef.database.Recipe"-->
+<!--            app:nullable="true"-->
+<!--            android:defaultValue="@null" />-->
+<!--    </fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_submitRecipe"-->
+<!--        android:name="com.example.unichef.ui.uploadRecipe.SubmitRecipeFragment"-->
+<!--        android:label="@string/new_recipe"-->
+<!--        tools:layout="@layout/fragment_submit_recipe" >-->
+<!--        <argument-->
+<!--            android:name="recipeArg"-->
+<!--            app:argType="com.example.unichef.database.Recipe"-->
+<!--            app:nullable="true"-->
+<!--            android:defaultValue="@null" />-->
+<!--    </fragment>-->
+
+
 </navigation>

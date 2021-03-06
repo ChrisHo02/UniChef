@@ -2,5 +2,70 @@
     <string name="app_name">UniChef</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_account">Account</string>
+    <string name="title_settings">Settings</string>
+    <string name="settings_delete_account">Delete Account</string>
+
+    <string name="settings_account"><b>Account</b></string>
+    <string name="settings_title_notifications"><b>Notifications</b></string>
+    <string name="settings_title_help"><b>Support</b></string>
+    <string name="settings_title_about"><b>About</b></string>
+    <string name="settings_private_account">Private Account</string>
+    <string name="settings_change_password">Change Password</string>
+    <string name="settings_change_email">Change Email</string>
+    <string name="settings_get_help">Help FAQ</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_code_of_conduct">Code of Conduct</string>
+
+
+    <string name="settings_app_notifications">Receive notifications</string>
+    <string name="settings_email_notifications">Receive Email Updates</string>
+
+    <string-array name="tags">
+        <item>"test"</item>
+        <item>"test"</item>
+        <item>"test"</item>
+        <item>"test"</item>
+        <item>"test"</item>
+        <item>"test"</item>
+        <item>"test"</item>
+        <item>"test"</item>
+    </string-array>
+    <string name="next">Next</string>
+    <string name="name_your_recipe">Name Your Recipe</string>
+    <string name="name_of_recipe">Name of Recipe</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="portion_size">Portion Size</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="prep_time">Prep Time</string>
+    <string name="minutes">Minutes</string>
+    <string name="cooking_time">Cooking Time</string>
+    <string name="method">Method</string>
+    <string name="tags">Tags</string>
+    <string name="preview">Preview</string>
+    <string name="finish">Finish</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="Title">Title of Recipe</string>
+    <string name="other_details">Other details about recipe</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_recipe">New Recipe</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="add_ingredient">add ingredient</string>
+    <string name="description">Description</string>
 </resources>
