@@ -68,4 +68,7 @@
     <string name="ingredients">Ingredients</string>
     <string name="add_ingredient">add ingredient</string>
     <string name="description">Description</string>
+    <string name="equipment">Equipment</string>
+    <string name="add_equipment">Add Equipment</string>
+    <string name="add_tag">Add Tag</string>
 </resources>

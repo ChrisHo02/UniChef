@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.unichef.R;
+import com.example.unichef.database.Equipment;
 import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Instruction;
 import com.example.unichef.database.Recipe;
@@ -104,6 +105,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
 
         ArrayList<Ingredient> ingredients = new ArrayList<>();
         ArrayList<Instruction> instructions = new ArrayList<>();
+        ArrayList<Equipment> equipment = new ArrayList<>();
 
         Recipe recipe = new Recipe();
         recipe.setTitle(title);
@@ -111,6 +113,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         recipe.setImageUrl("IDK");
         recipe.setIngredients(ingredients);
         recipe.setInstructions(instructions);
+        recipe.setEquipment(equipment);
 
         UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
         action.setRecipeArg(recipe);
