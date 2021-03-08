@@ -22,6 +22,7 @@ import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Instruction;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.DBHelper;
+import com.example.unichef.database.Tag;
 import com.example.unichef.database.User;
 
 import java.lang.reflect.Array;
@@ -106,6 +107,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         ArrayList<Ingredient> ingredients = new ArrayList<>();
         ArrayList<Instruction> instructions = new ArrayList<>();
         ArrayList<Equipment> equipment = new ArrayList<>();
+        ArrayList<Tag> tags = new ArrayList<>();
 
         Recipe recipe = new Recipe();
         recipe.setTitle(title);
@@ -114,6 +116,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         recipe.setIngredients(ingredients);
         recipe.setInstructions(instructions);
         recipe.setEquipment(equipment);
+        recipe.setTags(tags);
 
         UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
         action.setRecipeArg(recipe);

@@ -104,7 +104,6 @@ public class UploadEquipmentFragment extends Fragment implements View.OnClickLis
         autoCompleteTextView.setAdapter(chooseAdapter);
 
         recyclerView = view.findViewById(R.id.recyclerView);
-        equipment = recipe.getEquipment();
         this.uploadEquipmentAdapter = new UploadEquipmentAdapter(this.getContext(), equipment);
         recyclerView.setAdapter(uploadEquipmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
