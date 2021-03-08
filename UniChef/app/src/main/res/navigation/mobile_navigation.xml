@@ -28,6 +28,11 @@
         android:name="com.example.unichef.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/navigation_tips"
+        android:name="com.example.unichef.ui.tips.TipsFragment"
+        android:label="@string/tips"
+        tools:layout="@layout/fragment_tips"/>
 <!--    <fragment-->
 <!--        android:id="@+id/navigation_uploadTitle"-->
 <!--        android:name="com.example.unichef.ui.uploadRecipe.UploadTitleFragment"-->
