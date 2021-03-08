@@ -60,13 +60,6 @@
             android:text="Create Account!"
             android:layout_marginBottom="100dp"/>
 
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Back" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
