@@ -52,8 +52,8 @@ public class HomeFragment extends Fragment {
             }
         });*/
 
-        DBHelper db = new DBHelper(this.getContext(), null, null, 1);
-        someRecipes = db.getRecipes(db.getReadableDatabase(), 10);
+        //DBHelper db = new DBHelper(this.getContext(), null, null, 1);
+        //someRecipes = db.getRecipes(db.getReadableDatabase(), 10);
 
         ChipGroup chipGroup = root.findViewById(R.id.chipGroup);
         for (String category : categories){
