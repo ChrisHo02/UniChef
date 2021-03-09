@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/navigation_uploadRecipeActivty"
-        android:icon="@drawable/new_recipe"
+        android:icon="@drawable/ic_add"
         android:title="@string/new_recipe" />
 
     <item
@@ -20,5 +20,9 @@
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/title_settings" />
+    <item
+        android:id="@+id/navigation_tips"
+        android:icon="@drawable/tips_icon"
+        android:title="@string/tips"/>
 
 </menu>

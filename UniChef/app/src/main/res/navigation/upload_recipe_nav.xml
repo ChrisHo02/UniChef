@@ -59,14 +59,14 @@
         <action
             android:id="@+id/action_uploadIngredientsFragment_to_chooseIngredientFragment"
             app:destination="@id/chooseIngredientFragment" />
-        <action
-            android:id="@+id/action_uploadIngredientsFragment_to_uploadInstructionsFragment"
-            app:destination="@id/uploadInstructionsFragment" />
         <argument
             android:name="recipeArg"
             app:argType="com.example.unichef.database.Recipe"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_uploadIngredientsFragment_to_uploadEquipmentFragment"
+            app:destination="@id/uploadEquipmentFragment" />
     </fragment>
     <fragment
         android:id="@+id/uploadInstructionsFragment"
@@ -80,35 +80,14 @@
         <!--            app:exitAnim="@anim/fragment_open_exit"-->
         <!--            app:popEnterAnim="@anim/fragment_open_enter"-->
         <!--            app:popExitAnim="@anim/fragment_open_exit" />-->
-        <action
-            android:id="@+id/action_uploadInstructionsFragment_to_uploadTagsFragment"
-            app:destination="@id/uploadTagsFragment" />
         <argument
             android:name="recipeArg"
             app:argType="com.example.unichef.database.Recipe"
             app:nullable="true"
             android:defaultValue="@null" />
-    </fragment>
-    <fragment
-        android:id="@+id/uploadTagsFragment"
-        android:name="com.example.unichef.ui.uploadRecipe.UploadTagsFragment"
-        android:label="fragment_upload_tags"
-        tools:layout="@layout/fragment_upload_tags">
-        <!--        <action-->
-        <!--            android:id="@+id/action_uploadRecipe4_to_uploadRecipe5"-->
-        <!--            app:destination="@id/uploadRecipe5"-->
-        <!--            app:enterAnim="@anim/fragment_open_enter"-->
-        <!--            app:exitAnim="@anim/fragment_open_exit"-->
-        <!--            app:popEnterAnim="@anim/fragment_open_enter"-->
-        <!--            app:popExitAnim="@anim/fragment_open_exit" />-->
         <action
-            android:id="@+id/action_uploadTagsFragment_to_submitRecipeFragment"
-            app:destination="@id/submitRecipeFragment" />
-        <argument
-            android:name="recipeArg"
-            app:argType="com.example.unichef.database.Recipe"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            android:id="@+id/action_uploadInstructionsFragment_to_tempUploadTagsFragment"
+            app:destination="@id/tempUploadTagsFragment" />
     </fragment>
     <fragment
         android:id="@+id/submitRecipeFragment"
@@ -137,5 +116,33 @@
             app:argType="com.example.unichef.database.Recipe"
             app:nullable="true"
             android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadEquipmentFragment"
+        android:name="com.example.unichef.ui.uploadRecipe.UploadEquipmentFragment"
+        android:label="fragment_upload_equipment"
+        tools:layout="@layout/fragment_upload_equipment" >
+        <action
+            android:id="@+id/action_uploadEquipmentFragment_to_uploadInstructionsFragment"
+            app:destination="@id/uploadInstructionsFragment" />
+        <argument
+            android:name="recipeArg"
+            app:argType="com.example.unichef.database.Recipe"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/tempUploadTagsFragment"
+        android:name="com.example.unichef.ui.uploadRecipe.TempUploadTagsFragment"
+        android:label="fragment_temp_upload_tags"
+        tools:layout="@layout/fragment_temp_upload_tags" >
+        <argument
+            android:name="recipeArg"
+            app:argType="com.example.unichef.database.Recipe"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_tempUploadTagsFragment_to_submitRecipeFragment"
+            app:destination="@id/submitRecipeFragment" />
     </fragment>
 </navigation>

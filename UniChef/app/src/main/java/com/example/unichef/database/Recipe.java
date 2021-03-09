@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Recipe implements Serializable {
-    private long id;
-    private User user;
+    private String creatorId;
     private String title;
     private String description;
     private String imageUrl;
@@ -22,8 +21,8 @@ public class Recipe implements Serializable {
 
     public Recipe(){}
 
-    public Recipe(User user, String title, String description, String imageUrl, long dateAdded, ArrayList<Instruction> instructions, ArrayList<Ingredient> ingredients, ArrayList<Equipment> equipment, ArrayList<Tag> tags, int likes, int difficulty, int time, int portions) {
-        this.user = user;
+    public Recipe(String creatorId, String title, String description, String imageUrl, long dateAdded, ArrayList<Instruction> instructions, ArrayList<Ingredient> ingredients, ArrayList<Equipment> equipment, ArrayList<Tag> tags, int likes, int difficulty, int time, int portions) {
+        this.creatorId = creatorId;
         this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -38,21 +37,14 @@ public class Recipe implements Serializable {
         this.portions = portions;
     }
 
-    public long getId() {
-        return id;
+    public String getCreatorId() {
+        return creatorId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public String getTitle() {
         return title;
