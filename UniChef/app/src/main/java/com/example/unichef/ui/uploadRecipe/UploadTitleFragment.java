@@ -1,25 +1,56 @@
 package com.example.unichef.ui.uploadRecipe;
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.unichef.R;
+import com.example.unichef.UploadRecipeActivity;
+import com.example.unichef.database.Equipment;
 import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Instruction;
 import com.example.unichef.database.Recipe;
+import com.example.unichef.database.DBHelper;
+import com.example.unichef.database.Tag;
+import com.example.unichef.database.User;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +69,9 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
     private String mParam2;
     Button next;
     NavController navController;
+    ImageView recipePhoto;
+    ImageButton uploadPhoto;
+    String photoPath;
 
     public UploadTitleFragment() {
         // Required empty public constructor
@@ -82,7 +116,12 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
                 container, false);
 
 
-        next = (Button) view.findViewById(R.id.button);
+        recipePhoto = view.findViewById(R.id.imageView);
+
+        uploadPhoto = view.findViewById(R.id.imageButton);
+        uploadPhoto.setOnClickListener(this);
+
+        next = view.findViewById(R.id.button);
         next.setOnClickListener(this);
 
 
@@ -92,24 +131,106 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        EditText recipeTextView = (EditText) getView().findViewById(R.id.nameOfRecipe);
-        EditText recipeDescTextView = (EditText) getView().findViewById(R.id.description);
-        String title = recipeTextView.getText().toString();
-        String description = recipeDescTextView.getText().toString();
+        switch (view.getId()) {
+            case R.id.imageButton:
+                selectImage();
+                break;
+            case R.id.button:
+                EditText recipeTextView = getView().findViewById(R.id.nameOfRecipe);
+                EditText recipeDescTextView = getView().findViewById(R.id.description);
+                String title = recipeTextView.getText().toString();
+                String description = recipeDescTextView.getText().toString();
 
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
-        ArrayList<Instruction> instructions = new ArrayList<>();
+                ArrayList<Ingredient> ingredients = new ArrayList<>();
+                ArrayList<Instruction> instructions = new ArrayList<>();
+                ArrayList<Equipment> equipment = new ArrayList<>();
+                ArrayList<Tag> tags = new ArrayList<>();
 
-        Recipe recipe = new Recipe();
-        recipe.setTitle(title);
-        recipe.setDescription(description);
-        recipe.setImageUrl("IDK");
-        recipe.setIngredients(ingredients);
-        recipe.setInstructions(instructions);
+                Recipe recipe = new Recipe();
+                recipe.setTitle(title);
+                recipe.setDescription(description);
+                recipe.setImageUrl("IDK");
+                recipe.setIngredients(ingredients);
+                recipe.setInstructions(instructions);
+                recipe.setEquipment(equipment);
+                recipe.setTags(tags);
 
-        UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
-        action.setRecipeArg(recipe);
-        Navigation.findNavController(view).navigate(action);
-        //navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadTitleFragment_to_uploadInfoFragment));
+                UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
+                action.setRecipeArg(recipe);
+                Navigation.findNavController(view).navigate(action);
+                //navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadTitleFragment_to_uploadInfoFragment));
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void selectImage() {
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        builder.setTitle("Add Photo");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent;
+                switch (options[i].toString()) {
+                    case "Take Photo":
+                        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                        File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+//                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                        startActivityForResult(intent, 1);
+                        break;
+                    case "Choose from Gallery":
+                        intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, 2);
+                        break;
+                    case "Cancel":
+                        dialogInterface.dismiss();
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                recipePhoto.setImageBitmap(imageBitmap);
+            } else if (requestCode == 2) {
+                Uri selectedImage = data.getData();
+//                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+//
+//                Cursor cursor = requireContext().getContentResolver().query(selectedImage,
+//                        filePathColumn, null, null, null);
+//                cursor.moveToFirst();
+//
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                String picturePath = cursor.getString(columnIndex);
+//                cursor.close();
+//
+//                recipePhoto.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                recipePhoto.setImageURI(selectedImage);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        photoPath = image.getAbsolutePath();
+        return image;
     }
 }
