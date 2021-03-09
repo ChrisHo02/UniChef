@@ -21,7 +21,18 @@ public class TipsFragment extends Fragment {
     private TipsViewModel tipsViewModel;
     ListView tipsListView;
     String tipTitle[] = {"#1", "#2", "#3'", "#4", "#5", "#6", "#7", "#8"};
-    String tipDesc[] = {"Al dente = the moment when pasta is JUST cooked!", "Always wash your produce and hands before cooking!", "You can't cook chicken to be medium rare! It's either poisonous, cooked or sand!", "Don't chop both veggies and meat on one chopping board! Cross-contamination!", "Let the knife do all the work!", "Ran out of things to say", "Uh...", "I hate AI CW?"};
+    String tipDesc[] = {"Al dente = the moment when pasta is JUST cooked!", "Always wash your produce and hands before cooking!",
+            "You can't cook chicken to be medium rare! It's either poisonous, cooked or sand!",
+            "Don't chop both veggies and meat on one chopping board! Cross-contamination!",
+            "Let the knife do all the work!",
+            "Use a little bit of spare pasta water in your pasta sauce!",
+            "When slicing an onion, keep the root intact!",
+            "Added too much salt to your sauce? Add a quartered potato to absorb some of the excess!",
+            "Read recipes the whole way through before you start; no-one wants to stop cooking because they forgot to dice an ingredient!",
+            "Make sure you rotate your pan so that the handle is out of the way: this reduces the chance of knocking it over!",
+            "Remember: better safe than sorry!",
+            "Take advantage of leftovers!",
+            "Plan ahead!"};
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         tipsViewModel = new ViewModelProvider(this).get(TipsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tips, container, false);
