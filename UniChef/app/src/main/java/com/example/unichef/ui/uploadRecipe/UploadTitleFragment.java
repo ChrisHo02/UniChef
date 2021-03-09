@@ -4,8 +4,6 @@ package com.example.unichef.ui.uploadRecipe;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ActionOnlyNavDirections;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -20,10 +18,7 @@ import com.example.unichef.R;
 import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Instruction;
 import com.example.unichef.database.Recipe;
-import com.example.unichef.database.DBHelper;
-import com.example.unichef.database.User;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

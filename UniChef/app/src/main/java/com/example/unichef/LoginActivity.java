@@ -7,27 +7,12 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.unichef.database.DBHelper;
-import com.example.unichef.database.Equipment;
-import com.example.unichef.database.Ingredient;
-import com.example.unichef.database.Instruction;
-import com.example.unichef.database.Recipe;
-import com.example.unichef.database.RecipeGenerator;
-import com.example.unichef.database.Tag;
-import com.example.unichef.database.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     public Button login;
