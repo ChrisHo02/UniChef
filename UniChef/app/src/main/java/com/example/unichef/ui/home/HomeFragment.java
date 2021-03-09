@@ -33,8 +33,11 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,7 +55,11 @@ public class HomeFragment extends Fragment {
     String recipeDescription[] = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
     int size[] = {1, 0, 2, 0, 1, 1, 2, 0};
 
-    private ArrayList<Tag> tags;
+    private ViewGroup container;
+
+    private DatabaseReference mDatabase;
+    private FirebaseUser user;
+    private FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -66,25 +73,17 @@ public class HomeFragment extends Fragment {
             }
         });*/
 
-        //DBHelper db = new DBHelper(this.getContext(), null, null, 1);
-        //someRecipes = db.getRecipes(db.getReadableDatabase(), 10);
+        this.container = container;
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance("https://unichef-f6056-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         if (user == null){
             startActivity(new Intent(getActivity(), LoginActivity.class));
-        }else{
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://unichef-f6056-default-rtdb.europe-west1.firebasedatabase.app/").getReference("recipes");
-            FirebaseHelper helper = new FirebaseHelper();
-            tags = helper.getAllTags();
         }
 
         ChipGroup chipGroup = root.findViewById(R.id.chipGroup);
-        for (Tag tag : tags){
-            Chip categoryChip = new Chip(container.getContext());
-            categoryChip.setText(tag.getName());
-            chipGroup.addView(categoryChip);
-        }
+        updateTags(chipGroup);
 
         listView = root.findViewById(R.id.listView);
         listView.setOnItemClickListener((parent, view, position, id) -> startActivity(new Intent(getActivity(), ViewRecipeActivity.class)));
@@ -93,6 +92,23 @@ public class HomeFragment extends Fragment {
         listView.setAdapter(adapter);
 
         return root;
+    }
+
+    private void updateTags(ChipGroup chipGroup){
+        mDatabase.child("tags").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot tagSnapshot : snapshot.getChildren()){
+                    Tag tag = new Tag(tagSnapshot.getValue().toString());
+                    Chip categoryChip = new Chip(container.getContext());
+                    categoryChip.setText(tag.getName());
+                    chipGroup.addView(categoryChip);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     class MyAdapter extends ArrayAdapter<String>{
