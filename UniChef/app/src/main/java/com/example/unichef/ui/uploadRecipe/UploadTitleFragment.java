@@ -37,7 +37,6 @@ import com.example.unichef.database.Equipment;
 import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Instruction;
 import com.example.unichef.database.Recipe;
-import com.example.unichef.database.DBHelper;
 import com.example.unichef.database.Tag;
 import com.example.unichef.database.User;
 
