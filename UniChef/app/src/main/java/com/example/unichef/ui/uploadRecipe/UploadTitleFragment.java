@@ -40,6 +40,8 @@ import com.example.unichef.database.Instruction;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.Tag;
 import com.example.unichef.database.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -151,6 +153,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
                 ArrayList<Tag> tags = new ArrayList<>();
 
                 Recipe recipe = new Recipe();
+                recipe.setCreatorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 recipe.setTitle(title);
                 recipe.setDescription(description);
                 recipe.setImageUrl("IDK");

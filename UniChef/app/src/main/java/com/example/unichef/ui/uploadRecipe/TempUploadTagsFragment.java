@@ -24,10 +24,12 @@ import com.example.unichef.R;
 import com.example.unichef.adapters.TempUploadTagsAdapter;
 import com.example.unichef.adapters.UploadEquipmentAdapter;
 import com.example.unichef.database.Equipment;
+import com.example.unichef.database.FirebaseHelper;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.Tag;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -143,11 +145,9 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        /* upload recipe to database here
-
-                            asdfasdf
-
-                         */
+                        recipe.setDateAdded(new Date().getTime());
+                        FirebaseHelper helper = new FirebaseHelper();
+                        helper.uploadRecipe(recipe);
                         getActivity().finish();
                         Toast.makeText(getContext(),
                                 "Recipe uploaded",Toast.LENGTH_SHORT).show();
