@@ -24,10 +24,13 @@ import com.example.unichef.R;
 import com.example.unichef.adapters.TempUploadTagsAdapter;
 import com.example.unichef.adapters.UploadEquipmentAdapter;
 import com.example.unichef.database.Equipment;
+import com.example.unichef.database.FirebaseHelper;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.Tag;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +62,7 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
     RecyclerView recyclerView;
     ArrayAdapter<String> chooseAdapter;
     TempUploadTagsAdapter uploadTagsAdapter;
+    String photopath;
 
     public TempUploadTagsFragment() {
         // Required empty public constructor
@@ -101,6 +105,7 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
         assert getArguments() != null;
         this.recipe = TempUploadTagsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
         this.tags = recipe.getTags();
+        this.photopath = recipe.getImageUrl();
 
 
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.tags_autoCompleteTextView);
@@ -143,11 +148,12 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        /* upload recipe to database here
+                        recipe.setDateAdded(new Date().getTime());
+                        FirebaseHelper helper = new FirebaseHelper();
+                        helper.uploadRecipe(recipe);
 
-                            asdfasdf
-
-                         */
+                        File file = new File(photopath);
+                        file.delete();
                         getActivity().finish();
                         Toast.makeText(getContext(),
                                 "Recipe uploaded",Toast.LENGTH_SHORT).show();

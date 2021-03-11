@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.SingleLineTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,8 @@ public class LoginActivity extends AppCompatActivity {
     public Button register;
     public EditText email;
     public EditText password;
+    public Button hideshow;
+    public Boolean shown = false;
 
     public FirebaseAuth mAuth;
 
@@ -39,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
         email = findViewById(R.id.editTextEmail);
         password = findViewById(R.id.editPassword);
+        hideshow = findViewById(R.id.hideshow_button);
 
         login = findViewById(R.id.login_button);
         login.setOnClickListener(v -> {
@@ -58,16 +63,28 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
             startActivity(intent);
         });
+
+        hideshow.setOnClickListener(v -> {
+            if(shown) {
+                password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                hideshow.setText("ヘ(- _ -ヘ)");
+                shown = false;
+            } else {
+                password.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+                hideshow.setText("\\(◕。◕\\)");
+                shown = true;
+            }
+        });
     }
 
     private boolean checkValidData(){
         boolean valid = true;
         if (!isEmail(email)){
-            email.setError("Enter valid email!");
+            email.setError("Enter valid email! (e.g. johnsmith123@gmail.com)");
             valid = false;
         }
         if (isShort(password)){
-            password.setError("Password is too short!");
+            password.setError("Password must be 6+ characters!");
             valid = false;
         }
         return valid;

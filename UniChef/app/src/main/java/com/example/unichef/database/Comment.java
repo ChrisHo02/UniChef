@@ -1,6 +1,8 @@
 package com.example.unichef.database;
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable {
     private String userId;
     private String comment;
     private long date;

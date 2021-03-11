@@ -1,7 +1,11 @@
 package com.example.unichef.database;
 
-public class Tag {
+import java.io.Serializable;
+
+public class Tag implements Serializable {
     private String name;
+
+    public Tag(){}
 
     public Tag(String name){
         this.name = name;
