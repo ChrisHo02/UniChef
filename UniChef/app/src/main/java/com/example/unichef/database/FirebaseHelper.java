@@ -18,6 +18,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.apache.commons.text.WordUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +45,8 @@ public class FirebaseHelper {
 
     public void uploadRecipeTags(Recipe recipe){
         for(Tag tag : recipe.getTags()){
-            mDatabase.child("tags").child(tag.getName()).setValue(tag.getName());
+            String tagName = WordUtils.capitalizeFully(tag.getName());
+            mDatabase.child("tags").child(tagName).setValue(tagName);
         }
     }
 
