@@ -13,6 +13,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ActionOnlyNavDirections;
@@ -50,6 +51,8 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,6 +74,8 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
     ImageView recipePhoto;
     ImageButton uploadPhoto;
     String photoPath;
+
+    List<String> imagesFilesPaths = new ArrayList<>();
 
     public UploadTitleFragment() {
         // Required empty public constructor
@@ -153,6 +158,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
                 recipe.setInstructions(instructions);
                 recipe.setEquipment(equipment);
                 recipe.setTags(tags);
+                recipe.setImageUrl(photoPath);
 
                 UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
                 action.setRecipeArg(recipe);
@@ -175,12 +181,25 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
                 switch (options[i].toString()) {
                     case "Take Photo":
                         intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                        File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-//                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                        startActivityForResult(intent, 1);
+                        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                            File photoFile = null;
+                            try {
+                                photoFile = createImageFile();
+                            } catch (IOException ex) {
+                                // Error occurred while creating the File
+                            }
+                            // Continue only if the File was successfully created
+                            if (photoFile != null) {
+                                Uri photoURI = FileProvider.getUriForFile(requireContext(),
+                                        "com.mydomain.fileprovider",
+                                        photoFile);
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                startActivityForResult(intent, 1);
+                            }
+                        }
                         break;
                     case "Choose from Gallery":
-                        intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(intent, 2);
                         break;
                     case "Cancel":
@@ -196,9 +215,14 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                recipePhoto.setImageBitmap(imageBitmap);
+//                Bundle extras = data.getExtras();
+//                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                recipePhoto.setImageBitmap(imageBitmap);
+
+
+                String tempImageFilePath = imagesFilesPaths.get(imagesFilesPaths.size()-1);
+                Uri tempImageURI = Uri.fromFile(new File( tempImageFilePath ));
+                resizeThanLoadImage(tempImageFilePath, tempImageURI);
             } else if (requestCode == 2) {
                 Uri selectedImage = data.getData();
 //                String[] filePathColumn = { MediaStore.Images.Media.DATA };
@@ -221,7 +245,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -229,7 +253,32 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         );
 
         // Save a file: path for use with ACTION_VIEW intents
+        imagesFilesPaths.add(image.getAbsolutePath());
         photoPath = image.getAbsolutePath();
         return image;
     }
+
+    private void resizeThanLoadImage(String tempImageFilePath, Uri tempImageURI){
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), tempImageURI);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(bitmap == null)return;
+
+        int sizeDivisor = 1;
+
+        double imageSize = bitmap.getWidth();
+        if(bitmap.getHeight() > bitmap.getWidth())imageSize = bitmap.getHeight();
+        if(sizeDivisor == 0)sizeDivisor = 1;
+
+
+        Bitmap bitmapScaled = Bitmap.createScaledBitmap(bitmap, (bitmap.getWidth()/sizeDivisor), (bitmap.getHeight()/sizeDivisor), true);
+
+        //storeBitmapInFile(bitmapScaled, tempImageFilePath);
+
+        recipePhoto.setImageURI(tempImageURI);
+    }
+
 }
