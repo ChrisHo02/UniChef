@@ -1,9 +1,13 @@
 package com.example.unichef.database;
 
-public class Instruction {
+import java.io.Serializable;
+
+public class Instruction implements Serializable {
     private int step;
     private String instruction;
     private int time;
+
+    public Instruction(){}
 
     public Instruction(int step, String instruction, int time) {
         this.step = step;

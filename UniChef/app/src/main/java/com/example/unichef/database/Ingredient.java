@@ -1,8 +1,12 @@
 package com.example.unichef.database;
 
 
-public class Ingredient  {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
     private String name;
+
+    public Ingredient(){}
 
     public Ingredient(String name) {
         this.name = name;
