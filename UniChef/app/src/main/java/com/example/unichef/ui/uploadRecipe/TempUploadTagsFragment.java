@@ -28,6 +28,7 @@ import com.example.unichef.database.FirebaseHelper;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.Tag;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -148,6 +149,9 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
                         recipe.setDateAdded(new Date().getTime());
                         FirebaseHelper helper = new FirebaseHelper();
                         helper.uploadRecipe(recipe);
+
+                        File file = new File(recipe.getImageUrl());
+                        file.delete();
                         getActivity().finish();
                         Toast.makeText(getContext(),
                                 "Recipe uploaded",Toast.LENGTH_SHORT).show();
