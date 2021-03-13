@@ -7,9 +7,9 @@
     tools:context=".ui.home.HomeFragment">
 
     <SearchView
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </SearchView>
+        android:layout_height="wrap_content"></SearchView>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
