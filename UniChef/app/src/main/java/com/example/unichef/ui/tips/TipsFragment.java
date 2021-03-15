@@ -20,9 +20,8 @@ import com.example.unichef.ui.home.HomeFragment;
 public class TipsFragment extends Fragment {
     private TipsViewModel tipsViewModel;
     ListView tipsListView;
-    String tipTitle[] = {"#1", "#2", "#3'", "#4", "#5", "#6", "#7", "#8", "#9", "#10", "#11", "#12", "#13"};
-    String tipDesc[] = {"Al dente = the moment when pasta is JUST cooked!",
-            "Always wash your produce and hands before cooking!",
+    String tipTitle[] = {"#1", "#2", "#3'", "#4", "#5", "#6", "#7", "#8"};
+    String tipDesc[] = {"Al dente = the moment when pasta is JUST cooked!", "Always wash your produce and hands before cooking!",
             "You can't cook chicken to be medium rare! It's either poisonous, cooked or sand!",
             "Don't chop both veggies and meat on one chopping board! Cross-contamination!",
             "Let the knife do all the work!",
