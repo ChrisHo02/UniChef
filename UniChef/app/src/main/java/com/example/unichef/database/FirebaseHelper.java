@@ -37,17 +37,16 @@ public class FirebaseHelper {
 
     public String uploadRecipe(Recipe recipe){
         String recipeId = mDatabase.child("recipes").push().getKey();
-        assert recipeId != null;
         mDatabase.child("recipes").child(recipeId).setValue(recipe);
-        uploadRecipeTags(recipe, recipeId);
+        uploadRecipeTags(recipe);
         uploadRecipeImage(recipe, recipeId);
         return recipeId;
     }
 
-    public void uploadRecipeTags(Recipe recipe, String recipeId){
+    public void uploadRecipeTags(Recipe recipe){
         for(Tag tag : recipe.getTags()){
             String tagName = WordUtils.capitalizeFully(tag.getName());
-            mDatabase.child("tags").child(tagName).child(recipeId).setValue(true);
+            mDatabase.child("tags").child(tagName).setValue(tagName);
         }
     }
 
