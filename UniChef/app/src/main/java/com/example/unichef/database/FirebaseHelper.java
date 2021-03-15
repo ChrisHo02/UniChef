@@ -60,4 +60,20 @@ public class FirebaseHelper {
             });
         });
     }
+
+    public ArrayList<Tag> getAllTags(){
+        ArrayList<Tag> tags = new ArrayList<>();
+        mDatabase.child("tags").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Tag tag = new Tag(snapshot.getValue().toString());
+                tags.add(tag);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        return tags;
+    }
 }
