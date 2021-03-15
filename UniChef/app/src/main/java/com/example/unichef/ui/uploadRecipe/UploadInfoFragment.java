@@ -120,8 +120,6 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
         recipe.setDifficulty(difficulty);
         recipe.setTime(cookingTime);
 
-        System.out.println(recipe.getImageUrl());
-
 //        ArrayList<Ingredient> ingredients = new ArrayList<>();
 //        ingredients.add(new Ingredient("apple"));
 //        ingredients.add(new Ingredient("banana"));
