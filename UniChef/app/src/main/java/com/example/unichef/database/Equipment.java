@@ -1,11 +1,7 @@
 package com.example.unichef.database;
 
-import java.io.Serializable;
-
-public class Equipment implements Serializable {
+public class Equipment {
     private String name;
-
-    public Equipment(){}
 
     public Equipment(String name){
         this.name=name;
