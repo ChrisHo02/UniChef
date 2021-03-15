@@ -48,7 +48,7 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
     RecyclerView recyclerView;
     ArrayList<Instruction> instructions;
     UploadInstructionsAdapter adapter;
-    int step = 1;
+    int step = 0;
 
 
     public UploadInstructionsFragment() {
@@ -120,7 +120,7 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
             case R.id.addInstruction_button:
                 EditText instructionTextView = (EditText) getView().findViewById(R.id.instruction_editText);
                 String instructionStr = instructionTextView.getText().toString();
-                this.instructions.add(new Instruction(step++, instructionStr, 0));
+                this.instructions.add(new Instruction(step, instructionStr, 0));
                 instructionTextView.getText().clear();
                 this.adapter.notifyDataSetChanged();
                 break;
