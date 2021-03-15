@@ -13,18 +13,6 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Welcome to UniChef!"
-            android:textStyle="bold"
-            android:textColor="#069420"
-            android:textSize="35dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintEnd_toEndOf="parent" />
-
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="198dp"
@@ -41,33 +29,22 @@
             android:hint="Password"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="15dp"/>
 
         <Button
-            android:id="@+id/hideshow_button"
-            android:layout_width="113dp"
-            android:layout_height="37dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:text="ヘ(- _ -ヘ)" />
-
-        <Button
-            android:layout_marginTop="50dp"
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Log in"
-            android:textSize="30dp"/>
+            android:text="Log in" />
 
         <Button
             android:id="@+id/signup_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="0dp"
             android:gravity="center"
-            android:text="Create an Account" />
+            android:text="Create an Account"
+            android:layout_marginTop="50dp"/>
 
     </LinearLayout>
 

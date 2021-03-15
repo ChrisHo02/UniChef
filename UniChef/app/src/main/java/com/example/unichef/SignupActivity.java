@@ -3,10 +3,7 @@ package com.example.unichef;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.InputType;
 import android.text.TextUtils;
-import android.text.method.PasswordTransformationMethod;
-import android.text.method.SingleLineTransformationMethod;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,8 +31,6 @@ public class SignupActivity extends AppCompatActivity {
     public EditText username;
     public EditText password;
     public EditText confirmPassword;
-    public Button hideshow;
-    public boolean shown = false;
 
     public FirebaseAuth mAuth;
     public DatabaseReference mDatabase;
@@ -50,10 +45,6 @@ public class SignupActivity extends AppCompatActivity {
         username = findViewById(R.id.editUsername);
         password = findViewById(R.id.editPassword);
         confirmPassword = findViewById(R.id.confirmPassword);
-        hideshow = findViewById(R.id.hideshow_button);
-
-        password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        confirmPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://unichef-f6056-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
@@ -76,20 +67,6 @@ public class SignupActivity extends AppCompatActivity {
                 });
             }else{
                 Toast.makeText(this, "Check your info.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        hideshow.setOnClickListener(v -> {
-            if(shown) {
-                password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                confirmPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                hideshow.setText("ヘ(- _ -ヘ)");
-                shown = false;
-            } else {
-                confirmPassword.setTransformationMethod(SingleLineTransformationMethod.getInstance());
-                password.setTransformationMethod(SingleLineTransformationMethod.getInstance());
-                hideshow.setText("\\(◕。◕\\)");
-                shown = true;
             }
         });
     }
