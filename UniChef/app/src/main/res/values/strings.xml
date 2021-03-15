@@ -44,7 +44,7 @@
     <string name="tags">Tags</string>
     <string name="preview">Preview</string>
     <string name="finish">Finish</string>
-
+    <string name="tips">Tips</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -68,9 +68,5 @@
     <string name="ingredients">Ingredients</string>
     <string name="add_ingredient">add ingredient</string>
     <string name="description">Description</string>
-    <string name="equipment">Equipment</string>
-    <string name="add_equipment">Add Equipment</string>
-    <string name="add_tag">Add Tag</string>
-    <string name="upload_recipe">Upload Recipe</string>
-    <string name="tips">Tips</string>
+
 </resources>

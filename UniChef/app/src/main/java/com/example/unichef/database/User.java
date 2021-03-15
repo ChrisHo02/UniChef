@@ -3,7 +3,7 @@ package com.example.unichef.database;
 import java.util.ArrayList;
 
 public class User {
-    private String id;
+    private long id;
     private String name;
     private String email;
     private String username;
@@ -20,11 +20,11 @@ public class User {
         this.password = password;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

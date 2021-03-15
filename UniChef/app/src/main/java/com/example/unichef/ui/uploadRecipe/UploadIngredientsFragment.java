@@ -27,7 +27,6 @@ import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Recipe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,11 +43,11 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private static  String[] INGREDIENTS = new String[]{
-            "Apple", "Avocado", "Banana", "Carrot", "Duck", "Egg", "Garlic", "Ginger", "Hot sauce", "Red onion", "Onion", "Red pepper", "Yellow pepper", "Green pepper",
+    private static final String[] INGREDIENTS = new String[]{
+            "Apple", "Avocado", "Acorn", "Banana", "Carrot", "Duck", "Egg", "Garlic", "Ginger", "Hot sauce", "Red onion", "Onion", "Red pepper", "Yellow pepper", "Green pepper",
             "Pancetta", "Parmesan", "Egg", "Salted butter", "Unsalted butter", "Butter", "Salt", "Pepper", "Beef mince", "Pork mince", "Lamb mince", "Chicken breast",
             "Chicken thigh", "Chicken wing", "Chicken drumstick", "Red chilli", "Smoked paprika", "Ground coriander", "Ground cumin", "Olive oil", "Lime", "Lemon", "Tabasco",
-            "Tortilla", "Oregano", "Tomato", "Spaghetti", "Tinned tomatoes", "Curry sauce", "Sugar", "Caster sugar", "Granulated sugar", "Vegetable oil", "Sweet potato",
+            "Tortilla", "Carrot", "Oregano", "Tomato", "Spaghetti", "Tinned tomatoes", "Curry sauce", "Sugar", "Caster sugar", "Granulated sugar", "Vegetable oil", "Sweet potato",
             "Potato", "Black beans", "Kidney beans", "Tomato purée", "Chilli powder", "Celery", "Lasagne sheets", "Cheddar cheese"
     };
     NavController navController;
@@ -101,7 +100,6 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
 
         View view = inflater.inflate(R.layout.fragment_upload_ingredients,
                 container, false);
-        Arrays.sort(INGREDIENTS);
 
 
         assert getArguments() != null;
@@ -140,9 +138,13 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
                 recipe.addIngredient(new Ingredient(ingredientString));
                 ingredientTextView.getText().clear();
                 this.uploadIngredientsAdapter.notifyDataSetChanged();
+//                UploadIngredientsFragmentDirections.ActionUploadIngredientsFragmentToChooseIngredientFragment action = UploadIngredientsFragmentDirections.actionUploadIngredientsFragmentToChooseIngredientFragment();
+//                action.setRecipeArg(recipe);
+//                Navigation.findNavController(view).navigate(action);
+                //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredient_to_navigation_chooseIngredient));
                 break;
             case R.id.button:
-                UploadIngredientsFragmentDirections.ActionUploadIngredientsFragmentToUploadEquipmentFragment action2 = UploadIngredientsFragmentDirections.actionUploadIngredientsFragmentToUploadEquipmentFragment();
+                UploadIngredientsFragmentDirections.ActionUploadIngredientsFragmentToUploadInstructionsFragment action2 = UploadIngredientsFragmentDirections.actionUploadIngredientsFragmentToUploadInstructionsFragment();
                 action2.setRecipeArg(recipe);
                 Navigation.findNavController(view).navigate(action2);
                 //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));

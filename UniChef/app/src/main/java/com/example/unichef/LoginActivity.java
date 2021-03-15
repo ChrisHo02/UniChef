@@ -3,27 +3,38 @@ package com.example.unichef;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.unichef.database.DBHelper;
+import com.example.unichef.database.Equipment;
+import com.example.unichef.database.Ingredient;
+import com.example.unichef.database.Instruction;
+import com.example.unichef.database.Recipe;
+import com.example.unichef.database.RecipeGenerator;
+import com.example.unichef.database.Tag;
+import com.example.unichef.database.User;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
-    public Button login;
-    public Button register;
-    public EditText email;
-    public EditText password;
-
-    public FirebaseAuth mAuth;
+    public Button button1;
+    public Button button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //testing
+        DBHelper db = new DBHelper(this, null, null, 1);
+        User user = new User("chris", "email.com","chris","pass");
+        db.addUser(db.getWritableDatabase(), user);
+
+        new RecipeGenerator().generateRecipes(db, user);
+        //end of testing
+
         super.onCreate(savedInstanceState);
         //for changing status bar icon colors
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
@@ -31,55 +42,30 @@ public class LoginActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-
-        if (mAuth.getCurrentUser() != null){
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        }
-
-        email = findViewById(R.id.editTextEmail);
-        password = findViewById(R.id.editPassword);
-
-        login = findViewById(R.id.login_button);
-        login.setOnClickListener(v -> {
-            if (checkValidData()){
-                mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    }else{
-                        Toast.makeText(LoginActivity.this, "Failed to sign in!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        button1 = (Button) findViewById(R.id.signup_button);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
             }
         });
 
-        register = findViewById(R.id.signup_button);
-        register.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-            startActivity(intent);
+        button2 = (Button) findViewById(R.id.login_button);
+        EditText editTextEmail = findViewById(R.id.editTextEmail);
+        EditText editPassword = findViewById(R.id.editPassword);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                if(db.findUser(db.getReadableDatabase(),editTextEmail.getText().toString(), editPassword.getText().toString())){
+                    db.close();
+                    //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    //startActivity(intent);
+                }
+            }
         });
     }
 
-    private boolean checkValidData(){
-        boolean valid = true;
-        if (!isEmail(email)){
-            email.setError("Enter valid email!");
-            valid = false;
-        }
-        if (isShort(password)){
-            password.setError("Password is too short!");
-            valid = false;
-        }
-        return valid;
-    }
-
-    private boolean isEmail(EditText text){
-        CharSequence email = text.getText().toString();
-        return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
-    }
-
-    private boolean isShort(EditText text){
-        int textLength = text.getText().toString().length();
-        return textLength < 6;
-    }
 }

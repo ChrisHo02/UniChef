@@ -1,47 +1,34 @@
 package com.example.unichef.ui.home;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.unichef.LoginActivity;
+import com.example.unichef.MainActivity;
 import com.example.unichef.R;
+import com.example.unichef.SignupActivity;
 import com.example.unichef.ViewRecipeActivity;
-import com.example.unichef.database.Equipment;
-import com.example.unichef.database.FirebaseHelper;
-import com.example.unichef.database.Ingredient;
-import com.example.unichef.database.Instruction;
+import com.example.unichef.database.DBHelper;
 import com.example.unichef.database.Recipe;
-import com.example.unichef.database.RecipeGenerator;
-import com.example.unichef.database.Tag;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOError;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class HomeFragment extends Fragment {
 
@@ -50,11 +37,10 @@ public class HomeFragment extends Fragment {
     ListView listView;
     String recipeTitle[] = {"Spaghetti", "Lasagne", "Turds with Cream", "Curry", "Avocado", "Fish", "Toilet Finder", "Pizza"};
     String recipeDescription[] = {"Noodles", "Pasta", "Cream isn't fresh. It isn't cream either.", "It'll burn both holes.", "The right technique for binning this...", "It reminds me of he...", "A cool idea to revolutioni...", "Insert funny math joke about Pi."};
+    String categories [] = {"Vegan", "Meat", "Food", "Drink", "Pasta", "Vegetarian", "Quick", "Easy"};
     int size[] = {1, 0, 2, 0, 1, 1, 2, 0};
-
-    private ArrayList<Tag> tags;
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         //This was default code written when I loaded up the project.
@@ -66,23 +52,13 @@ public class HomeFragment extends Fragment {
             }
         });*/
 
-        //DBHelper db = new DBHelper(this.getContext(), null, null, 1);
-        //someRecipes = db.getRecipes(db.getReadableDatabase(), 10);
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null){
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-        }else{
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://unichef-f6056-default-rtdb.europe-west1.firebasedatabase.app/").getReference("recipes");
-            FirebaseHelper helper = new FirebaseHelper();
-            tags = helper.getAllTags();
-        }
+        DBHelper db = new DBHelper(this.getContext(), null, null, 1);
+        someRecipes = db.getRecipes(db.getReadableDatabase(), 10);
 
         ChipGroup chipGroup = root.findViewById(R.id.chipGroup);
-        for (Tag tag : tags){
+        for (String category : categories){
             Chip categoryChip = new Chip(container.getContext());
-            categoryChip.setText(tag.getName());
+            categoryChip.setText(category);
             chipGroup.addView(categoryChip);
         }
 

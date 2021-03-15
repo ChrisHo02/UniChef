@@ -90,7 +90,6 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
                 container, false);
 
         this.recipe = UploadInstructionsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
-        assert recipe != null;
         this.instructions = recipe.getInstructions();
 
 
@@ -120,13 +119,13 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
             case R.id.addInstruction_button:
                 EditText instructionTextView = (EditText) getView().findViewById(R.id.instruction_editText);
                 String instructionStr = instructionTextView.getText().toString();
-                this.instructions.add(new Instruction(step, instructionStr, 0));
+                this.instructions.add(new Instruction(++step, instructionStr, 0,null));
                 instructionTextView.getText().clear();
                 this.adapter.notifyDataSetChanged();
                 break;
             case R.id.button:
                 recipe.setInstructions(instructions);
-                UploadInstructionsFragmentDirections.ActionUploadInstructionsFragmentToTempUploadTagsFragment action = UploadInstructionsFragmentDirections.actionUploadInstructionsFragmentToTempUploadTagsFragment();
+                UploadInstructionsFragmentDirections.ActionUploadInstructionsFragmentToUploadTagsFragment action = UploadInstructionsFragmentDirections.actionUploadInstructionsFragmentToUploadTagsFragment();
                 action.setRecipeArg(recipe);
                 Navigation.findNavController(view).navigate(action);
                 //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
