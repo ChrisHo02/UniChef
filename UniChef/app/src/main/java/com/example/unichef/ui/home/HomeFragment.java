@@ -13,15 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -108,14 +105,9 @@ public class HomeFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (chipGroup.getCheckedChipIds().size() == 0){
-                    String searchPhrase = WordUtils.capitalizeFully(newText);
-                    Query query = mDatabase.child("recipes").orderByChild("title").startAt(searchPhrase).endAt(searchPhrase + "\uf8ff").limitToLast(25);
-                    updateRecipeAdapter(query);
-                }else{
-                    recipeAdapter.getFilter().filter(newText);
-                }
-                //Need to decide whether we use the poor search database, or good search but no auto updates
+                String searchPhrase = WordUtils.capitalizeFully(newText);
+                Query query = mDatabase.child("recipes").orderByChild("title").startAt(searchPhrase).endAt(searchPhrase + "\uf8ff").limitToLast(25);
+                updateRecipeAdapter(query);
                 return false;
             }
         });
@@ -137,7 +129,6 @@ public class HomeFragment extends Fragment {
                             initializeNormalRecipeAdapter();
                         }else{
                             recipeAdapter.clear();
-                            recipeAdapter.notifyDataSetChanged();
                         }
                         ArrayList<Tag> checkedTags = new ArrayList<>();
                         for (Integer chipId : chipGroup.getCheckedChipIds()){
@@ -148,7 +139,6 @@ public class HomeFragment extends Fragment {
                             listView.setAdapter(firebaseRecipeAdapter);
                         }else{
                             listView.setAdapter(recipeAdapter);
-                            recipeAdapter.notifyDataSetChanged();
                         }
                         for (Tag checkedTag : checkedTags){
                             Query query = mDatabase.child("tags").child(checkedTag.getName()).limitToLast(25);
@@ -163,8 +153,6 @@ public class HomeFragment extends Fragment {
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                     Recipe recipe = snapshot.getValue(Recipe.class);
                                                     recipeAdapter.add(recipe);
-                                                    recipeAdapter.getFilter().filter(searchView.getQuery());
-                                                    recipeAdapter.notifyDataSetChanged();
                                                 }
 
                                                 @Override
@@ -173,7 +161,6 @@ public class HomeFragment extends Fragment {
                                             });
                                         }else{
                                             recipeAdapter.clear();
-                                            recipeAdapter.notifyDataSetChanged();
                                         }
                                     }
                                 }
@@ -220,14 +207,9 @@ public class HomeFragment extends Fragment {
         recipeAdapter = adapter;
     }
 
-    private static class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
-        private final ArrayList<Recipe> originalRecipes;
-        private ArrayList<Recipe> filteredRecipes;
-
+    private static class RecipeAdapter extends ArrayAdapter<Recipe>{
         public RecipeAdapter(Context context, ArrayList<Recipe> recipes){
             super(context, 0, recipes);
-            this.originalRecipes = recipes;
-            this.filteredRecipes = recipes;
         }
 
         @Override
@@ -241,63 +223,11 @@ public class HomeFragment extends Fragment {
             TextView description = v.findViewById(R.id.textView2);
             ImageView image = v.findViewById(R.id.image);
 
-            assert recipe != null;
             title.setText(recipe.getTitle());
             description.setText(recipe.getDescription());
             Picasso.get().load(recipe.getImageUrl()).into(image);
 
             return v;
-        }
-
-        @Override
-        public int getCount() {
-            return filteredRecipes.size();
-        }
-
-        @Nullable
-        @Override
-        public Recipe getItem(int position) {
-            return filteredRecipes.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @NonNull
-        @Override
-        public Filter getFilter() {
-            return new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    String filterString = constraint.toString().toLowerCase();
-                    FilterResults results = new FilterResults();
-                    if (filterString.isEmpty()){
-                        results.values = originalRecipes;
-                        results.count = originalRecipes.size();
-                        return results;
-                    }
-                    final ArrayList<Recipe> recipes = originalRecipes;
-                    int count = recipes.size();
-                    final ArrayList<Recipe> filteredRecipes = new ArrayList<>(count);
-                    for (int i = 0; i < count; i++) {
-                        Recipe filterableRecipe = recipes.get(i);
-                        if (filterableRecipe.getTitle().toLowerCase().contains(filterString) || filterableRecipe.getDescription().contains(filterString)) {
-                            filteredRecipes.add(recipes.get(i));
-                        }
-                    }
-                    results.values = filteredRecipes;
-                    results.count = filteredRecipes.size();
-                    return results;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    filteredRecipes = (ArrayList<Recipe>) results.values;
-                    notifyDataSetChanged();
-                }
-            };
         }
     }
 }
