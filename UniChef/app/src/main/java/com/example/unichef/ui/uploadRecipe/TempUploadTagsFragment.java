@@ -62,7 +62,7 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
     RecyclerView recyclerView;
     ArrayAdapter<String> chooseAdapter;
     TempUploadTagsAdapter uploadTagsAdapter;
-    String photopath;
+    String photoPath;
 
     public TempUploadTagsFragment() {
         // Required empty public constructor
@@ -105,7 +105,7 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
         assert getArguments() != null;
         this.recipe = TempUploadTagsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
         this.tags = recipe.getTags();
-        this.photopath = recipe.getImageUrl();
+        this.photoPath = recipe.getImageUrl();
 
 
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.tags_autoCompleteTextView);
@@ -152,7 +152,7 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
                         FirebaseHelper helper = new FirebaseHelper();
                         helper.uploadRecipe(recipe);
 
-                        File file = new File(photopath);
+                        File file = new File(photoPath);
                         file.delete();
                         getActivity().finish();
                         Toast.makeText(getContext(),
