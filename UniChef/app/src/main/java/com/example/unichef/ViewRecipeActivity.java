@@ -34,7 +34,7 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
         ImageView image = findViewById(R.id.imageView);
         Picasso.get().load(recipe.getImageUrl()).into(image);
 
-        FragmentStateAdapter adapter = new ViewPagerAdapter(this);
+        FragmentStateAdapter adapter = new ViewPagerAdapter(this, recipe.getInstructions(), recipe.getIngredients());
         ViewPager2 viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
 
