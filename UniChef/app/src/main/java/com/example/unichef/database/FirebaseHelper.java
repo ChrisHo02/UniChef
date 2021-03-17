@@ -27,12 +27,10 @@ import java.util.Date;
 public class FirebaseHelper {
     private final DatabaseReference mDatabase;
     private final StorageReference mStorage;
-    private final FirebaseAuth mAuth;
 
     public FirebaseHelper(){
         mDatabase = FirebaseDatabase.getInstance("https://unichef-f6056-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         mStorage = FirebaseStorage.getInstance("gs://unichef-f6056.appspot.com").getReference();
-        mAuth = FirebaseAuth.getInstance();
     }
 
     public String uploadRecipe(Recipe recipe){
@@ -74,4 +72,81 @@ public class FirebaseHelper {
             });
         });
     }
+
+    public void uploadProfilePicture(String filePath, String userId){
+        StorageReference profileRef = mStorage.child("profile/" + new Date().getTime() + ".png");
+        Uri file = Uri.fromFile(new File(filePath));
+        UploadTask uploadTask = profileRef.putFile(file);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            Task<Uri> downloadUrl = profileRef.getDownloadUrl();
+            downloadUrl.addOnSuccessListener(uri -> {
+                String imageReference = uri.toString();
+                mDatabase.child("users").child(userId).child("profileImage").setValue(imageReference);
+            });
+        });
+    }
+
+    public void deleteRecipe(Recipe recipe){
+        mDatabase.child("recipes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    Recipe tempRecipe = snap.getValue(Recipe.class);
+                    if (tempRecipe.getDateAdded() == recipe.getDateAdded() && tempRecipe.getCreatorId().equals(recipe.getCreatorId())){
+                        mDatabase.child("recipes").child(snap.getKey()).removeValue();
+                        deleteImage(recipe.getImageUrl());
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void deleteImage(String imageUrl){
+        StorageReference imageRef = FirebaseStorage.getInstance("gs://unichef-f6056.appspot.com").getReferenceFromUrl(imageUrl);
+        imageRef.delete();
+    }
+
+    public void addSavedRecipe(String userId, Recipe recipe){
+        mDatabase.child("recipes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    Recipe tempRecipe = snap.getValue(Recipe.class);
+                    if (tempRecipe.getDateAdded() == recipe.getDateAdded() && tempRecipe.getCreatorId().equals(recipe.getCreatorId())){
+                        mDatabase.child("users").child(userId).child("savedRecipes").child(snap.getKey()).setValue(true);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void removeSavedRecipe(String userId, Recipe recipe){
+        mDatabase.child("recipes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    Recipe tempRecipe = snap.getValue(Recipe.class);
+                    if (tempRecipe.getDateAdded() == recipe.getDateAdded() && tempRecipe.getCreatorId().equals(recipe.getCreatorId())){
+                        mDatabase.child("users").child(userId).child("savedRecipes").child(snap.getKey()).removeValue();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
 }
