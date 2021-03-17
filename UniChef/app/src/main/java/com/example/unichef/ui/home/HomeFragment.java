@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.unichef.LoginActivity;
+import com.example.unichef.ProfanityFilter;
 import com.example.unichef.R;
 import com.example.unichef.ViewRecipeActivity;
 import com.example.unichef.database.Equipment;
@@ -40,6 +41,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,6 +57,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HomeFragment extends Fragment {
 
@@ -64,8 +69,9 @@ public class HomeFragment extends Fragment {
     private ListView listView;
     private SearchView searchView;
 
+    private ChipGroup chipGroup;
+
     private RecipeAdapter recipeAdapter;
-    private FirebaseListAdapter<Recipe> firebaseRecipeAdapter;
 
     private DatabaseReference mDatabase;
     private FirebaseUser user;
@@ -74,14 +80,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        //This was default code written when I loaded up the project.
-        /*final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
 
         this.container = container;
 
@@ -92,14 +90,20 @@ public class HomeFragment extends Fragment {
             startActivity(new Intent(getActivity(), LoginActivity.class));
         }
 
-        ChipGroup chipGroup = root.findViewById(R.id.chipGroup);
+        chipGroup = root.findViewById(R.id.chipGroup);
         updateTags(chipGroup);
 
         listView = root.findViewById(R.id.listView);
-        Query query = mDatabase.child("recipes").limitToLast(25);
-        updateRecipeAdapter(query);
+        initializeRecipeAdapter();
+        updateRecipeAdapter();
 
         searchView = root.findViewById(R.id.searchView);
+        searchFilter();
+
+        return root;
+    }
+
+    private void searchFilter(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -108,19 +112,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (chipGroup.getCheckedChipIds().size() == 0){
-                    String searchPhrase = WordUtils.capitalizeFully(newText);
-                    Query query = mDatabase.child("recipes").orderByChild("title").startAt(searchPhrase).endAt(searchPhrase + "\uf8ff").limitToLast(25);
-                    updateRecipeAdapter(query);
-                }else{
-                    recipeAdapter.getFilter().filter(newText);
+                if (!newText.equals("")){
+                    filterRecipeAdapter();
                 }
-                //Need to decide whether we use the poor search database, or good search but no auto updates
                 return false;
             }
         });
-
-        return root;
     }
 
     private void updateTags(ChipGroup chipGroup){
@@ -133,56 +130,7 @@ public class HomeFragment extends Fragment {
                     categoryChip.setText(tag.getName());
                     categoryChip.setCheckable(true);
                     categoryChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                        if (recipeAdapter == null){
-                            initializeNormalRecipeAdapter();
-                        }else{
-                            recipeAdapter.clear();
-                            recipeAdapter.notifyDataSetChanged();
-                        }
-                        ArrayList<Tag> checkedTags = new ArrayList<>();
-                        for (Integer chipId : chipGroup.getCheckedChipIds()){
-                            Chip checkedChip = chipGroup.findViewById(chipId);
-                            checkedTags.add(new Tag(checkedChip.getText().toString()));
-                        }
-                        if (checkedTags.size() == 0){
-                            listView.setAdapter(firebaseRecipeAdapter);
-                        }else{
-                            listView.setAdapter(recipeAdapter);
-                            recipeAdapter.notifyDataSetChanged();
-                        }
-                        for (Tag checkedTag : checkedTags){
-                            Query query = mDatabase.child("tags").child(checkedTag.getName()).limitToLast(25);
-                            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    for (DataSnapshot recipe : snapshot.getChildren()){
-                                        if (recipe.getKey() != null){
-                                            Query recipeQuery = mDatabase.child("recipes").child(recipe.getKey());
-                                            recipeQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    Recipe recipe = snapshot.getValue(Recipe.class);
-                                                    recipeAdapter.add(recipe);
-                                                    recipeAdapter.getFilter().filter(searchView.getQuery());
-                                                    recipeAdapter.notifyDataSetChanged();
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                }
-                                            });
-                                        }else{
-                                            recipeAdapter.clear();
-                                            recipeAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                }
-                            });
-                        }
+                        filterRecipeAdapter();
                     });
                     chipGroup.addView(categoryChip);
                 }
@@ -193,31 +141,64 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void updateRecipeAdapter(Query query){
-        FirebaseListOptions<Recipe> options = new FirebaseListOptions.Builder<Recipe>().setLayout(R.layout.med_recipe_item).setQuery(query, Recipe.class).build();
-        FirebaseListAdapter<Recipe> adapter = new FirebaseListAdapter<Recipe>(options) {
-            @Override
-            protected void populateView(@NonNull View v, @NonNull Recipe model, int position) {
-                TextView title = v.findViewById(R.id.textView1);
-                TextView description = v.findViewById(R.id.textView2);
-                ImageView image = v.findViewById(R.id.image);
-
-                title.setText(model.getTitle());
-                description.setText(model.getDescription());
-                Picasso.get().load(model.getImageUrl()).into(image);
-            }
-        };
-        listView.setAdapter(adapter);
-        adapter.startListening();
-        listView.setOnItemClickListener((parent, view, position, id) -> startActivity(new Intent(getActivity(), ViewRecipeActivity.class).putExtra("Recipe", adapter.getItem(position))));
-        firebaseRecipeAdapter = adapter;
-    }
-
-    private void initializeNormalRecipeAdapter(){
+    private void initializeRecipeAdapter(){
         RecipeAdapter adapter = new RecipeAdapter(getContext(), new ArrayList<>());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> startActivity(new Intent(getActivity(), ViewRecipeActivity.class).putExtra("Recipe", adapter.getItem(position))));
         recipeAdapter = adapter;
+    }
+
+    private void updateRecipeAdapter(){
+        mDatabase.child("recipes").addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Recipe recipe = snapshot.getValue(Recipe.class);
+                recipeAdapter.add(recipe);
+                recipeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Recipe recipe = snapshot.getValue(Recipe.class);
+                for (Recipe r : recipeAdapter.getItems()){
+                    if (r.getImageUrl().equals("Uploading")){
+                        recipeAdapter.remove(r);
+                    }
+                }
+                recipeAdapter.add(recipe);
+                recipeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void filterRecipeAdapter(){
+        StringBuilder filterString = new StringBuilder();
+        List<Integer> chipIds = (ArrayList<Integer>) chipGroup.getCheckedChipIds();
+        for (Integer chipId : chipIds){
+            Chip chip = chipGroup.findViewById(chipId);
+            filterString.append("<t>").append(chip.getText().toString()).append("</t>");
+        }
+        String searchString = searchView.getQuery().toString();
+        if (!searchString.isEmpty()){
+            filterString.append("<s>").append(searchView.getQuery().toString()).append("</s>");
+        }
+        recipeAdapter.getFilter().filter(filterString);
     }
 
     private static class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
@@ -260,6 +241,10 @@ public class HomeFragment extends Fragment {
             return filteredRecipes.get(position);
         }
 
+        public ArrayList<Recipe> getItems(){
+            return originalRecipes;
+        }
+
         @Override
         public long getItemId(int position) {
             return position;
@@ -271,24 +256,51 @@ public class HomeFragment extends Fragment {
             return new Filter() {
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
-                    String filterString = constraint.toString().toLowerCase();
+                    String filterString = constraint.toString();
                     FilterResults results = new FilterResults();
                     if (filterString.isEmpty()){
                         results.values = originalRecipes;
                         results.count = originalRecipes.size();
                         return results;
                     }
-                    final ArrayList<Recipe> recipes = originalRecipes;
-                    int count = recipes.size();
-                    final ArrayList<Recipe> filteredRecipes = new ArrayList<>(count);
-                    for (int i = 0; i < count; i++) {
-                        Recipe filterableRecipe = recipes.get(i);
-                        if (filterableRecipe.getTitle().toLowerCase().contains(filterString) || filterableRecipe.getDescription().contains(filterString)) {
-                            filteredRecipes.add(recipes.get(i));
+                    List<String> filterTags = new ArrayList<>();
+                    Matcher tagMatcher = Pattern.compile("<t>(.*?)</t>").matcher(filterString);
+                    while (tagMatcher.find()){
+                        filterTags.add(tagMatcher.group(1));
+                    }
+                    String filterSearch = "";
+                    Matcher searchMatcher = Pattern.compile("<s>(.*?)</s>").matcher(filterString);
+                    if (searchMatcher.find()){
+                        filterSearch = searchMatcher.group(1).toLowerCase();
+                    }
+                    ArrayList<Recipe> filteredRecipes = new ArrayList<>();
+                    for (Recipe filterableRecipe : originalRecipes){
+                        checkedRecipe:
+                        for (String filterTag : filterTags){
+                            for (Tag tag : filterableRecipe.getTags()){
+                                if (tag.getName().equals(filterTag)){
+                                    filteredRecipes.add(filterableRecipe);
+                                    break checkedRecipe;
+                                }
+                            }
                         }
                     }
-                    results.values = filteredRecipes;
-                    results.count = filteredRecipes.size();
+                    ArrayList<Recipe> finalRecipes = new ArrayList<>();
+                    if (filteredRecipes.size() > 0){
+                        for (Recipe filteredRecipe : filteredRecipes){
+                            if (filteredRecipe.getTitle().toLowerCase().contains(filterSearch) || filteredRecipe.getDescription().toLowerCase().contains(filterSearch)){
+                                finalRecipes.add(filteredRecipe);
+                            }
+                        }
+                    }else{
+                        for (Recipe filterableRecipe : originalRecipes){
+                            if (filterableRecipe.getTitle().toLowerCase().contains(filterSearch) || filterableRecipe.getDescription().toLowerCase().contains(filterSearch)){
+                                finalRecipes.add(filterableRecipe);
+                            }
+                        }
+                    }
+                    results.values = finalRecipes;
+                    results.count = finalRecipes.size();
                     return results;
                 }
 

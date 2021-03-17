@@ -36,12 +36,24 @@ public class FirebaseHelper {
     }
 
     public String uploadRecipe(Recipe recipe){
+        updateTags(recipe);
         String recipeId = mDatabase.child("recipes").push().getKey();
         assert recipeId != null;
+        String imagePath = recipe.getImageUrl();
+        recipe.setImageUrl("Uploading");
         mDatabase.child("recipes").child(recipeId).setValue(recipe);
         uploadRecipeTags(recipe, recipeId);
-        uploadRecipeImage(recipe, recipeId);
+        uploadRecipeImage(recipe, recipeId, imagePath);
         return recipeId;
+    }
+
+    private void updateTags(Recipe recipe){
+        ArrayList<Tag> updatedTags = new ArrayList<>();
+        for (int i = 0; i < recipe.getTags().size(); i++){
+            String tagName = recipe.getTags().get(i).getName();
+            updatedTags.add(new Tag(WordUtils.capitalizeFully(tagName)));
+        }
+        recipe.setTags(updatedTags);
     }
 
     public void uploadRecipeTags(Recipe recipe, String recipeId){
@@ -51,9 +63,9 @@ public class FirebaseHelper {
         }
     }
 
-    public void uploadRecipeImage(Recipe recipe, String recipeId){
+    public void uploadRecipeImage(Recipe recipe, String recipeId, String imagePath){
         StorageReference recipeRef = mStorage.child("recipes/" + new Date().getTime() + ".png");
-        Uri file = Uri.fromFile(new File(recipe.getImageUrl()));
+        Uri file = Uri.fromFile(new File(imagePath));
         UploadTask uploadTask = recipeRef.putFile(file);
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             Task<Uri> downloadUrl = recipeRef.getDownloadUrl();
