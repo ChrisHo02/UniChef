@@ -39,11 +39,9 @@ public class FirebaseHelper {
         updateTags(recipe);
         String recipeId = mDatabase.child("recipes").push().getKey();
         assert recipeId != null;
-        String imagePath = recipe.getImageUrl();
-        recipe.setImageUrl("Uploading");
         mDatabase.child("recipes").child(recipeId).setValue(recipe);
         uploadRecipeTags(recipe, recipeId);
-        uploadRecipeImage(recipe, recipeId, imagePath);
+        uploadRecipeImage(recipe, recipeId);
         return recipeId;
     }
 
@@ -63,9 +61,9 @@ public class FirebaseHelper {
         }
     }
 
-    public void uploadRecipeImage(Recipe recipe, String recipeId, String imagePath){
+    public void uploadRecipeImage(Recipe recipe, String recipeId){
         StorageReference recipeRef = mStorage.child("recipes/" + new Date().getTime() + ".png");
-        Uri file = Uri.fromFile(new File(imagePath));
+        Uri file = Uri.fromFile(new File(recipe.getImageUrl()));
         UploadTask uploadTask = recipeRef.putFile(file);
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             Task<Uri> downloadUrl = recipeRef.getDownloadUrl();

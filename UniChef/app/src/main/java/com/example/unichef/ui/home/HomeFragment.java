@@ -57,6 +57,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,6 +72,7 @@ public class HomeFragment extends Fragment {
 
     private ChipGroup chipGroup;
 
+    private Hashtable<String, Integer> recipePositions;
     private RecipeAdapter recipeAdapter;
 
     private DatabaseReference mDatabase;
@@ -94,6 +96,7 @@ public class HomeFragment extends Fragment {
         updateTags(chipGroup);
 
         listView = root.findViewById(R.id.listView);
+        recipePositions = new Hashtable<>();
         initializeRecipeAdapter();
         updateRecipeAdapter();
 
@@ -112,9 +115,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (!newText.equals("")){
-                    filterRecipeAdapter();
-                }
+                filterRecipeAdapter();
                 return false;
             }
         });
@@ -156,18 +157,19 @@ public class HomeFragment extends Fragment {
                 Recipe recipe = snapshot.getValue(Recipe.class);
                 recipeAdapter.add(recipe);
                 recipeAdapter.notifyDataSetChanged();
+                recipePositions.put(snapshot.getKey(), recipeAdapter.getPosition(recipe));
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Recipe recipe = snapshot.getValue(Recipe.class);
-                for (Recipe r : recipeAdapter.getItems()){
-                    if (r.getImageUrl().equals("Uploading")){
-                        recipeAdapter.remove(r);
-                    }
-                }
+                int position = recipePositions.get(snapshot.getKey());
+                Recipe oldRecipe = recipeAdapter.getOriginalItem(position);
+                recipeAdapter.remove(oldRecipe);
                 recipeAdapter.add(recipe);
                 recipeAdapter.notifyDataSetChanged();
+                int newPosition = recipeAdapter.getPosition(recipe);
+                recipePositions.put(snapshot.getKey(), newPosition);
             }
 
             @Override
@@ -241,8 +243,8 @@ public class HomeFragment extends Fragment {
             return filteredRecipes.get(position);
         }
 
-        public ArrayList<Recipe> getItems(){
-            return originalRecipes;
+        public Recipe getOriginalItem(int position){
+            return  originalRecipes.get(position);
         }
 
         @Override
@@ -277,13 +279,20 @@ public class HomeFragment extends Fragment {
                     for (Recipe filterableRecipe : originalRecipes){
                         checkedRecipe:
                         for (String filterTag : filterTags){
-                            for (Tag tag : filterableRecipe.getTags()){
-                                if (tag.getName().equals(filterTag)){
-                                    filteredRecipes.add(filterableRecipe);
-                                    break checkedRecipe;
+                            if (filterableRecipe.getTags() != null){
+                                for (Tag tag : filterableRecipe.getTags()){
+                                    if (tag.getName().equals(filterTag)){
+                                        filteredRecipes.add(filterableRecipe);
+                                        break checkedRecipe;
+                                    }
                                 }
                             }
                         }
+                    }
+                    if (filterSearch.isEmpty()){
+                        results.values = filteredRecipes;
+                        results.count = filteredRecipes.size();
+                        return results;
                     }
                     ArrayList<Recipe> finalRecipes = new ArrayList<>();
                     if (filteredRecipes.size() > 0){
