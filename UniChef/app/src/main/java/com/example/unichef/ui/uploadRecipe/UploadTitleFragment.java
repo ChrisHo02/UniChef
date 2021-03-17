@@ -204,8 +204,6 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
             if(ActivityCompat.shouldShowRequestPermissionRationale(
                     mActivity,Manifest.permission.CAMERA)
                     || ActivityCompat.shouldShowRequestPermissionRationale(
-                    mActivity,Manifest.permission.READ_CONTACTS)
-                    || ActivityCompat.shouldShowRequestPermissionRationale(
                     mActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
                 // If we should give explanation of requested permissions
 
@@ -220,7 +218,6 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
                                 mActivity,
                                 new String[]{
                                         Manifest.permission.CAMERA,
-                                        Manifest.permission.READ_CONTACTS,
                                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                                 },
                                 MY_PERMISSIONS_REQUEST_CODE
@@ -236,7 +233,6 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
                         mActivity,
                         new String[]{
                                 Manifest.permission.CAMERA,
-                                Manifest.permission.READ_CONTACTS,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE
                         },
                         MY_PERMISSIONS_REQUEST_CODE
@@ -306,7 +302,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
 //                        checkPermission(
 //                                Manifest.permission.CAMERA,
 //                                CAMERA_PERMISSION_CODE);
-
+                        checkPermission();
                         uploadPhotoFromCamera();
                         break;
                     case "Choose from Gallery":
@@ -314,6 +310,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
 //                                Manifest.permission.READ_EXTERNAL_STORAGE,
 //                                STORAGE_PERMISSION_CODE);
 
+                        checkPermission();
                         uploadPhotoFromGallery();
 
                         break;

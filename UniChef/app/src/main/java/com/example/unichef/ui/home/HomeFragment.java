@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.unichef.LoginActivity;
 import com.example.unichef.R;
 import com.example.unichef.ViewRecipeActivity;
@@ -244,7 +245,8 @@ public class HomeFragment extends Fragment {
             assert recipe != null;
             title.setText(recipe.getTitle());
             description.setText(recipe.getDescription());
-            Picasso.get().load(recipe.getImageUrl()).into(image);
+            Glide.with(this.getContext()).load(recipe.getImageUrl()).into(image);
+//            Picasso.get().load(recipe.getImageUrl()).into(image);
 
             return v;
         }
