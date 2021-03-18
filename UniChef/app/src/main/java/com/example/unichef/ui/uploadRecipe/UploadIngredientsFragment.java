@@ -1,5 +1,6 @@
 package com.example.unichef.ui.uploadRecipe;
 
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.unichef.MainActivity;
 import com.example.unichef.R;
@@ -55,6 +58,7 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     Button addIngredient;
     Button next;
     Recipe recipe;
+    ImageButton deleteIngredient;
     ArrayList<Ingredient> ingredients;
     RecyclerView recyclerView;
     ArrayAdapter<String> chooseAdapter;
@@ -112,17 +116,37 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
         this.chooseAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, INGREDIENTS);
         autoCompleteTextView.setAdapter(chooseAdapter);
 
+
         recyclerView = view.findViewById(R.id.recyclerView);
         ingredients = recipe.getIngredients();
         this.uploadIngredientsAdapter = new UploadIngredientsAdapter(this.getContext(), ingredients);
         recyclerView.setAdapter(uploadIngredientsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        uploadIngredientsAdapter.setOnItemClickListener(new UploadIngredientsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //can add new functionality probably idk
+                //edit the ingredients?
+                return;
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                ingredients.remove(position);
+                uploadIngredientsAdapter.notifyDataSetChanged();
+            }
+        });
+
 
         navController = NavHostFragment.findNavController(this);
 
 
+
         addIngredient = (Button) view.findViewById(R.id.addIngredient_button);
         addIngredient.setOnClickListener(this);
+
+//        deleteIngredient = (ImageButton) view.findViewById(R.id.deleteIngredient_button);
+//        deleteIngredient.setOnClickListener(this);
 
         next = (Button) view.findViewById(R.id.button);
         next.setOnClickListener(this);
@@ -131,21 +155,44 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
         //return inflater.inflate(R.layout.fragment_upload_recipe2, container, false);
     }
 
+    public void buildRecyclerView() {
+
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addIngredient_button:
+                EditText amountTextView = (EditText) getView().findViewById(R.id.ingredientAmount_autoCompleteTextView);
                 EditText ingredientTextView = (EditText) getView().findViewById(R.id.ingredient_autoCompleteTextView);
+
+                String amountString = amountTextView.getText().toString();
                 String ingredientString = ingredientTextView.getText().toString();
-                recipe.addIngredient(new Ingredient(ingredientString));
-                ingredientTextView.getText().clear();
-                this.uploadIngredientsAdapter.notifyDataSetChanged();
+                if (amountString.trim().length() == 0 || ingredientString.trim().length() == 0) {
+                    amountTextView.setError("Please enter an amount");
+                    ingredientTextView.setError("Please enter an ingredient");
+                } else {
+                    String ingredient = amountString + "   " + ingredientString;
+                    recipe.addIngredient(new Ingredient(ingredient));
+                    amountTextView.getText().clear();
+                    ingredientTextView.getText().clear();
+                    this.uploadIngredientsAdapter.notifyDataSetChanged();
+                }
+                break;
+            case R.id.deleteIngredient_button:
+                int position = 0;
+                recipe.getIngredients().remove(position);
+                uploadIngredientsAdapter.notifyDataSetChanged();
                 break;
             case R.id.button:
-                UploadIngredientsFragmentDirections.ActionUploadIngredientsFragmentToUploadEquipmentFragment action2 = UploadIngredientsFragmentDirections.actionUploadIngredientsFragmentToUploadEquipmentFragment();
-                action2.setRecipeArg(recipe);
-                Navigation.findNavController(view).navigate(action2);
-                //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
+                if (uploadIngredientsAdapter.getItemCount() == 0) {
+                    Toast.makeText(getContext(),"Please add ingredients", Toast.LENGTH_SHORT).show();
+                } else {
+                    UploadIngredientsFragmentDirections.ActionUploadIngredientsFragmentToUploadEquipmentFragment action2 = UploadIngredientsFragmentDirections.actionUploadIngredientsFragmentToUploadEquipmentFragment();
+                    action2.setRecipeArg(recipe);
+                    Navigation.findNavController(view).navigate(action2);
+                    //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
+                }
                 break;
             default:
                 break;

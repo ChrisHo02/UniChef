@@ -20,7 +20,7 @@
 
 
     <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView"
+        android:id="@+id/ingredientAmount_autoCompleteTextView"
         android:layout_width="125dp"
         android:layout_height="45dp"
         android:layout_marginStart="24dp"
@@ -50,7 +50,7 @@
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@+id/addIngredient_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/autoCompleteTextView"
+        app:layout_constraintStart_toEndOf="@+id/ingredientAmount_autoCompleteTextView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button

@@ -1,6 +1,7 @@
 package com.example.unichef.ui.uploadRecipe;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.unichef.MainActivity;
 import com.example.unichef.R;
 import com.example.unichef.adapters.TempUploadTagsAdapter;
 import com.example.unichef.adapters.UploadEquipmentAdapter;
@@ -154,9 +156,14 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
 
                         File file = new File(photoPath);
                         file.delete();
-                        getActivity().finish();
+
+
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+
                         Toast.makeText(getContext(),
-                                "Recipe uploaded",Toast.LENGTH_SHORT).show();
+                                "Recipe uploaded",Toast.LENGTH_LONG).show();
                     }
                 });
 

@@ -16,6 +16,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -124,6 +125,16 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
 
     @Override
@@ -175,7 +186,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
                 recipe.setCreatorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 recipe.setTitle(title);
                 recipe.setDescription(description);
-                recipe.setImageUrl("IDK");
+                recipe.setImageUrl("");
                 recipe.setIngredients(ingredients);
                 recipe.setInstructions(instructions);
                 recipe.setEquipment(equipment);
