@@ -1,17 +1,26 @@
 package com.example.unichef.ui.home;
 
+import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -19,6 +28,7 @@ import com.example.unichef.LoginActivity;
 import com.example.unichef.R;
 import com.example.unichef.ViewRecipeActivity;
 import com.example.unichef.adapters.RecipeAdapter;
+import com.example.unichef.adapters.TempUploadTagsAdapter;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.Tag;
 import com.google.android.material.chip.Chip;
@@ -45,6 +55,7 @@ public class HomeFragment extends Fragment {
     private SearchView searchView;
 
     private ChipGroup chipGroup;
+    private ArrayList<String> filters;
 
     private Hashtable<String, Integer> recipePositions;
     private RecipeAdapter recipeAdapter;
@@ -56,7 +67,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
+        setHasOptionsMenu(true);
         this.container = container;
 
         mAuth = FirebaseAuth.getInstance();
@@ -68,16 +79,88 @@ public class HomeFragment extends Fragment {
 
         chipGroup = root.findViewById(R.id.chipGroup);
         updateTags(chipGroup);
+        filters = new ArrayList<>();
 
         listView = root.findViewById(R.id.listView);
         recipePositions = new Hashtable<>();
         initializeRecipeAdapter();
         updateRecipeAdapter();
 
-        searchView = root.findViewById(R.id.searchView);
-        searchFilter();
-
         return root;
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        inflater.inflate(R.menu.filter_menu, menu);
+        MenuBuilder menuBuilder = (MenuBuilder) menu;
+        menuBuilder.setOptionalIconsVisible(true);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setIconifiedByDefault(false);
+        searchView.setQueryHint("Search for recipes...");
+        searchFilter();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        item.setChecked(!item.isChecked());
+        switch (item.getTitle().toString()){
+            case "Difficulty":
+                if (filters.contains("Difficulty")){
+                    filters.remove("Difficulty");
+                }else{
+                    filters.add("Difficulty");
+                }
+                break;
+            case "Portions":
+                if (filters.contains("Portions")){
+                    filters.remove("Portions");
+                }else{
+                    filters.add("Portions");
+                }
+                break;
+            case "Rating":
+                if (filters.contains("Rating")){
+                    filters.remove("Rating");
+                }else{
+                    filters.add("Rating");
+                }
+                break;
+            case "Time":
+                if (filters.contains("Time")){
+                    filters.remove("Time");
+                }else{
+                    filters.add("Time");
+                }
+                break;
+            case "Date Added":
+                if (filters.contains("Date Added")){
+                    filters.remove("Date Added");
+                }else{
+                    filters.add("Date Added");
+                }
+                break;
+        }
+        filterRecipeAdapter();
+
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        item.setActionView(new View(getActivity()));
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return false;
+            }
+        });
+        return false;
     }
 
     private void searchFilter(){
@@ -173,6 +256,9 @@ public class HomeFragment extends Fragment {
         String searchString = searchView.getQuery().toString();
         if (!searchString.isEmpty()){
             filterString.append("<s>").append(searchView.getQuery().toString()).append("</s>");
+        }
+        for (String filter : filters){
+            filterString.append("<f>").append(filter).append("</f>");
         }
         recipeAdapter.getFilter().filter(filterString);
     }

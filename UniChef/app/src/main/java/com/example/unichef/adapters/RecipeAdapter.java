@@ -16,9 +16,16 @@ import androidx.annotation.Nullable;
 import com.example.unichef.R;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.Tag;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,12 +49,32 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
         }
         TextView title = v.findViewById(R.id.textView1);
         TextView description = v.findViewById(R.id.textView2);
+        TextView likes = v.findViewById(R.id.likesText);
+        TextView difficulty = v.findViewById(R.id.difficultyText);
+        TextView time = v.findViewById(R.id.timeText);
+        TextView portions = v.findViewById(R.id.portionText);
         ImageView image = v.findViewById(R.id.image);
+        ChipGroup chipGroup = v.findViewById(R.id.recipeChipGroup);
+        chipGroup.removeAllViews();
 
         assert recipe != null;
         title.setText(recipe.getTitle());
         description.setText(recipe.getDescription());
+        likes.setText(" " + recipe.getLikes());
+        likes.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_favorite_border_24, 0, 0, 0);
+        difficulty.setText(" " + recipe.getDifficulty() + "/5");
+        difficulty.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_speed_24, 0, 0, 0);
+        time.setText(" " + recipe.getTime());
+        time.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_alarm_24, 0, 0, 0);
+        portions.setText(" " + recipe.getPortions());
+        portions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_dinner_dining_24, 0, 0, 0);
         Picasso.get().load(recipe.getImageUrl()).into(image);
+        for (Tag tag : recipe.getTags()){
+            Chip chip = new Chip(getContext());
+            chip.setText(tag.getName());
+            chip.setClickable(false);
+            chipGroup.addView(chip);
+        }
 
         return v;
     }
@@ -85,16 +112,32 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
                     results.count = originalRecipes.size();
                     return results;
                 }
+
                 List<String> filterTags = new ArrayList<>();
                 Matcher tagMatcher = Pattern.compile("<t>(.*?)</t>").matcher(filterString);
                 while (tagMatcher.find()){
                     filterTags.add(tagMatcher.group(1));
                 }
+
                 String filterSearch = "";
                 Matcher searchMatcher = Pattern.compile("<s>(.*?)</s>").matcher(filterString);
                 if (searchMatcher.find()){
                     filterSearch = searchMatcher.group(1).toLowerCase();
                 }
+
+                List<String> filters = new ArrayList<>();
+                Matcher filterMatcher = Pattern.compile("<f>(.*?)</f>").matcher(filterString);
+                while (filterMatcher.find()){
+                    filters.add(filterMatcher.group(1));
+                }
+
+                if (filterSearch.isEmpty() && filterTags.isEmpty()){
+                    sortRecipes(originalRecipes, filters);
+                    results.values = originalRecipes;
+                    results.count = originalRecipes.size();
+                    return results;
+                }
+
                 ArrayList<Recipe> filteredRecipes = new ArrayList<>();
                 for (Recipe filterableRecipe : originalRecipes){
                     checkedRecipe:
@@ -109,8 +152,13 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
                         }
                     }
                 }
+
                 if (filterSearch.isEmpty()){
-                    results.values = filteredRecipes;
+                    if (filters.isEmpty()){
+                        results.values = filteredRecipes;
+                    }else{
+                        results.values = sortRecipes(filteredRecipes, filters);
+                    }
                     results.count = filteredRecipes.size();
                     return results;
                 }
@@ -128,9 +176,41 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
                         }
                     }
                 }
-                results.values = finalRecipes;
+                if (filters.isEmpty()){
+                    results.values = finalRecipes;
+                }else{
+                    results.values = sortRecipes(finalRecipes, filters);
+                }
                 results.count = finalRecipes.size();
                 return results;
+            }
+
+            private ArrayList<Recipe> sortRecipes(ArrayList<Recipe> recipes, List<String> filters){
+                for (String filter : filters){
+                    switch (filter){
+                        case "Difficulty":
+                            Comparator<Recipe> difficulty = (r1, r2) -> Integer.compare(r1.getDifficulty(), r2.getDifficulty());
+                            Collections.sort(recipes, difficulty);
+                            break;
+                        case "Time":
+                            Comparator<Recipe> time = (r1, r2) -> Integer.compare(r1.getTime(), r2.getTime());
+                            Collections.sort(recipes, time);
+                            break;
+                        case "Rating":
+                            Comparator<Recipe> rating = (r1, r2) -> Integer.compare(r1.getLikes(), r2.getLikes());
+                            Collections.sort(recipes, rating);
+                            break;
+                        case "Date Added":
+                            Comparator<Recipe> date = (r1, r2) -> Double.compare(r1.getDateAdded(), r2.getDateAdded());
+                            Collections.sort(recipes, date);
+                            break;
+                        case "Portions":
+                            Comparator<Recipe> portions = (r1, r2) -> Integer.compare(r1.getPortions(), r2.getPortions());
+                            Collections.sort(recipes, portions);
+                            break;
+                    }
+                }
+                return recipes;
             }
 
             @Override
