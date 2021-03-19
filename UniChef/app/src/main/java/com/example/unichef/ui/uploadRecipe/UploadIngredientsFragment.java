@@ -58,7 +58,6 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     Button addIngredient;
     Button next;
     Recipe recipe;
-    ImageButton deleteIngredient;
     ArrayList<Ingredient> ingredients;
     RecyclerView recyclerView;
     ArrayAdapter<String> chooseAdapter;
@@ -110,7 +109,7 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
 
         assert getArguments() != null;
         this.recipe = UploadIngredientsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
-
+        this.ingredients = recipe.getIngredients();
 
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.ingredient_autoCompleteTextView);
         this.chooseAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, INGREDIENTS);
@@ -118,7 +117,6 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
 
 
         recyclerView = view.findViewById(R.id.recyclerView);
-        ingredients = recipe.getIngredients();
         this.uploadIngredientsAdapter = new UploadIngredientsAdapter(this.getContext(), ingredients);
         recyclerView.setAdapter(uploadIngredientsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -145,8 +143,6 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
         addIngredient = (Button) view.findViewById(R.id.addIngredient_button);
         addIngredient.setOnClickListener(this);
 
-//        deleteIngredient = (ImageButton) view.findViewById(R.id.deleteIngredient_button);
-//        deleteIngredient.setOnClickListener(this);
 
         next = (Button) view.findViewById(R.id.button);
         next.setOnClickListener(this);
@@ -161,10 +157,10 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        EditText amountTextView = (EditText) getView().findViewById(R.id.ingredientAmount_autoCompleteTextView);
+        EditText ingredientTextView = (EditText) getView().findViewById(R.id.ingredient_autoCompleteTextView);
         switch (view.getId()) {
             case R.id.addIngredient_button:
-                EditText amountTextView = (EditText) getView().findViewById(R.id.ingredientAmount_autoCompleteTextView);
-                EditText ingredientTextView = (EditText) getView().findViewById(R.id.ingredient_autoCompleteTextView);
 
                 String amountString = amountTextView.getText().toString();
                 String ingredientString = ingredientTextView.getText().toString();
@@ -179,14 +175,10 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
                     this.uploadIngredientsAdapter.notifyDataSetChanged();
                 }
                 break;
-            case R.id.deleteIngredient_button:
-                int position = 0;
-                recipe.getIngredients().remove(position);
-                uploadIngredientsAdapter.notifyDataSetChanged();
-                break;
             case R.id.button:
                 if (uploadIngredientsAdapter.getItemCount() == 0) {
-                    Toast.makeText(getContext(),"Please add ingredients", Toast.LENGTH_SHORT).show();
+                    amountTextView.setError("Please add an amount");
+                    ingredientTextView.setError("Please add an ingredient");
                 } else {
                     UploadIngredientsFragmentDirections.ActionUploadIngredientsFragmentToUploadEquipmentFragment action2 = UploadIngredientsFragmentDirections.actionUploadIngredientsFragmentToUploadEquipmentFragment();
                     action2.setRecipeArg(recipe);

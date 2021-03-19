@@ -19,6 +19,7 @@ import android.widget.EditText;
 
 import com.example.unichef.R;
 import com.example.unichef.adapters.InstructionAdapter;
+import com.example.unichef.adapters.UploadEquipmentAdapter;
 import com.example.unichef.adapters.UploadIngredientsAdapter;
 import com.example.unichef.adapters.UploadInstructionsAdapter;
 import com.example.unichef.database.Instruction;
@@ -47,7 +48,7 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
     Recipe recipe;
     RecyclerView recyclerView;
     ArrayList<Instruction> instructions;
-    UploadInstructionsAdapter adapter;
+    UploadInstructionsAdapter uploadInstructionsAdapter;
     int step = 1;
 
 
@@ -96,11 +97,25 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
 
 
         recyclerView = view.findViewById(R.id.instructions_recycler_view);
-        this.adapter= new UploadInstructionsAdapter(this.getContext(),instructions);
-        recyclerView.setAdapter(adapter);
+        this.uploadInstructionsAdapter= new UploadInstructionsAdapter(this.getContext(),instructions);
+        recyclerView.setAdapter(uploadInstructionsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
+        uploadInstructionsAdapter.setOnItemClickListener(new UploadInstructionsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                return;
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                instructions.remove(position);
+                uploadInstructionsAdapter.notifyDataSetChanged();
+            }
+        });
+
+
 
 
         navController = NavHostFragment.findNavController(this);
@@ -116,20 +131,29 @@ public class UploadInstructionsFragment extends Fragment implements  View.OnClic
 
     @Override
     public void onClick(View view) {
+        EditText instructionTextView = (EditText) getView().findViewById(R.id.instruction_editText);
         switch (view.getId()) {
             case R.id.addInstruction_button:
-                EditText instructionTextView = (EditText) getView().findViewById(R.id.instruction_editText);
+
                 String instructionStr = instructionTextView.getText().toString();
-                this.instructions.add(new Instruction(step++, instructionStr, 0));
-                instructionTextView.getText().clear();
-                this.adapter.notifyDataSetChanged();
+                if (instructionStr.trim().length() == 0) {
+                    instructionTextView.setError("Please enter an instruction");
+                } else {
+                    this.instructions.add(new Instruction(step, instructionStr, 0));
+                    instructionTextView.getText().clear();
+                    this.uploadInstructionsAdapter.notifyDataSetChanged();
+                }
                 break;
             case R.id.button:
-                recipe.setInstructions(instructions);
-                UploadInstructionsFragmentDirections.ActionUploadInstructionsFragmentToTempUploadTagsFragment action = UploadInstructionsFragmentDirections.actionUploadInstructionsFragmentToTempUploadTagsFragment();
-                action.setRecipeArg(recipe);
-                Navigation.findNavController(view).navigate(action);
-                //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
+                if (uploadInstructionsAdapter.getItemCount() == 0) {
+                    instructionTextView.setError("Please add an instruction");
+                } else {
+                    recipe.setInstructions(instructions);
+                    UploadInstructionsFragmentDirections.ActionUploadInstructionsFragmentToTempUploadTagsFragment action = UploadInstructionsFragmentDirections.actionUploadInstructionsFragmentToTempUploadTagsFragment();
+                    action.setRecipeArg(recipe);
+                    Navigation.findNavController(view).navigate(action);
+                    //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
+                }
                 break;
             default:
                 break;

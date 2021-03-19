@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.unichef.R;
 
@@ -116,18 +117,23 @@ public class UploadInfoFragment extends Fragment implements View.OnClickListener
             cookingTime = Integer.parseInt(recipeTimeTextView.getText().toString());
         }
 
-        recipe.setPortions(portion);
-        recipe.setDifficulty(difficulty);
-        recipe.setTime(cookingTime);
+        if (difficulty == 0) {
+            Toast.makeText(getContext(),"Please add difficulty", Toast.LENGTH_SHORT).show();
+        }
+        else if (cookingTime == 0) {
+            recipeTimeTextView.setError("Please add cooking time");
+        }
+        else {
 
-//        ArrayList<Ingredient> ingredients = new ArrayList<>();
-//        ingredients.add(new Ingredient("apple"));
-//        ingredients.add(new Ingredient("banana"));
+            recipe.setPortions(portion);
+            recipe.setDifficulty(difficulty);
+            recipe.setTime(cookingTime);
 
 
-        UploadInfoFragmentDirections.ActionUploadInfoFragmentToUploadIngredientsFragment action = UploadInfoFragmentDirections.actionUploadInfoFragmentToUploadIngredientsFragment();
-        action.setRecipeArg(recipe);
-        Navigation.findNavController(view).navigate(action);
+            UploadInfoFragmentDirections.ActionUploadInfoFragmentToUploadIngredientsFragment action = UploadInfoFragmentDirections.actionUploadInfoFragmentToUploadIngredientsFragment();
+            action.setRecipeArg(recipe);
+            Navigation.findNavController(view).navigate(action);
 //        navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_UploadInfo_to_navigation_uploadIngredient));
+        }
     }
 }

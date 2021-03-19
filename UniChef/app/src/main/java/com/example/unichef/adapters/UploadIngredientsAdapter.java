@@ -67,12 +67,6 @@ public class UploadIngredientsAdapter extends RecyclerView.Adapter<UploadIngredi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (listener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
-                    }
                 }
             });
 
@@ -88,11 +82,5 @@ public class UploadIngredientsAdapter extends RecyclerView.Adapter<UploadIngredi
                 }
             });
         }
-    }
-
-    public void removeItem(int position) {
-        data.remove(position);
-        notifyItemRemoved(position);
-        // Add whatever you want to do when removing an Item
     }
 }

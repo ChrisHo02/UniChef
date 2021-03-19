@@ -125,6 +125,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
@@ -174,29 +175,38 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
             case R.id.button:
                 EditText recipeTextView = getView().findViewById(R.id.nameOfRecipe);
                 EditText recipeDescTextView = getView().findViewById(R.id.description);
+                ImageView recipeImageView = getView().findViewById(R.id.imageView);
                 String title = recipeTextView.getText().toString();
                 String description = recipeDescTextView.getText().toString();
 
-                ArrayList<Ingredient> ingredients = new ArrayList<>();
-                ArrayList<Instruction> instructions = new ArrayList<>();
-                ArrayList<Equipment> equipment = new ArrayList<>();
-                ArrayList<Tag> tags = new ArrayList<>();
+                if (title.trim().length() == 0) {
+                    recipeTextView.setError("Please add a title");
+                }
+                else if (recipeImageView.getDrawable() == null) {
+                    Toast.makeText(getContext(),"Please add an image", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    ArrayList<Ingredient> ingredients = new ArrayList<>();
+                    ArrayList<Instruction> instructions = new ArrayList<>();
+                    ArrayList<Equipment> equipment = new ArrayList<>();
+                    ArrayList<Tag> tags = new ArrayList<>();
 
-                Recipe recipe = new Recipe();
-                recipe.setCreatorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                recipe.setTitle(title);
-                recipe.setDescription(description);
-                recipe.setImageUrl("");
-                recipe.setIngredients(ingredients);
-                recipe.setInstructions(instructions);
-                recipe.setEquipment(equipment);
-                recipe.setTags(tags);
-                recipe.setImageUrl(photoPath);
+                    Recipe recipe = new Recipe();
+                    recipe.setCreatorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    recipe.setTitle(title);
+                    recipe.setDescription(description);
+                    recipe.setImageUrl("");
+                    recipe.setIngredients(ingredients);
+                    recipe.setInstructions(instructions);
+                    recipe.setEquipment(equipment);
+                    recipe.setTags(tags);
+                    recipe.setImageUrl(photoPath);
 
-                UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
-                action.setRecipeArg(recipe);
-                Navigation.findNavController(view).navigate(action);
-                //navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadTitleFragment_to_uploadInfoFragment));
+                    UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
+                    action.setRecipeArg(recipe);
+                    Navigation.findNavController(view).navigate(action);
+                    //navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadTitleFragment_to_uploadInfoFragment));
+                }
                 break;
             default:
                 break;
@@ -372,20 +382,21 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
                 Uri selectedImage = data.getData();
                 String picturePath = getPath( getActivity( ).getApplicationContext( ), selectedImage );
 
-                File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                } catch (IOException ex) {
-                    // Error occurred while creating the File
-                }
-                // Continue only if the File was successfully created
-                if (photoFile != null) {
-                    try {
-                        copyFile(new File(picturePath), photoFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                File photoFile = null;
+//                try {
+//                    photoFile = createImageFile();
+//                } catch (IOException ex) {
+//                    // Error occurred while creating the File
+//                }
+//                // Continue only if the File was successfully created
+//                if (photoFile != null) {
+//                    try {
+//                        copyFile(new File(picturePath), photoFile);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+                photoPath = picturePath;
                 recipePhoto.setImageURI(selectedImage);
             }
         }

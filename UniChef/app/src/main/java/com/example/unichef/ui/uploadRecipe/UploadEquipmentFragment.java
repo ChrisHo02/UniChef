@@ -19,6 +19,7 @@ import android.widget.EditText;
 
 import com.example.unichef.R;
 import com.example.unichef.adapters.UploadEquipmentAdapter;
+import com.example.unichef.adapters.UploadIngredientsAdapter;
 import com.example.unichef.database.Equipment;
 import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Recipe;
@@ -107,6 +108,18 @@ public class UploadEquipmentFragment extends Fragment implements View.OnClickLis
         this.uploadEquipmentAdapter = new UploadEquipmentAdapter(this.getContext(), equipment);
         recyclerView.setAdapter(uploadEquipmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        uploadEquipmentAdapter.setOnItemClickListener(new UploadEquipmentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                return;
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                equipment.remove(position);
+                uploadEquipmentAdapter.notifyDataSetChanged();
+            }
+        });
 
         navController = NavHostFragment.findNavController(this);
 
@@ -123,19 +136,29 @@ public class UploadEquipmentFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        EditText equipmentTextView = (EditText) getView().findViewById(R.id.equipment_autoCompleteTextView);
         switch (view.getId()) {
             case R.id.addEquipment_button:
-                EditText equipmentTextView = (EditText) getView().findViewById(R.id.equipment_autoCompleteTextView);
+
                 String equipmentString = equipmentTextView.getText().toString();
-                recipe.addEquipment(new Equipment(equipmentString));
-                equipmentTextView.getText().clear();
-                this.uploadEquipmentAdapter.notifyDataSetChanged();
+
+                if (equipmentString.trim().length() == 0) {
+                    equipmentTextView.setError("Please enter an equipment");
+                } else {
+                    recipe.addEquipment(new Equipment(equipmentString));
+                    equipmentTextView.getText().clear();
+                    this.uploadEquipmentAdapter.notifyDataSetChanged();
+                }
                 break;
             case R.id.button:
-                UploadEquipmentFragmentDirections.ActionUploadEquipmentFragmentToUploadInstructionsFragment action2 = UploadEquipmentFragmentDirections.actionUploadEquipmentFragmentToUploadInstructionsFragment();
-                action2.setRecipeArg(recipe);
-                Navigation.findNavController(view).navigate(action2);
-                //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
+                if (uploadEquipmentAdapter.getItemCount() == 0) {
+                    equipmentTextView.setError("Please add an equipment");
+                } else {
+                    UploadEquipmentFragmentDirections.ActionUploadEquipmentFragmentToUploadInstructionsFragment action2 = UploadEquipmentFragmentDirections.actionUploadEquipmentFragmentToUploadInstructionsFragment();
+                    action2.setRecipeArg(recipe);
+                    Navigation.findNavController(view).navigate(action2);
+                    //navController.navigate(new ActionOnlyNavDirections(R.id.action_navigation_uploadIngredients_to_navigation_uploadInstructions));
+                }
                 break;
             default:
                 break;

@@ -118,6 +118,18 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
         this.uploadTagsAdapter = new TempUploadTagsAdapter(this.getContext(), tags);
         recyclerView.setAdapter(uploadTagsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        uploadTagsAdapter.setOnItemClickListener(new TempUploadTagsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                return;
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                tags.remove(position);
+                uploadTagsAdapter.notifyDataSetChanged();
+            }
+        });
 
         navController = NavHostFragment.findNavController(this);
 
@@ -134,13 +146,17 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View view) {
+        EditText tagTextView = (EditText) getView().findViewById(R.id.tags_autoCompleteTextView);
         switch (view.getId()) {
             case R.id.addTag_button:
-                EditText tagTextView = (EditText) getView().findViewById(R.id.tags_autoCompleteTextView);
                 String tagString = tagTextView.getText().toString();
-                recipe.addTag(new Tag(tagString));
-                tagTextView.getText().clear();
-                this.uploadTagsAdapter.notifyDataSetChanged();
+                if (tagString.trim().length() == 0) {
+                    tagTextView.setError("Please enter a tag");
+                } else {
+                    recipe.addTag(new Tag(tagString));
+                    tagTextView.getText().clear();
+                    this.uploadTagsAdapter.notifyDataSetChanged();
+                }
                 break;
             case R.id.button:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
@@ -154,10 +170,10 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
                         FirebaseHelper helper = new FirebaseHelper();
                         helper.uploadRecipe(recipe);
 
-                        File file = new File(photoPath);
-                        file.delete();
-
-
+                        // probably dont need to delete photos
+//                        File file = new File(photoPath);
+//                        file.delete();
+                        
                         Intent intent = new Intent(getContext(), MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
