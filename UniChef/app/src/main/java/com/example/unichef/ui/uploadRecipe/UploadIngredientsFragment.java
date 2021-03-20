@@ -168,7 +168,7 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
                     amountTextView.setError("Please enter an amount");
                     ingredientTextView.setError("Please enter an ingredient");
                 } else {
-                    String ingredient = amountString + "   " + ingredientString;
+                    String ingredient = amountString + " " + ingredientString;
                     recipe.addIngredient(new Ingredient(ingredient));
                     amountTextView.getText().clear();
                     ingredientTextView.getText().clear();
