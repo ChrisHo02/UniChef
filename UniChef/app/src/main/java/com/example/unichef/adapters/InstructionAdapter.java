@@ -44,7 +44,9 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
 
     @Override
     public void onBindViewHolder(@NotNull ViewHolder viewholder, int position) {
-        viewholder.getTextView().setText(instructions.get(position).getInstruction());
+        int indexNum = position + 1;
+        String index = indexNum + ". ";
+        viewholder.getTextView().setText(index + instructions.get(position).getInstruction());
     }
 
     @Override
