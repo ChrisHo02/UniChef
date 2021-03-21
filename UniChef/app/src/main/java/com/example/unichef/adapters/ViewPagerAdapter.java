@@ -37,6 +37,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
                 break;
             case 1:
                 fragment = new RecipeInstructionsFragment(instructions);
+                break;
             case 2:
                 fragment = new RecipeEquipmentFragment(equipment);
                 break;
