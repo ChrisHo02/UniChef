@@ -24,7 +24,7 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_recipe);
+        setContentView(R.layout.activity_new_view_recipe);
 
         recipe = (Recipe) getIntent().getSerializableExtra("Recipe");
 
