@@ -183,13 +183,12 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
                                     likeButton.setColorFilter(Color.BLACK);
                                     helper.removeLikedRecipe(user.getUid(), recipe);
                                     recipe.setLikes(currentLikes - 1);
-                                    likes.setText(String.valueOf(recipe.getLikes()));
                                 }else{
                                     likeButton.setColorFilter(Color.rgb(98,0,238));
                                     helper.addLikedRecipe(user.getUid(), recipe);
                                     recipe.setLikes(currentLikes + 1);
-                                    likes.setText(String.valueOf(recipe.getLikes()));
                                 }
+                                likes.setText(String.valueOf(recipe.getLikes()));
                             }
 
                             @Override
