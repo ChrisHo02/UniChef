@@ -168,15 +168,35 @@ public class FirebaseHelper {
         });
     }
 
-    public void likeRecipe(String userId, Recipe recipe){
+    public void addLikedRecipe(String userId, Recipe recipe){
         mDatabase.child("recipes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snap : snapshot.getChildren()){
                     Recipe tempRecipe = snap.getValue(Recipe.class);
                     if (tempRecipe.getDateAdded() == recipe.getDateAdded() && tempRecipe.getCreatorId().equals(recipe.getCreatorId())){
-                        mDatabase.child("recipes").child(snap.getKey()).child("likes").setValue(tempRecipe.getLikes() + 1);
                         mDatabase.child("users").child(userId).child("likedRecipes").child(snap.getKey()).setValue(true);
+                        mDatabase.child("recipes").child(snap.getKey()).child("likes").setValue(tempRecipe.getLikes() + 1);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void removeLikedRecipe(String userId, Recipe recipe){
+        mDatabase.child("recipes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    Recipe tempRecipe = snap.getValue(Recipe.class);
+                    if (tempRecipe.getDateAdded() == recipe.getDateAdded() && tempRecipe.getCreatorId().equals(recipe.getCreatorId())){
+                        mDatabase.child("users").child(userId).child("likedRecipes").child(snap.getKey()).removeValue();
+                        mDatabase.child("recipes").child(snap.getKey()).child("likes").setValue(tempRecipe.getLikes() - 1);
                         break;
                     }
                 }
