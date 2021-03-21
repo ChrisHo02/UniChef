@@ -62,6 +62,47 @@
                 android:layout_margin="8dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="8dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageButton
+                        android:id="@+id/tips_btn_recipe"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="90dp"
+                        android:src="@drawable/baseline_lightbulb_black_24dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintLeft_toRightOf="@id/like_btn_recipe"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/like_btn_recipe"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="95dp"
+                        android:src="@drawable/baseline_favorite_border_24"
+                        app:layout_constraintLeft_toRightOf="@id/fav_btn_recipe"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/fav_btn_recipe"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="16dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baseline_bookmark_black_24dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="8dp">
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="match_parent"
