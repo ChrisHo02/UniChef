@@ -105,11 +105,14 @@
                         android:layout_width="350dp"
                         android:layout_height="wrap_content"
                         android:ems="10"
+                        app:layout_constraintRight_toLeftOf="@id/submit_comment_btn"
+                        app:layout_constraintTop_toTopOf="parent"
                         android:hint=" Write your comment here..."
                         android:inputType="textPersonName"
                         />
 
                     <Button
+                        android:id="@+id/submit_comment_btn"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginRight="8dp"
