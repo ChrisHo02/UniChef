@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/template_recipe" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -182,13 +182,13 @@
                 <ListView
                     android:id="@+id/commentListView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="500dp"
                     android:paddingTop="25dp" />
 
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
