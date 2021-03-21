@@ -42,7 +42,7 @@ import java.util.Date;
 
 public class ViewRecipeActivity extends AppCompatActivity implements Serializable {
 
-    String[] tabNames = {"Ingredients", "Instructions"};
+    String[] tabNames = {"Ingredients", "Instructions", "Equipment"};
     private Recipe recipe;
     private Button commentButton;
     private ImageButton likeButton;
@@ -82,7 +82,7 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
         ImageView image = findViewById(R.id.imageView);
         Picasso.get().load(recipe.getImageUrl()).into(image);
 
-        FragmentStateAdapter adapter = new ViewPagerAdapter(this, recipe.getInstructions(), recipe.getIngredients());
+        FragmentStateAdapter adapter = new ViewPagerAdapter(this, recipe.getInstructions(), recipe.getIngredients(), recipe.getEquipment());
         ViewPager2 viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
 
@@ -134,11 +134,17 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
                         mDatabase.child("users").child(user.getUid()).child("likedRecipes").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                boolean saved = false;
                                 for (DataSnapshot s : snapshot.getChildren()){
                                     if (snap.getKey().equals(s.getKey())){
-                                        likeButton.setColorFilter(Color.rgb(98,0,238));
+                                        saved = true;
                                         break;
                                     }
+                                }
+                                if (saved){
+                                    likeButton.setColorFilter(Color.rgb(98,0,238));
+                                }else{
+                                    likeButton.setColorFilter(Color.BLACK);
                                 }
                             }
 
@@ -211,11 +217,17 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
                         mDatabase.child("users").child(user.getUid()).child("savedRecipes").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                boolean saved = false;
                                 for (DataSnapshot s : snapshot.getChildren()){
                                     if (snap.getKey().equals(s.getKey())){
-                                        saveButton.setColorFilter(Color.rgb(98,0,238));
+                                        saved = true;
                                         break;
                                     }
+                                }
+                                if (saved){
+                                    saveButton.setColorFilter(Color.rgb(98,0,238));
+                                }else{
+                                    saveButton.setColorFilter(Color.BLACK);
                                 }
                             }
 
@@ -271,9 +283,6 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
             public void onCancelled(@NonNull DatabaseError error) {
             }
         }));
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        helper.addSavedRecipe(user.getUid(), recipe);
     }
 
 }

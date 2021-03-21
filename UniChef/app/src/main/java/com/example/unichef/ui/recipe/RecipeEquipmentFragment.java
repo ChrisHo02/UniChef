@@ -10,22 +10,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.unichef.R;
-import com.example.unichef.adapters.IngredientAdapter;
-import com.example.unichef.database.Ingredient;
+import com.example.unichef.adapters.EquipmentAdapter;
+import com.example.unichef.database.Equipment;
 
 import java.util.ArrayList;
 
-public class RecipeIngredientsFragment extends Fragment {
-    private ArrayList<Ingredient> ingredients;
+public class RecipeEquipmentFragment extends Fragment {
+    private ArrayList<Equipment> equipment;
 
-    public RecipeIngredientsFragment(ArrayList<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public RecipeEquipmentFragment(ArrayList<Equipment> equipment) {
+        this.equipment = equipment;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
+        View view = inflater.inflate(R.layout.fragment_recipe_equipment, container, false);
 
-        IngredientAdapter adapter = new IngredientAdapter(ingredients);
+        EquipmentAdapter adapter = new EquipmentAdapter(equipment);
         RecyclerView recyclerView = view.findViewById(R.id.equipment_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
