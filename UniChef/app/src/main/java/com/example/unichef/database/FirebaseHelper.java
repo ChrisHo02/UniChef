@@ -149,4 +149,43 @@ public class FirebaseHelper {
         });
     }
 
+    public void postComment(Recipe recipe, ArrayList<Comment> comments){
+        mDatabase.child("recipes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    Recipe tempRecipe = snap.getValue(Recipe.class);
+                    if (tempRecipe.getDateAdded() == recipe.getDateAdded() && tempRecipe.getCreatorId().equals(recipe.getCreatorId())){
+                        mDatabase.child("recipes").child(snap.getKey()).child("comments").setValue(comments);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void likeRecipe(String userId, Recipe recipe){
+        mDatabase.child("recipes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap : snapshot.getChildren()){
+                    Recipe tempRecipe = snap.getValue(Recipe.class);
+                    if (tempRecipe.getDateAdded() == recipe.getDateAdded() && tempRecipe.getCreatorId().equals(recipe.getCreatorId())){
+                        mDatabase.child("recipes").child(snap.getKey()).child("likes").setValue(tempRecipe.getLikes() + 1);
+                        mDatabase.child("users").child(userId).child("likedRecipes").child(snap.getKey()).setValue(true);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
 }

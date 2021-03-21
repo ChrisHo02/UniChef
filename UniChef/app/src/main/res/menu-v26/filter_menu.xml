@@ -13,6 +13,8 @@
         <item
             android:title="Difficulty"
             android:icon="@drawable/ic_baseline_speed_24"/>
+        <item android:title="Equipment"
+            android:icon="@drawable/baseline_restaurant_menu_24"/>
         <item
             android:title="Portions"
             android:icon="@drawable/baseline_dinner_dining_24"/>

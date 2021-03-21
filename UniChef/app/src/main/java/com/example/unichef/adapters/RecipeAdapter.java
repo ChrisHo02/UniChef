@@ -1,7 +1,9 @@
 package com.example.unichef.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.example.unichef.R;
 import com.example.unichef.database.Recipe;
@@ -53,6 +56,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
         TextView difficulty = v.findViewById(R.id.difficultyText);
         TextView time = v.findViewById(R.id.timeText);
         TextView portions = v.findViewById(R.id.portionText);
+        TextView equipment = v.findViewById(R.id.equipmentText);
         ImageView image = v.findViewById(R.id.image);
         ChipGroup chipGroup = v.findViewById(R.id.recipeChipGroup);
         chipGroup.removeAllViews();
@@ -68,11 +72,12 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
         time.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_alarm_24, 0, 0, 0);
         portions.setText(" " + recipe.getPortions());
         portions.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_dinner_dining_24, 0, 0, 0);
+        equipment.setText(" " + recipe.getEquipment().size());
+        equipment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_restaurant_menu_24, 0, 0, 0);
         Picasso.get().load(recipe.getImageUrl()).into(image);
         for (Tag tag : recipe.getTags()){
-            Chip chip = new Chip(getContext());
+            Chip chip = (Chip) LayoutInflater.from(getContext()).inflate(R.layout.small_chip_style, chipGroup, false);
             chip.setText(tag.getName());
-            chip.setClickable(false);
             chipGroup.addView(chip);
         }
 
@@ -207,6 +212,10 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> implements Filterable {
                         case "Portions":
                             Comparator<Recipe> portions = (r1, r2) -> Integer.compare(r1.getPortions(), r2.getPortions());
                             Collections.sort(recipes, portions);
+                            break;
+                        case "Equipment":
+                            Comparator<Recipe> equipment = (r1, r2) -> Integer.compare(r1.getEquipment().size(), r2.getEquipment().size());
+                            Collections.sort(recipes, equipment);
                             break;
                     }
                 }

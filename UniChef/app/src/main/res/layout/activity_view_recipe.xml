@@ -83,10 +83,10 @@
                 android:textColor="#FF5722"
                 android:textSize="30sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ListView
+                android:id="@+id/commentListView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="@layout/recycler_view_item" />
+                android:layout_height="match_parent" />
 
         </LinearLayout>
     </ScrollView>

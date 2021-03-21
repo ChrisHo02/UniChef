@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
         <item android:title="Filter (Low to High)"/>
     </group>
@@ -12,11 +11,14 @@
             android:title="Difficulty"
             android:icon="@drawable/ic_baseline_speed_24"/>
         <item
-            android:title="Portions"
-            android:icon="@drawable/baseline_dinner_dining_24"/>
+            android:icon="@drawable/baseline_restaurant_menu_24"
+            android:title="Equipment" />
         <item
-            android:title="Time"
-            android:icon="@drawable/baseline_alarm_24"/>
+            android:icon="@drawable/baseline_dinner_dining_24"
+            android:title="Portions" />
+        <item
+            android:icon="@drawable/baseline_alarm_24"
+            android:title="Time" />
         <item
             android:title="Date Added"
             android:icon="@drawable/baseline_event_24"/>

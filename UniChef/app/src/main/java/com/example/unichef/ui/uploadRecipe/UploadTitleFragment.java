@@ -125,7 +125,13 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            System.out.println("yes");
+            Recipe test = (Recipe) bundle.getSerializable("existingRecipe");
+        }else{
+            System.out.println("no");
+        }
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
@@ -142,8 +148,6 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-
         navController = NavHostFragment.findNavController(this);
         View view = inflater.inflate(R.layout.fragment_upload_title,
                 container, false);

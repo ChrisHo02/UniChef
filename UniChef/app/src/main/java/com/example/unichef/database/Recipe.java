@@ -2,6 +2,7 @@ package com.example.unichef.database;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Recipe implements Serializable {
     private String creatorId;
@@ -158,15 +159,11 @@ public class Recipe implements Serializable {
         this.portions = portions;
     }
 
-    public ArrayList<Comment> getComments(){
+    public ArrayList<Comment> getComments() {
         return comments;
     }
 
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
-    }
-
-    public void addComment(Comment comment){
-        comments.add(comment);
     }
 }

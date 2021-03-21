@@ -1,6 +1,7 @@
 package com.example.unichef;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -8,10 +9,15 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.unichef.adapters.RecipeAdapter;
 import com.example.unichef.database.FirebaseHelper;
 import com.example.unichef.database.Recipe;
+import com.example.unichef.ui.uploadRecipe.UploadTitleFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -77,9 +83,7 @@ public class ViewYourRecipesActivity extends AppCompatActivity {
     }
 
     private void editRecipe(int position){
-        //This will add the recipe to the users saved recipes. Need to implement edit later.
-        FirebaseHelper helper = new FirebaseHelper();
-        helper.addSavedRecipe(user.getUid(), recipeAdapter.getItem(position));
+        //To do.
     }
 
     private void deleteRecipe(int position){

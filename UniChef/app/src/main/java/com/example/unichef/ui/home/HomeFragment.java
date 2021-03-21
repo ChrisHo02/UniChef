@@ -143,6 +143,12 @@ public class HomeFragment extends Fragment {
                 }else{
                     filters.add("Date Added");
                 }
+            case "Equipment":
+                if (filters.contains("Equipment")){
+                    filters.remove("Equipment");
+                }else{
+                    filters.add("Equipment");
+                }
                 break;
         }
         filterRecipeAdapter();
@@ -248,7 +254,7 @@ public class HomeFragment extends Fragment {
 
     private void filterRecipeAdapter(){
         StringBuilder filterString = new StringBuilder();
-        List<Integer> chipIds = (ArrayList<Integer>) chipGroup.getCheckedChipIds();
+        List<Integer> chipIds = chipGroup.getCheckedChipIds();
         for (Integer chipId : chipIds){
             Chip chip = chipGroup.findViewById(chipId);
             filterString.append("<t>").append(chip.getText().toString()).append("</t>");

@@ -62,46 +62,6 @@
                 android:layout_margin="8dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="8dp">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageButton
-                        android:id="@+id/tips_btn_recipe"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="90dp"
-                        android:src="@drawable/baseline_lightbulb_black_24dp"
-                        android:scaleType="centerCrop"
-                        app:layout_constraintLeft_toRightOf="@id/like_btn_recipe"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/like_btn_recipe"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="95dp"
-                        android:src="@drawable/baseline_favorite_border_24"
-                        app:layout_constraintLeft_toRightOf="@id/fav_btn_recipe"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/fav_btn_recipe"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="16dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/baseline_bookmark_black_24dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="8dp">
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="match_parent"
@@ -140,22 +100,23 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <EditText
                         android:id="@+id/editTextTextPersonName"
-                        android:layout_width="350dp"
+                        android:layout_width="280dp"
                         android:layout_height="wrap_content"
+
                         android:ems="8"
-                        android:layout_marginLeft="4dp"
                         android:hint="Write your comment here..."
-                        android:inputType="textPersonName"
-                        />
+                        android:inputType="textPersonName" />
 
                     <Button
                         android:id="@+id/submit_comment_btn"
-                        android:layout_width="50dp"
+                        android:layout_width="75dp"
                         android:layout_height="50dp"
+                        android:layout_alignParentRight="true"
                         android:layout_marginRight="8dp"
-                        android:layout_alignParentRight="true"/>
+                        android:text="Post" />
                 </RelativeLayout>
 
 
@@ -171,16 +132,18 @@
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Comments"
                     android:gravity="center_horizontal"
+                    android:paddingBottom="10dp"
+                    android:text="Comments"
                     android:textColor="@color/black"
                     android:textSize="28sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
+                <ListView
+                    android:id="@+id/commentListView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="40dp"
-                    tools:listitem="@layout/recycler_view_item" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="25dp" />
+
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>

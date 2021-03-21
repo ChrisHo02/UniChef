@@ -124,7 +124,6 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
             }
         });
 
-
         recyclerView = view.findViewById(R.id.recyclerView);
         this.uploadTagsAdapter = new TempUploadTagsAdapter(this.getContext(), tags);
         recyclerView.setAdapter(uploadTagsAdapter);
