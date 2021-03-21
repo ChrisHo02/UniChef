@@ -88,6 +88,7 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
 
                 FirebaseHelper helper = new FirebaseHelper();
                 helper.postComment(recipe, comments);
+                commentText.getText().clear();
                 Toast.makeText(getApplicationContext(), "Comment Posted!", Toast.LENGTH_SHORT).show();
             }
         });
