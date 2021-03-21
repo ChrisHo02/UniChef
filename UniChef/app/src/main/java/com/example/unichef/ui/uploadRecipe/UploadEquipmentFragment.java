@@ -24,7 +24,9 @@ import com.example.unichef.database.Equipment;
 import com.example.unichef.database.Ingredient;
 import com.example.unichef.database.Recipe;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,11 +44,9 @@ public class UploadEquipmentFragment extends Fragment implements View.OnClickLis
     private String mParam1;
     private String mParam2;
     private static  String[] EQUIPMENT = new String[]{
-            "Apple", "Avocado", "Banana", "Carrot", "Duck", "Egg", "Garlic", "Ginger", "Hot sauce", "Red onion", "Onion", "Red pepper", "Yellow pepper", "Green pepper",
-            "Pancetta", "Parmesan", "Egg", "Salted butter", "Unsalted butter", "Butter", "Salt", "Pepper", "Beef mince", "Pork mince", "Lamb mince", "Chicken breast",
-            "Chicken thigh", "Chicken wing", "Chicken drumstick", "Red chilli", "Smoked paprika", "Ground coriander", "Ground cumin", "Olive oil", "Lime", "Lemon", "Tabasco",
-            "Tortilla", "Oregano", "Tomato", "Spaghetti", "Tinned tomatoes", "Curry sauce", "Sugar", "Caster sugar", "Granulated sugar", "Vegetable oil", "Sweet potato",
-            "Potato", "Black beans", "Kidney beans", "Tomato purée", "Chilli powder", "Celery", "Lasagne sheets", "Cheddar cheese"
+            "Aluminium Foil", "Baking Pan", "Baking Sheet", "Blender", "Can Opener", "Casserole Dish", "Chef's Knife", "Cling Film", "Colander", "Cutting Board", "Frying Pan", "Garlic Press", "Grater", "Grill Pan", "Juicer",
+            "Kitchen Scale", "Ladle", "Large Pot", "Masher", "Measuring Cups", "Measuring Spoons", "Mixing Bowl", "Muffin Pan", "Oven Mitts", "Pan", "Parchment Paper", "Peeler", "Roasting Pan", "Salad Spinner", "Saucepan (Large)",
+            "Saucepan (Medium)", "Saucepan (Small)", "Sauté pan", "Scissors", "Sieve", "Slotted Spoon", "Spatula", "Stainless Steel SKillet", "Stirring Spoon", "Thermometer", "Tongs", "Whisk", "Wok", "Wooden Spoon"
     };
     NavController navController;
     Button addEquipment;

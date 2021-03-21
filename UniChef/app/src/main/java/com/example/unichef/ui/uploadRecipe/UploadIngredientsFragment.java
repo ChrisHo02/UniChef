@@ -48,11 +48,12 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
     private String mParam1;
     private String mParam2;
     private static  String[] INGREDIENTS = new String[]{
-            "Apple", "Avocado", "Banana", "Carrot", "Duck", "Egg", "Garlic", "Ginger", "Hot sauce", "Red onion", "Onion", "Red pepper", "Yellow pepper", "Green pepper",
-            "Pancetta", "Parmesan", "Egg", "Salted butter", "Unsalted butter", "Butter", "Salt", "Pepper", "Beef mince", "Pork mince", "Lamb mince", "Chicken breast",
-            "Chicken thigh", "Chicken wing", "Chicken drumstick", "Red chilli", "Smoked paprika", "Ground coriander", "Ground cumin", "Olive oil", "Lime", "Lemon", "Tabasco",
-            "Tortilla", "Oregano", "Tomato", "Spaghetti", "Tinned tomatoes", "Curry sauce", "Sugar", "Caster sugar", "Granulated sugar", "Vegetable oil", "Sweet potato",
-            "Potato", "Black beans", "Kidney beans", "Tomato purée", "Chilli powder", "Celery", "Lasagne sheets", "Cheddar cheese"
+            "Apple", "Avocado", "Banana", "Bay Leaves", "Beef Stock", "Black Beans", "Brown Rice", "Butter", "Carrot", "Caster Sugar", "Cayenne", "Celery", "Cheddar Cheese",
+            "Chicken Stock", "Chicken breast", "Chicken Drumstick", "Chicken Thigh", "Chicken Wing", "Chilli Powder", "Cinnamon", "Crushed Red Pepper Flakes", "Cumin",
+            "Curry Powder", "Curry Sauce", "Dried Basil", "Dried Parsley", "Duck", "Egg", "Garlic", "Garlic Powder", "Ginger", "Granulated Sugar", "Green Pepper", "Ground coriander",
+            "Ground cumin", "Hot Sauce", "Kidney Beans", "Lasagne Sheets", "Lemon", "Lime", "Minced Beef", "Minced Lamb", "Minced Pork", "Olive Oil", "Onion", "Onion Powder", "Oregano",
+            "Pancetta", "Paprika", "Parmesan", "Pepper", "Potato", "Red Onion", "Red Pepper", "Red Chilli", "Salt", "Salted Butter", "Seasoned Salt", "Smoked Paprika", "Spaghetti",
+            "Sugar", "Sweet Potato", "Tabasco", "Tinned Tomatoes", "Tomato", "Tomato Purée", "Tortilla", "Tuna", "Unsalted Butter", "Vegetable Oil", "White Rice", "Yellow Pepper"
     };
     NavController navController;
     Button addIngredient;
@@ -104,8 +105,6 @@ public class UploadIngredientsFragment extends Fragment implements View.OnClickL
 
         View view = inflater.inflate(R.layout.fragment_upload_ingredients,
                 container, false);
-        Arrays.sort(INGREDIENTS);
-
 
         assert getArguments() != null;
         this.recipe = UploadIngredientsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
