@@ -272,8 +272,6 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
             }
         }));
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        helper.addSavedRecipe(user.getUid(), recipe);
     }
 
 }
