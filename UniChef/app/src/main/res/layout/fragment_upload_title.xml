@@ -39,7 +39,7 @@
             android:id="@+id/nameOfRecipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/name_of_recipe"
+            android:hint="@string/title"
             android:singleLine="true"
             android:visibility="visible" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -70,9 +70,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/description"
-            android:textSize="12sp"/>
+            android:layout_height="56dp"
+            android:hint="@string/description" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -101,7 +100,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="341dp"
-        android:layout_height="240dp"
+        android:layout_height="226dp"
         android:contentDescription="TODO"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"

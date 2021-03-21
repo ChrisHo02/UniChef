@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private SettingsViewModel settingsViewModel;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private Switch privateSwitch;
+    private Switch receiveNotification;
+    private Switch receiveEmail;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +54,21 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://unichef-f6056-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
 
+        privateSwitch = root.findViewById(R.id.settings_switch_private_account);
+        privateSwitch.setOnClickListener(this);
+
+        Button changePassword = root.findViewById(R.id.settings_change_password);
+        changePassword.setOnClickListener(this);
+
+        Button changeEmail = root.findViewById(R.id.settings_change_email);
+        changeEmail.setOnClickListener(this);
+
+        receiveNotification = root.findViewById(R.id.settings_app_notifications);
+        receiveNotification.setOnClickListener(this);
+
+        receiveEmail = root.findViewById(R.id.settings_email_notifications);
+        receiveEmail.setOnClickListener(this);
+
         Button deleteButton = root.findViewById(R.id.settings_delete_account);
         deleteButton.setOnClickListener(this);
 
@@ -63,6 +82,31 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.settings_switch_private_account:
+                if (privateSwitch.isChecked()) {
+                    Toast.makeText(getContext(), "Account now private", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.settings_change_password:
+                Toast.makeText(getContext(),"Email sent to inbox", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.settings_change_email:
+                Toast.makeText(getContext(),"Email sent to inbox", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.settings_app_notifications:
+                if (receiveNotification.isChecked()) {
+                    Toast.makeText(getContext(), "Notifications turned on", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Notifications turned off", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.settings_email_notifications:
+                if (receiveEmail.isChecked()) {
+                    Toast.makeText(getContext(), "Email notifications turned on", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Email notifications turned off", Toast.LENGTH_SHORT).show();
+                }
+                break;
             case R.id.settings_delete_account:
                 deleteAccount();
                 break;
