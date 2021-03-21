@@ -107,7 +107,7 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
         this.tags = recipe.getTags();
         this.photoPath = recipe.getImageUrl();
 
-        AutoCompleteTextView autoCompleteTextView = this.getView().findViewById(R.id.tags_autoCompleteTextView);
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.tags_autoCompleteTextView);
         this.chooseAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, new ArrayList<String>());
         autoCompleteTextView.setAdapter(chooseAdapter);
 
