@@ -23,4 +23,9 @@
     <style name="TextAppearance.MaterialComponents.Body2_Thin" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="popUpTheme">
+        <item name = "android:windowIsTranslucent">true</item>
+        <item name = "android:windowCloseOnTouchOutside">true</item>
+    </style>
 </resources>
