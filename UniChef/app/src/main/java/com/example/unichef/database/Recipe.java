@@ -166,4 +166,19 @@ public class Recipe implements Serializable {
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
     }
+    public ArrayList<String> getIngredientsNames(){
+        ArrayList<String> names = new ArrayList<>();
+        for(int i =0;i<ingredients.size();i++){
+            names.add(ingredients.get(i).getName());
+        }
+        return names;
+    }
+
+    public ArrayList<String> getEquipmentNames(){
+        ArrayList<String> names = new ArrayList<>();
+        for(int i =0;i<equipment.size();i++){
+            names.add(equipment.get(i).getName());
+        }
+        return names;
+    }
 }
