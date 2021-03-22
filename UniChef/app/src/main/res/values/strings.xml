@@ -75,6 +75,8 @@
     <string name="tips">Tips</string>
     <string name="title">Title</string>
 
+    <string name="tips_title"><b><u>Tips</u></b></string>
+
     <string-array name = "tipsArray">
         <item>"Al dente = the moment when pasta is JUST cooked!"</item>
         <item>"Always wash your produce and hands before cooking!"</item>
