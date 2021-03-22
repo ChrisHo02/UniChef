@@ -30,7 +30,7 @@ public class PopActivity extends Activity {
     ArrayList<String> tipsTitle = new ArrayList<>();
     ArrayList<String> tipsDesc = new ArrayList<>();
 
-    ArrayList<String> redact = new ArrayList(Arrays.asList("to", "be", "the", "or", "heat", "medium", "small", "large", "cook", "a", "an", "so", "that", "before", "after"));
+    ArrayList<String> redact = new ArrayList(Arrays.asList("to", "be", "the", "or", "heat", "medium", "small", "large", "cook", "a", "an", "so", "that", "before", "after", "for", "can"));
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
