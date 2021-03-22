@@ -74,4 +74,21 @@
     <string name="upload_recipe">Upload Recipe</string>
     <string name="tips">Tips</string>
     <string name="title">Title</string>
+
+    <string-array name = "tipsArray">
+        <item>"Al dente = the moment when pasta is JUST cooked!"</item>
+        <item>"Always wash your produce and hands before cooking!"</item>
+        <item>"You can't cook chicken to be medium rare! It's either poisonous, cooked or sand!"</item>
+        <item>"Don't chop both veggies and meat on one chopping board! Cross-contamination!"</item>
+        <item>"Let the knife do all the work!"</item>
+        <item>"Use a little bit of spare pasta water in your pasta sauce!"</item>
+        <item>"When slicing an onion, keep the root intact!"</item>
+        <item>"Added too much salt to your sauce? Add a quartered potato to absorb some of the excess!"</item>
+        <item>"Read recipes the whole way through before you start; no-one wants to stop cooking because they forgot to dice an ingredient!"</item>
+        <item>"Make sure you rotate your pan so that the handle is out of the way: this reduces the chance of knocking it over!"</item>
+        <item>"Remember: better safe than sorry!"</item>
+        <item>"Take advantage of leftovers!"</item>
+        <item>"Plan ahead!"</item>
+        <item>"Toasting burger buns can take your burger to the next level!"</item>
+    </string-array>
 </resources>
