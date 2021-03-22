@@ -1,5 +1,6 @@
 package com.example.unichef;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -282,6 +283,22 @@ public class ViewRecipeActivity extends AppCompatActivity implements Serializabl
             public void onCancelled(@NonNull DatabaseError error) {
             }
         }));
+
+        ImageButton iButton = findViewById(R.id.tips_btn_recipe);
+        iButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), PopActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList("ingredients", recipe.getIngredientsNames());
+                bundle.putStringArrayList("equipment", recipe.getEquipmentNames());
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            }
+        });
     }
+
+
 
 }
