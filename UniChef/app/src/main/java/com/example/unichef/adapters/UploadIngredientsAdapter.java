@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,10 +19,22 @@ public class UploadIngredientsAdapter extends RecyclerView.Adapter<UploadIngredi
 
     ArrayList<Ingredient> data;
     Context context;
+    private OnItemClickListener mListener;
+
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+        void onDeleteClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
     public UploadIngredientsAdapter(Context ct, ArrayList<Ingredient> ingredients) {
         data = ingredients;
         context = ct;
+
     }
 
     @NonNull
@@ -29,7 +42,7 @@ public class UploadIngredientsAdapter extends RecyclerView.Adapter<UploadIngredi
     public UploadIngredientsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.upload_ingredient_item, parent, false);
-        return new UploadIngredientsAdapter.ViewHolder(view);
+        return new UploadIngredientsAdapter.ViewHolder(view, mListener);
     }
 
     @Override
@@ -44,10 +57,30 @@ public class UploadIngredientsAdapter extends RecyclerView.Adapter<UploadIngredi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView ingredient_txt;
+        ImageButton deleteIngredient;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             ingredient_txt = itemView.findViewById(R.id.ingredient_txt);
+            deleteIngredient = itemView.findViewById(R.id.deleteIngredient_button);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                }
+            });
+
+            deleteIngredient.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

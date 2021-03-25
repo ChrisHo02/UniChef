@@ -11,15 +11,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.unichef.R;
 import com.example.unichef.adapters.IngredientAdapter;
+import com.example.unichef.database.Ingredient;
+
+import java.util.ArrayList;
 
 public class RecipeIngredientsFragment extends Fragment {
+    private ArrayList<Ingredient> ingredients;
+
+    public RecipeIngredientsFragment(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
 
-        String[] testData = {"Apple", "Pear", "Pasta", "Water", "Wine", "Ginger", "Egg", "Flour", "Tomato", "Sauce"};
-        IngredientAdapter adapter = new IngredientAdapter(testData);
-        RecyclerView recyclerView = view.findViewById(R.id.ingredients_recycler_view);
+        IngredientAdapter adapter = new IngredientAdapter(ingredients);
+        RecyclerView recyclerView = view.findViewById(R.id.equipment_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);

@@ -8,12 +8,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.unichef.R;
+import com.example.unichef.database.Instruction;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.ViewHolder>{
 
-    private final String[] localDataSet;
+    private final ArrayList<Instruction> instructions;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -28,8 +31,8 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         }
     }
 
-    public InstructionAdapter(String[] dataSet){
-        localDataSet = dataSet;
+    public InstructionAdapter(ArrayList<Instruction> instructions){
+        this.instructions = instructions;
     }
 
     @NotNull
@@ -41,11 +44,13 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
 
     @Override
     public void onBindViewHolder(@NotNull ViewHolder viewholder, int position) {
-        viewholder.getTextView().setText(localDataSet[position]);
+        int indexNum = position + 1;
+        String index = indexNum + ". ";
+        viewholder.getTextView().setText(index + instructions.get(position).getInstruction());
     }
 
     @Override
     public int getItemCount() {
-        return localDataSet.length;
+        return instructions.size();
     }
 }

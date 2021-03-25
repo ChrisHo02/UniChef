@@ -1,8 +1,10 @@
 package com.example.unichef.ui.uploadRecipe;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.unichef.MainActivity;
 import com.example.unichef.R;
 import com.example.unichef.adapters.TempUploadTagsAdapter;
 import com.example.unichef.adapters.UploadEquipmentAdapter;
@@ -27,6 +30,11 @@ import com.example.unichef.database.Equipment;
 import com.example.unichef.database.FirebaseHelper;
 import com.example.unichef.database.Recipe;
 import com.example.unichef.database.Tag;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,14 +55,6 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private static  String[] TAGS = new String[]{
-            "Apple", "Avocado", "Banana", "Carrot", "Duck", "Egg", "Garlic", "Ginger", "Hot sauce", "Red onion", "Onion", "Red pepper", "Yellow pepper", "Green pepper",
-            "Pancetta", "Parmesan", "Egg", "Salted butter", "Unsalted butter", "Butter", "Salt", "Pepper", "Beef mince", "Pork mince", "Lamb mince", "Chicken breast",
-            "Chicken thigh", "Chicken wing", "Chicken drumstick", "Red chilli", "Smoked paprika", "Ground coriander", "Ground cumin", "Olive oil", "Lime", "Lemon", "Tabasco",
-            "Tortilla", "Oregano", "Tomato", "Spaghetti", "Tinned tomatoes", "Curry sauce", "Sugar", "Caster sugar", "Granulated sugar", "Vegetable oil", "Sweet potato",
-            "Potato", "Black beans", "Kidney beans", "Tomato purée", "Chilli powder", "Celery", "Lasagne sheets", "Cheddar cheese"
-    };
-    NavController navController;
     Button addTag;
     Button next;
     Recipe recipe;
@@ -62,7 +62,7 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
     RecyclerView recyclerView;
     ArrayAdapter<String> chooseAdapter;
     TempUploadTagsAdapter uploadTagsAdapter;
-    String photopath;
+    String photoPath;
 
     public TempUploadTagsFragment() {
         // Required empty public constructor
@@ -105,19 +105,41 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
         assert getArguments() != null;
         this.recipe = TempUploadTagsFragmentArgs.fromBundle(getArguments()).getRecipeArg();
         this.tags = recipe.getTags();
-        this.photopath = recipe.getImageUrl();
-
+        this.photoPath = recipe.getImageUrl();
 
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.tags_autoCompleteTextView);
-        this.chooseAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, TAGS);
+        this.chooseAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, new ArrayList<String>());
         autoCompleteTextView.setAdapter(chooseAdapter);
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://unichef-f6056-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        mDatabase.child("tags").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot tagSnapshot : snapshot.getChildren()){
+                    chooseAdapter.add(tagSnapshot.getKey());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
         recyclerView = view.findViewById(R.id.recyclerView);
         this.uploadTagsAdapter = new TempUploadTagsAdapter(this.getContext(), tags);
         recyclerView.setAdapter(uploadTagsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        uploadTagsAdapter.setOnItemClickListener(new TempUploadTagsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                return;
+            }
 
-        navController = NavHostFragment.findNavController(this);
+            @Override
+            public void onDeleteClick(int position) {
+                tags.remove(position);
+                uploadTagsAdapter.notifyDataSetChanged();
+            }
+        });
 
 
         addTag = (Button) view.findViewById(R.id.addTag_button);
@@ -130,15 +152,21 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
         //return inflater.inflate(R.layout.fragment_temp_upload_tags, container, false);
     }
 
+
+
     @Override
     public void onClick(View view) {
+        EditText tagTextView = (EditText) getView().findViewById(R.id.tags_autoCompleteTextView);
         switch (view.getId()) {
             case R.id.addTag_button:
-                EditText tagTextView = (EditText) getView().findViewById(R.id.tags_autoCompleteTextView);
                 String tagString = tagTextView.getText().toString();
-                recipe.addTag(new Tag(tagString));
-                tagTextView.getText().clear();
-                this.uploadTagsAdapter.notifyDataSetChanged();
+                if (tagString.trim().length() == 0) {
+                    tagTextView.setError("Please enter a tag");
+                } else {
+                    recipe.addTag(new Tag(tagString));
+                    tagTextView.getText().clear();
+                    this.uploadTagsAdapter.notifyDataSetChanged();
+                }
                 break;
             case R.id.button:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
@@ -152,11 +180,16 @@ public class TempUploadTagsFragment extends Fragment implements View.OnClickList
                         FirebaseHelper helper = new FirebaseHelper();
                         helper.uploadRecipe(recipe);
 
-                        File file = new File(photopath);
-                        file.delete();
-                        getActivity().finish();
+                        // probably dont need to delete photos
+//                        File file = new File(photoPath);
+//                        file.delete();
+                        
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+
                         Toast.makeText(getContext(),
-                                "Recipe uploaded",Toast.LENGTH_SHORT).show();
+                                "Recipe uploaded",Toast.LENGTH_LONG).show();
                     }
                 });
 

@@ -1,6 +1,7 @@
 package com.example.unichef.database;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Comment implements Serializable {
     private String userId;
@@ -38,5 +39,4 @@ public class Comment implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 }

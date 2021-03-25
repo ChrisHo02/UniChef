@@ -20,18 +20,37 @@
 
 
     <AutoCompleteTextView
+        android:id="@+id/ingredientAmount_autoCompleteTextView"
+        android:layout_width="125dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:hint="Amount"
+        android:maxLines="1"
+        android:minEms="1"
+        android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@+id/ingredient_autoCompleteTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <AutoCompleteTextView
         android:id="@+id/ingredient_autoCompleteTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:completionThreshold="1"
-        android:hint="Add Ingredient"
+        android:hint="Ingredient"
+        android:maxLines="1"
+        android:minEms="1"
+        android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@+id/addIngredient_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ingredientAmount_autoCompleteTextView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button

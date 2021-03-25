@@ -9,4 +9,23 @@
         <item name="height">20dp</item>
         <item name="textAllCaps">false</item>
     </style>
+
+    <style name="MaterialComponents_Chip_Thin" parent="@style/Widget.MaterialComponents.Chip.Entry">
+        <item name="chipMinHeight">24dp</item>
+        <item name="chipMinTouchTargetSize">24dp</item>
+        <item name="chipIconSize">18dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body2_Thin</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialComponents.Chip_Thin</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.MaterialComponents.Chip_Thin" parent="">
+        <item name="cornerSize">12dp</item>
+    </style>
+    <style name="TextAppearance.MaterialComponents.Body2_Thin" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="popUpTheme">
+        <item name = "android:windowIsTranslucent">true</item>
+        <item name = "android:windowCloseOnTouchOutside">true</item>
+    </style>
 </resources>

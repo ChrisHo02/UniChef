@@ -130,6 +130,7 @@ public class SignupActivity extends AppCompatActivity {
             if (task.isSuccessful()){
                 updateDatabase();
                 startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                finish();
             }else{
                 try{
                     throw task.getException();
@@ -145,5 +146,6 @@ public class SignupActivity extends AppCompatActivity {
     private void updateDatabase(){
         String newUserID = mAuth.getCurrentUser().getUid();
         mDatabase.child(newUserID).child("username").setValue(username.getText().toString());
+        mDatabase.child(newUserID).child("profileImage").setValue("https://firebasestorage.googleapis.com/v0/b/unichef-f6056.appspot.com/o/profile%2Fchef_icon.png?alt=media&token=52a0acb8-2222-415c-acc1-549c2af8c38f");
     }
 }

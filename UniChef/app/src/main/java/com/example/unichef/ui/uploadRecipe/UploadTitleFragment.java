@@ -1,11 +1,14 @@
 package com.example.unichef.ui.uploadRecipe;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +16,10 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -31,7 +38,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.unichef.MainActivity;
 import com.example.unichef.R;
 import com.example.unichef.UploadRecipeActivity;
 import com.example.unichef.database.Equipment;
@@ -45,11 +54,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,11 +82,16 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private static final int CAMERA_PERMISSION_CODE = 100;
+    private static final int STORAGE_PERMISSION_CODE = 101;
+    private static final int MY_PERMISSIONS_REQUEST_CODE = 200;
     Button next;
     NavController navController;
     ImageView recipePhoto;
     ImageButton uploadPhoto;
     String photoPath;
+    Context mContext;
+    Activity mActivity;
 
     List<String> imagesFilesPaths = new ArrayList<>();
 
@@ -109,18 +125,36 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            System.out.println("yes");
+            Recipe test = (Recipe) bundle.getSerializable("existingRecipe");
+        }else{
+            System.out.println("no");
+        }
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-
         navController = NavHostFragment.findNavController(this);
         View view = inflater.inflate(R.layout.fragment_upload_title,
                 container, false);
 
+        this.mContext = getContext();
+        this.mActivity = getActivity();
+        checkPermission();
 
         recipePhoto = view.findViewById(R.id.imageView);
 
@@ -139,71 +173,171 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imageButton:
+
                 selectImage();
                 break;
             case R.id.button:
                 EditText recipeTextView = getView().findViewById(R.id.nameOfRecipe);
                 EditText recipeDescTextView = getView().findViewById(R.id.description);
+                ImageView recipeImageView = getView().findViewById(R.id.imageView);
                 String title = recipeTextView.getText().toString();
                 String description = recipeDescTextView.getText().toString();
 
-                ArrayList<Ingredient> ingredients = new ArrayList<>();
-                ArrayList<Instruction> instructions = new ArrayList<>();
-                ArrayList<Equipment> equipment = new ArrayList<>();
-                ArrayList<Tag> tags = new ArrayList<>();
+                if (title.trim().length() == 0) {
+                    recipeTextView.setError("Please add a title");
+                }
+                else if (recipeImageView.getDrawable() == null) {
+                    Toast.makeText(getContext(),"Please add an image", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    ArrayList<Ingredient> ingredients = new ArrayList<>();
+                    ArrayList<Instruction> instructions = new ArrayList<>();
+                    ArrayList<Equipment> equipment = new ArrayList<>();
+                    ArrayList<Tag> tags = new ArrayList<>();
 
-                Recipe recipe = new Recipe();
-                recipe.setCreatorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                recipe.setTitle(title);
-                recipe.setDescription(description);
-                recipe.setImageUrl("IDK");
-                recipe.setIngredients(ingredients);
-                recipe.setInstructions(instructions);
-                recipe.setEquipment(equipment);
-                recipe.setTags(tags);
-                recipe.setImageUrl(photoPath);
+                    Recipe recipe = new Recipe();
+                    recipe.setCreatorId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    recipe.setTitle(title);
+                    recipe.setDescription(description);
+                    recipe.setImageUrl("");
+                    recipe.setIngredients(ingredients);
+                    recipe.setInstructions(instructions);
+                    recipe.setEquipment(equipment);
+                    recipe.setTags(tags);
+                    recipe.setImageUrl(photoPath);
 
-                UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
-                action.setRecipeArg(recipe);
-                Navigation.findNavController(view).navigate(action);
-                //navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadTitleFragment_to_uploadInfoFragment));
+                    UploadTitleFragmentDirections.ActionUploadTitleFragmentToUploadInfoFragment action = UploadTitleFragmentDirections.actionUploadTitleFragmentToUploadInfoFragment();
+                    action.setRecipeArg(recipe);
+                    Navigation.findNavController(view).navigate(action);
+                    //navController.navigate(new ActionOnlyNavDirections(R.id.action_uploadTitleFragment_to_uploadInfoFragment));
+                }
                 break;
             default:
                 break;
         }
     }
 
-    private void selectImage() {
+    protected void checkPermission(){
+        if(ContextCompat.checkSelfPermission(mActivity,Manifest.permission.CAMERA)
+                + ContextCompat.checkSelfPermission(
+                mActivity,Manifest.permission.READ_CONTACTS)
+                + ContextCompat.checkSelfPermission(
+                mActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+
+            // Do something, when permissions not granted
+            if(ActivityCompat.shouldShowRequestPermissionRationale(
+                    mActivity,Manifest.permission.CAMERA)
+                    || ActivityCompat.shouldShowRequestPermissionRationale(
+                    mActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                // If we should give explanation of requested permissions
+
+                // Show an alert dialog here with request explanation
+                AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+                builder.setMessage("Need stuff");
+                builder.setTitle("Please grant those permissions");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCompat.requestPermissions(
+                                mActivity,
+                                new String[]{
+                                        Manifest.permission.CAMERA,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                },
+                                MY_PERMISSIONS_REQUEST_CODE
+                        );
+                    }
+                });
+                builder.setNeutralButton("Cancel",null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }else{
+                // Directly request for required permissions, without explanation
+                ActivityCompat.requestPermissions(
+                        mActivity,
+                        new String[]{
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        },
+                        MY_PERMISSIONS_REQUEST_CODE
+                );
+            }
+        }else {
+            // Do something, when permissions are already granted
+            Toast.makeText(mContext,"Permissions already granted",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_CODE:{
+                // When request is cancelled, the results array are empty
+                if(
+                        (grantResults.length >0) &&
+                                (grantResults[0]
+                                        + grantResults[1]
+                                        + grantResults[2]
+                                        == PackageManager.PERMISSION_GRANTED
+                                )
+                ){
+                    // Permissions are granted
+                    Toast.makeText(mContext,"Permissions granted.",Toast.LENGTH_SHORT).show();
+                }else {
+                    // Permissions are denied
+                    Toast.makeText(mContext,"Permissions denied.",Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
+
+//    public void checkPermission(String permission, int requestCode)
+//    {
+//        if (ContextCompat.checkSelfPermission(this.getContext(), permission)
+//                == PackageManager.PERMISSION_DENIED) {
+//
+//            // Requesting the permission
+//            ActivityCompat.requestPermissions(this.getActivity(),
+//                    new String[] { permission },
+//                    requestCode);
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode,
+//                                           @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode,
+//                        permissions,
+//                        grantResults);
+//    }
+
+        private void selectImage() {
         final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Add Photo");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent;
                 switch (options[i].toString()) {
                     case "Take Photo":
-                        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-                            File photoFile = null;
-                            try {
-                                photoFile = createImageFile();
-                            } catch (IOException ex) {
-                                // Error occurred while creating the File
-                            }
-                            // Continue only if the File was successfully created
-                            if (photoFile != null) {
-                                Uri photoURI = FileProvider.getUriForFile(requireContext(),
-                                        "com.mydomain.fileprovider",
-                                        photoFile);
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                                startActivityForResult(intent, 1);
-                            }
-                        }
+//                        checkPermission(
+//                                Manifest.permission.CAMERA,
+//                                CAMERA_PERMISSION_CODE);
+                        checkPermission();
+                        uploadPhotoFromCamera();
                         break;
                     case "Choose from Gallery":
-                        intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(intent, 2);
+//                        checkPermission(
+//                                Manifest.permission.READ_EXTERNAL_STORAGE,
+//                                STORAGE_PERMISSION_CODE);
+
+                        checkPermission();
+                        uploadPhotoFromGallery();
+
                         break;
                     case "Cancel":
                         dialogInterface.dismiss();
@@ -214,31 +348,59 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         builder.show();
     }
 
+    private void uploadPhotoFromCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(requireContext(),
+                        "com.mydomain.fileprovider",
+                        photoFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(intent, 1);
+            }
+        }
+    }
+
+    private void uploadPhotoFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 2);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1) {
-//                Bundle extras = data.getExtras();
-//                Bitmap imageBitmap = (Bitmap) extras.get("data");
-//                recipePhoto.setImageBitmap(imageBitmap);
 
 
                 String tempImageFilePath = imagesFilesPaths.get(imagesFilesPaths.size()-1);
                 Uri tempImageURI = Uri.fromFile(new File( tempImageFilePath ));
-                resizeThanLoadImage(tempImageFilePath, tempImageURI);
+                resizeThenLoadImage(tempImageFilePath, tempImageURI);
             } else if (requestCode == 2) {
                 Uri selectedImage = data.getData();
-//                String[] filePathColumn = { MediaStore.Images.Media.DATA };
-//
-//                Cursor cursor = requireContext().getContentResolver().query(selectedImage,
-//                        filePathColumn, null, null, null);
-//                cursor.moveToFirst();
-//
-//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                String picturePath = cursor.getString(columnIndex);
-//                cursor.close();
-//
-//                recipePhoto.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                String picturePath = getPath( getActivity( ).getApplicationContext( ), selectedImage );
+
+//                File photoFile = null;
+//                try {
+//                    photoFile = createImageFile();
+//                } catch (IOException ex) {
+//                    // Error occurred while creating the File
+//                }
+//                // Continue only if the File was successfully created
+//                if (photoFile != null) {
+//                    try {
+//                        copyFile(new File(picturePath), photoFile);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+                photoPath = picturePath;
                 recipePhoto.setImageURI(selectedImage);
             }
         }
@@ -261,7 +423,7 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         return image;
     }
 
-    private void resizeThanLoadImage(String tempImageFilePath, Uri tempImageURI){
+    private void resizeThenLoadImage(String tempImageFilePath, Uri tempImageURI){
         Bitmap bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), tempImageURI);
@@ -282,6 +444,44 @@ public class UploadTitleFragment extends Fragment implements View.OnClickListene
         //storeBitmapInFile(bitmapScaled, tempImageFilePath);
 
         recipePhoto.setImageURI(tempImageURI);
+    }
+
+    public static String getPath(Context context, Uri uri ) {
+        String result = null;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                int column_index = cursor.getColumnIndexOrThrow(proj[0]);
+                result = cursor.getString(column_index);
+            }
+            cursor.close();
+        }
+        if (result == null) {
+            result = "Not found";
+        }
+        return result;
+    }
+
+
+    private void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!sourceFile.exists()) {
+            return;
+        }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+        source = new FileInputStream(sourceFile).getChannel();
+        destination = new FileOutputStream(destFile).getChannel();
+        if (destination != null && source != null) {
+            destination.transferFrom(source, 0, source.size());
+        }
+        if (source != null) {
+            source.close();
+        }
+        if (destination != null) {
+            destination.close();
+        }
     }
 
 }

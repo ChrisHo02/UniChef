@@ -15,6 +15,9 @@ public class UploadRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_recipe);
 
-        
+
+
     }
+
+
 }
